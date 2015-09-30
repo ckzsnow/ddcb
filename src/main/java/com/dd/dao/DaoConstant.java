@@ -32,4 +32,34 @@ public interface DaoConstant {
 	    }
     }
     
+    enum UserType implements DaoConstant {
+    	LISTEN_USER(0), TEACH_USER(1), ALL_USER(2);
+    	
+    	private int code;
+
+	    private UserType(int code) {
+	        this.code = code;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return String.valueOf(this.code);
+	    }
+    }
+    
+    enum UserSex implements DaoConstant {
+    	MALE(0), FEMALE(1);
+    	
+    	private int code;
+
+	    private UserSex(int code) {
+	        this.code = code;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return String.valueOf(this.code);
+	    }
+    }
+    
 }

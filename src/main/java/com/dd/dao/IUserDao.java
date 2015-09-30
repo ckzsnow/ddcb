@@ -10,6 +10,6 @@ public interface IUserDao {
 	
 	public boolean deleteUserByUserId(String userId);
 	
-	public boolean updateUserPwdByUserId(String userId);
+	public boolean updateUserPwdByUserId(String pwd, String userId);
 	
 }
