@@ -54,4 +54,9 @@ public class IndustryModel implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
+	@Override
+	public String toString() {
+		return "IndustryModel [id=" + id + ", name=" + name + ", createTime=" + createTime + "]";
+	}
+
 }

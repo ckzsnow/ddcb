@@ -70,4 +70,10 @@ public class UserCourseModel implements java.io.Serializable {
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "UserCourseModel [id=" + id + ", userId=" + userId + ", courseId=" + courseId + ", userType=" + userType
+				+ ", createTime=" + createTime + "]";
+	}
+
 }

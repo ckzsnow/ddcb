@@ -61,4 +61,9 @@ public class CityModel implements java.io.Serializable {
 		this.father = father;
 	}
 
+	@Override
+	public String toString() {
+		return "CityModel [id=" + id + ", cityId=" + cityId + ", city=" + city + ", father=" + father + "]";
+	}
+
 }

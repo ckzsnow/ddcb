@@ -1,0 +1,24 @@
+1.用户注册接口路径:/safety/userRegister
+请求方式:HTTPS GET/POST
+请求参数:userId, userPwd
+返回字段:errorCode, errorMsg
+0000-操作成功
+0001-用户Id为空
+0002-用户密码为空
+0003-用户id已经存在
+0004-操作数据库失败
+
+2.用户登陆接口路径:/safety/userLogin
+请求方式:HTTPS GET/POST
+请求参数:userId, userPwd
+返回字段:errorCode, errorMsg
+0000-操作成功
+0001-用户Id为空
+0002-用户密码为空
+0005-用户id不存在
+0006-密码不正确
+
+3.用户手机号码验证接口路径:/safety/sendVerifyCode
+请求方式:HTTPS GET/POST
+请求参数:userId, userPwd
+返回字段:errorCode, errorMsg

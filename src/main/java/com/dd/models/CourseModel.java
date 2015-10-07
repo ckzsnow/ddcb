@@ -12,6 +12,9 @@ public class CourseModel implements java.io.Serializable {
 	private Integer industryId;
 	private Integer fieldId;
 	private Integer stageId;
+	private String industryName;
+	private String fieldName;
+	private String stageName;
 	private Timestamp schoolTime;
 	private String docAttatch;
 	private String voiceAttatch;
@@ -42,6 +45,30 @@ public class CourseModel implements java.io.Serializable {
 		this.courseType = courseType;
 		this.auditStatus = auditStatus;
 		this.createTime = createTime;
+	}
+
+	public String getIndustryName() {
+		return industryName;
+	}
+
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	public String getStageName() {
+		return stageName;
+	}
+
+	public void setStageName(String stageName) {
+		this.stageName = stageName;
 	}
 
 	public Long getId() {
@@ -150,5 +177,14 @@ public class CourseModel implements java.io.Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "CourseModel [id=" + id + ", name=" + name + ", brief=" + brief + ", details=" + details
+				+ ", industryId=" + industryId + ", fieldId=" + fieldId + ", stageId=" + stageId + ", industryName="
+				+ industryName + ", fieldName=" + fieldName + ", stageName=" + stageName + ", schoolTime=" + schoolTime
+				+ ", docAttatch=" + docAttatch + ", voiceAttatch=" + voiceAttatch + ", courseType=" + courseType
+				+ ", auditStatus=" + auditStatus + ", createTime=" + createTime + "]";
 	}
 }

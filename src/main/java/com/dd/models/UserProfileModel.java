@@ -16,17 +16,27 @@ public class UserProfileModel implements java.io.Serializable {
 	
 	private Integer industryId;
 	
+	private String industryName;
+	
 	private String companyName;
 	
 	private String companyPosition;
 	
 	private Integer workYearId;
 	
+	private String workYear;
+	
 	private String provinceId;
+	
+	private String provinceName;
 	
 	private String cityId;
 	
+	private String cityName;
+	
 	private String areaId;
+	
+	private String areaName;
 	
 	private String resume;
 	
@@ -51,6 +61,46 @@ public class UserProfileModel implements java.io.Serializable {
 		this.areaId = areaId;
 		this.resume = resume;
 		this.createTime = createTime;
+	}
+
+	public String getIndustryName() {
+		return industryName;
+	}
+
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+
+	public String getWorkYear() {
+		return workYear;
+	}
+
+	public void setWorkYear(String workYear) {
+		this.workYear = workYear;
+	}
+
+	public String getProvinceName() {
+		return provinceName;
+	}
+
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 
 	public String getUserId() {
@@ -159,6 +209,16 @@ public class UserProfileModel implements java.io.Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "UserProfileModel [userId=" + userId + ", userName=" + userName + ", userPhoto=" + userPhoto
+				+ ", userSex=" + userSex + ", industryId=" + industryId + ", industryName=" + industryName
+				+ ", companyName=" + companyName + ", companyPosition=" + companyPosition + ", workYearId=" + workYearId
+				+ ", workYear=" + workYear + ", provinceId=" + provinceId + ", provinceName=" + provinceName
+				+ ", cityId=" + cityId + ", cityName=" + cityName + ", areaId=" + areaId + ", areaName=" + areaName
+				+ ", resume=" + resume + ", createTime=" + createTime + "]";
 	}
 		
 }

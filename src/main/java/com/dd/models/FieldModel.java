@@ -52,4 +52,10 @@ public class FieldModel implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
+	@Override
+	public String toString() {
+		return "FieldModel [id=" + id + ", industryId=" + industryId + ", name=" + name + ", createTime=" + createTime
+				+ "]";
+	}
+
 }

@@ -59,5 +59,10 @@ public class UserModel implements java.io.Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	@Override
+	public String toString() {
+		return "UserModel [id=" + id + ", userId=" + userId + ", pwd=" + pwd + ", createTime=" + createTime + "]";
+	}
 	
 }

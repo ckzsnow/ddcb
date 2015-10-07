@@ -61,6 +61,16 @@
 			<version>${spring.mock}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 
 		<!-- Mysql -->
 		<dependency>
@@ -133,13 +143,6 @@
 			<version>${thoughtworks.xstream.version}</version>
 		</dependency>
 
-		<!-- javaMail -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${javamail.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -150,7 +153,7 @@
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
-		</dependency>		
+		</dependency>
 
 	</dependencies>
 

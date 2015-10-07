@@ -1,6 +1,8 @@
 package com.dd.dao.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.dd.dao.DaoConstant.UserSex;
 import com.dd.dao.IUserProfileDao;
 import com.dd.mappers.UserProfileModelMapper;
 import com.dd.models.UserProfileModel;
@@ -23,6 +24,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 
 	@Override
 	public UserProfileModel getUserProfileByUserId(String userId) {
+		logger.debug("args userId : {}", userId);
 		String sql = "select * from user_profile where user_id = ?";
 		UserProfileModel userProfileModel = null;
 		try {
@@ -35,6 +37,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 
 	@Override
 	public boolean addUserProfile(UserProfileModel userProfileModel) {
+		logger.debug("args userProfileModel : {}", userProfileModel.toString());
 		String sql = "insert into user_profile (user_id, name, photo, sex, industry, company, position, work_year_id, province_id, city_id, area_id, resume, create_time)"
 				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int affectedRows = 0;
@@ -53,6 +56,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 
 	@Override
 	public boolean deleteUserProfileByUserId(String userId) {
+		logger.debug("args userId : {}", userId);
 		String sql = "delete from user_profile where user_id = ?";
 		int affectedRows = 0;
 		try {
@@ -64,81 +68,74 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 	}
 
 	@Override
-	public boolean updateUserNameByUserId(String userName, String userId) {
-		String sql = "update user_profile set name=? where user_id=?";
+	public boolean updateUserProfile(UserProfileModel userProfileModel) {
+		logger.debug("args userProfileModel : {}", userProfileModel.toString());
 		int affectedRows = 0;
-		try {
-			affectedRows = jdbcTemplate.update(sql, userName, userId);
-		} catch (Exception e) {
-			logger.debug("updateUserNameByUserId, exception : {}", e.toString());
+		StringBuilder sql = new StringBuilder();
+		List<Object> argsList = new ArrayList<>();
+		sql.append("update user_profile set ");
+		if(userProfileModel.getUserName() != null && !userProfileModel.getUserName().isEmpty()) {
+			sql.append("name=? ");
+			argsList.add(userProfileModel.getUserName());
+		}
+		if(userProfileModel.getUserPhoto() != null && !userProfileModel.getUserPhoto().isEmpty()) {
+			sql.append(", photo=? ");
+			argsList.add(userProfileModel.getUserPhoto());
+		}
+		if(userProfileModel.getUserSex() != null) {
+			sql.append(", sex=? ");
+			argsList.add(userProfileModel.getUserSex());
+		}
+		if(userProfileModel.getIndustryId() != null) {
+			sql.append(", industry_id=? ");
+			argsList.add(userProfileModel.getIndustryId());
+		}
+		if(userProfileModel.getCompanyName() != null && !userProfileModel.getCompanyName().isEmpty()) {
+			sql.append(", company=? ");
+			argsList.add(userProfileModel.getCompanyName());
+		}
+		if(userProfileModel.getCompanyPosition() != null && !userProfileModel.getCompanyPosition().isEmpty()) {
+			sql.append(", position=? ");
+			argsList.add(userProfileModel.getCompanyPosition());
+		}
+		if(userProfileModel.getWorkYearId() != null) {
+			sql.append(", work_year_id=? ");
+			argsList.add(userProfileModel.getWorkYearId());
+		}
+		if(userProfileModel.getProvinceId() != null && !userProfileModel.getProvinceId().isEmpty()) {
+			sql.append(", province_id=? ");
+			argsList.add(userProfileModel.getProvinceId());
+		}
+		if(userProfileModel.getCityId() != null && !userProfileModel.getCityId().isEmpty()) {
+			sql.append(", city_id=? ");
+			argsList.add(userProfileModel.getCityId());
+		}
+		if(userProfileModel.getAreaId() != null && !userProfileModel.getAreaId().isEmpty()) {
+			sql.append(", area_id=? ");
+			argsList.add(userProfileModel.getAreaId());
+		}
+		if(userProfileModel.getResume() != null && !userProfileModel.getResume().isEmpty()) {
+			sql.append(", resume=? ");
+			argsList.add(userProfileModel.getResume());
+		}
+		if(argsList.size() == 0) {
+			logger.debug("valid args amount is 0, failed in updating.");
+			return false;
+		}
+		if(userProfileModel.getUserId() == null || userProfileModel.getUserId().isEmpty()) {
+			logger.debug("userId is invalid, failed in updating.");
+			return false;
+		} else {
+			sql.append("where user_id=?");
+			argsList.add(userProfileModel.getUserId());
+			Object[] args = (Object[])argsList.toArray(new Object[argsList.size()]);
+			try {
+				affectedRows = jdbcTemplate.update(sql.toString(), args);
+			} catch (Exception e) {
+				logger.debug("updateUserProfile, exception : {}", e.toString());
+			}
 		}
 		return affectedRows != 0;
-	}
-
-	@Override
-	public boolean updateUserPhotoByUserId(String userPhoto, String userId) {
-		String sql = "update user_profile set photo=? where user_id=?";
-		int affectedRows = 0;
-		try {
-			affectedRows = jdbcTemplate.update(sql, userPhoto, userId);
-		} catch (Exception e) {
-			logger.debug("updateUserPhotoByUserId, exception : {}", e.toString());
-		}
-		return affectedRows != 0;
-	}
-
-	@Override
-	public boolean updateUserSexByUserId(UserSex userSex, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateIndustryIdByUserId(int industryId, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateCompanyByUserId(String companyName, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updatePositionByUserId(String position, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateWorkYearIdByUserId(int workYearId, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateProvinceIdByUserId(String provinceId, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateCityIdByUserId(String cityId, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateAreaIdByUserId(String areaId, String userId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateResumeByUserId(String resume, String userId) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

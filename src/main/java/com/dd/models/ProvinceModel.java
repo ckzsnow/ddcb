@@ -44,4 +44,9 @@ public class ProvinceModel implements java.io.Serializable {
 		this.province = province;
 	}
 
+	@Override
+	public String toString() {
+		return "ProvinceModel [id=" + id + ", provinceId=" + provinceId + ", province=" + province + "]";
+	}
+
 }

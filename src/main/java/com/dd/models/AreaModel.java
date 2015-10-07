@@ -61,4 +61,9 @@ public class AreaModel implements java.io.Serializable {
 		this.father = father;
 	}
 
+	@Override
+	public String toString() {
+		return "AreaModel [id=" + id + ", areaId=" + areaId + ", area=" + area + ", father=" + father + "]";
+	}
+
 }

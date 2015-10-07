@@ -52,4 +52,9 @@ public class StageModel implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
+	@Override
+	public String toString() {
+		return "StageModel [id=" + id + ", fieldId=" + fieldId + ", name=" + name + ", createTime=" + createTime + "]";
+	}
+
 }

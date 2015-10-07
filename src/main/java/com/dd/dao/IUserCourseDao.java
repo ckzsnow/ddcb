@@ -1,17 +1,16 @@
 package com.dd.dao;
 
 import java.util.List;
-
-import com.dd.dao.DaoConstant.UserType;
+import com.dd.constant.Constant.UserType;
 import com.dd.models.UserCourseModel;
 
 public interface IUserCourseDao {
 
-	public List<UserCourseModel> getUserCourseByUserIdAndUserType(String userId, UserType userType);
+	public List<UserCourseModel> getUserCourseByUserIdAndUserType(String userId, UserType userType, int page, int amountPerPage);
 	
-	public Long getUserAmountForCourse(Long courseId);
+	public List<UserCourseModel> getUserCourseByCourseIdAndUserType(Long courseId, UserType userType, int page, int amountPerPage);
 	
-	public List<UserCourseModel> getUserCourseForCourse(Long courseId);
+	public Integer getUserAmountForCourse(Long courseId);
 		
 	public boolean addUserCourse(UserCourseModel userCourseModel);
 	
