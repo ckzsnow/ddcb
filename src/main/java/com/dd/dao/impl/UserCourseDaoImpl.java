@@ -31,7 +31,7 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		String sql = "select * from user_course where user_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
 		try {
-			userCourseList = jdbcTemplate.query(sql, new Object[] { userId, userType, limitBegin, limitEnd }, new UserCourseModelMapper());
+			userCourseList = jdbcTemplate.query(sql, new Object[] { userId, userType.value(), limitBegin, limitEnd }, new UserCourseModelMapper());
 		} catch (Exception e) {
 			logger.debug("getUserCourseByUserIdAndUserType, exception : {}", e.toString());
 		}
@@ -44,7 +44,7 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		String sql = "select count(*) from user_course where course_id=? and user_type=?";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { courseId, UserType.LISTEN }, Integer.class);
+			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { courseId, UserType.LISTEN.value() }, Integer.class);
 		} catch (Exception e) {
 			logger.debug("getUserAmountForCourse, exception : {}", e.toString());
 		}
@@ -67,14 +67,15 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	}
 
 	@Override
-	public boolean deleteUserCourseByUserIdAndCourseId(String userId, Long courseId) {
+	public boolean deleteUserCourseByUserIdAndCourseIdAndUserType(String userId, Long courseId, UserType userType) {
 		logger.debug("args userId : {}, courseId : {}", userId, courseId);
-		String sql = "delete from user_course where user_id = ? and course_id = ?";
+		String sql = "delete from user_course where user_id = ? and course_id = ? and user_type=?";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.update(sql, userId, courseId);
+			affectedRows = jdbcTemplate.update(sql, userId, courseId, userType.value());
+			affectedRows = affectedRows == 0 ? 1 : affectedRows;
 		} catch (Exception e) {
-			logger.debug("deleteUserCourseByUserIdAndCourseId, exception : {}", e.toString());
+			logger.debug("deleteUserCourseByUserIdAndCourseIdAndUserType, exception : {}", e.toString());
 		}
 		return affectedRows != 0;
 	}
@@ -88,7 +89,7 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		String sql = "select * from user_course where course_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
 		try {
-			userCourseList = jdbcTemplate.query(sql, new Object[] { courseId, userType, limitBegin, limitEnd }, new UserCourseModelMapper());
+			userCourseList = jdbcTemplate.query(sql, new Object[] { courseId, userType.value(), limitBegin, limitEnd }, new UserCourseModelMapper());
 		} catch (Exception e) {
 			logger.debug("getUserCourseByUserIdAndUserType, exception : {}", e.toString());
 		}

@@ -3,6 +3,8 @@ package com.dd.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class WorkYearInfoService implements IWorkYearInfoService {
 
 	@Autowired
 	private IWorkYearDao workYearDao;
+	
+	private static final Logger logger = LoggerFactory.getLogger(WorkYearInfoService.class);
 
 	@Override
 	public ResultModel getAllWorkYear() {
@@ -33,9 +37,18 @@ public class WorkYearInfoService implements IWorkYearInfoService {
 	}
 
 	@Override
-	public ResultModel getWorkYearById(int id) {
+	public ResultModel getWorkYearById(String id) {
 		ResultModel ret = new ResultModel();
-		WorkYearModel workYearModel = workYearDao.getWorkYearById(id);
+		int workYearId = 0;
+		try {
+			workYearId = Integer.valueOf(id);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("5002");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		WorkYearModel workYearModel = workYearDao.getWorkYearById(workYearId);
 		if(workYearModel == null) {
 			ret.setErrorCode("5001");
 			ret.setErrorMsg("未查询到数据");

@@ -41,7 +41,7 @@ public class CourseService implements ICourseService {
 		} catch (NumberFormatException e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		CourseModel courseModel = courseDao.getCourseByCourseId(courseId_);
@@ -71,15 +71,10 @@ public class CourseService implements ICourseService {
 			amountPerPage_ = Integer.valueOf(amountPerPage);
 			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
 			courseType_ = Enum.valueOf(CourseType.class, courseType);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
-			return ret;
-		} catch (IllegalArgumentException | NullPointerException  e) {
-			logger.error(e.toString());
-			ret.setErrorCode("2021");
-			ret.setErrorMsg("传入枚举类型格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		if (page_ <= 0 || amountPerPage_ <= 0) {
@@ -120,15 +115,10 @@ public class CourseService implements ICourseService {
 			stageId_ = Integer.valueOf(stageId);
 			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseStatus);
 			courseType_ = Enum.valueOf(CourseType.class, courseType);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
-			return ret;
-		} catch (IllegalArgumentException | NullPointerException  e) {
-			logger.error(e.toString());
-			ret.setErrorCode("2021");
-			ret.setErrorMsg("传入枚举类型格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		if (page_ <= 0 || amountPerPage_ <= 0) {
@@ -151,27 +141,26 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel getCourseBySchoolTime(Timestamp startTime, Timestamp endTime,
+	public ResultModel getCourseBySchoolTime(String startTime, String endTime,
 			String courseAuditStatus, String courseType, String page, String amountPerPage) {
 		ResultModel ret = new ResultModel();
 		int page_ = 0;
 		int amountPerPage_ = 0;
 		CourseAuditStatus courseAuditStatus_ = CourseAuditStatus.ALL;
 		CourseType courseType_ = CourseType.ALL;
+		Timestamp startTime_ = null;
+		Timestamp endTime_ = null;
 		try {
 			page_ = Integer.valueOf(page);
 			amountPerPage_ = Integer.valueOf(amountPerPage);
 			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
 			courseType_ = Enum.valueOf(CourseType.class, courseType);
-		} catch (NumberFormatException e) {
+			startTime_ = Timestamp.valueOf(startTime);//String的类型必须形如： yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
+			endTime_ = Timestamp.valueOf(endTime);
+		} catch (Exception e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
-			return ret;
-		} catch (IllegalArgumentException | NullPointerException  e) {
-			logger.error(e.toString());
-			ret.setErrorCode("2021");
-			ret.setErrorMsg("传入枚举类型格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		if (page_ <= 0 || amountPerPage_ <= 0) {
@@ -179,7 +168,7 @@ public class CourseService implements ICourseService {
 			ret.setErrorMsg("页数或每页显示数量必须为正数");
 			return ret;
 		}
-		List<CourseModel> retList = courseDao.getCourseBySchoolTime(startTime, endTime, courseAuditStatus_, courseType_,
+		List<CourseModel> retList = courseDao.getCourseBySchoolTime(startTime_, endTime_, courseAuditStatus_, courseType_,
 				page_, amountPerPage_);
 		if (retList != null && retList.size() != 0) {
 			ret.setErrorCode("0000");
@@ -206,15 +195,10 @@ public class CourseService implements ICourseService {
 			amountPerPage_ = Integer.valueOf(amountPerPage);
 			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
 			courseType_ = Enum.valueOf(CourseType.class, courseType);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
-			return ret;
-		} catch (IllegalArgumentException | NullPointerException  e) {
-			logger.error(e.toString());
-			ret.setErrorCode("2021");
-			ret.setErrorMsg("传入枚举类型格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		if (page_ <= 0 || amountPerPage_ <= 0) {
@@ -282,10 +266,15 @@ public class CourseService implements ICourseService {
 			ret.setErrorMsg("school_time未设置");
 			return ret;
 		}
-		courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));// String的类型必须形如：
-																				// yyyy-mm-dd
-																				// hh:mm:ss[.f...]
-																				// 这样的格式，中括号表示可选
+		try {
+			Timestamp schoolTime_ = Timestamp.valueOf(params.get("school_time"));
+			courseModel.setSchoolTime(schoolTime_);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2013");
+			ret.setErrorMsg("时间格式不正确，格式为： yyyy-mm-dd hh:mm:ss");
+			return ret;
+		}
 		courseModel.setDocAttatch(params.containsKey("doc_attatch") ? params.get("doc_attatch") : "");
 		courseModel.setVoiceAttatch(params.containsKey("voice_attatch") ? params.get("voice_attatch") : "");
 		courseModel.setCourseType(0);
@@ -304,6 +293,11 @@ public class CourseService implements ICourseService {
 	public ResultModel updateCourse(Map<String, String> params) {
 		ResultModel ret = new ResultModel();
 		CourseModel courseModel = new CourseModel();
+		if (!params.containsKey("course_id")) {
+			ret.setErrorCode("2014");
+			ret.setErrorMsg("course_id未设置");
+			return ret;
+		}
 		if (params.containsKey("name")) {
 			courseModel.setName(params.get("name"));
 		}
@@ -313,24 +307,34 @@ public class CourseService implements ICourseService {
 		if (params.containsKey("details")) {
 			courseModel.setDetails(params.get("details"));
 		}
-		if (params.containsKey("industry_id")) {
-			courseModel.setIndustryId(Integer.valueOf(params.get("industry_id")));
-		}
-		if (params.containsKey("field_id")) {
-			courseModel.setFieldId(Integer.valueOf(params.get("field_id")));
-		}
-		if (params.containsKey("stage_id")) {
-			courseModel.setStageId(Integer.valueOf(params.get("stage_id")));
-		}
-		if (params.containsKey("school_time")) {
-			courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));
-		}
 		if (params.containsKey("doc_attatch")) {
 			courseModel.setDocAttatch(params.get("doc_attatch"));
 		}
 		if (params.containsKey("voice_attatch")) {
 			courseModel.setVoiceAttatch(params.get("voice_attatch"));
 		}
+		
+		try {
+			if (params.containsKey("industry_id")) {
+				courseModel.setIndustryId(Integer.valueOf(params.get("industry_id")));
+			}
+			if (params.containsKey("field_id")) {
+				courseModel.setFieldId(Integer.valueOf(params.get("field_id")));
+			}
+			if (params.containsKey("stage_id")) {
+				courseModel.setStageId(Integer.valueOf(params.get("stage_id")));
+			}
+			if (params.containsKey("school_time")) {
+				courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));
+			}
+			courseModel.setId(Long.valueOf(params.get("course_id")));
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		
 		if (params.containsKey("course_type")) {
 			CourseType courseType_ = CourseType.ALL;
 			try {
@@ -379,7 +383,7 @@ public class CourseService implements ICourseService {
 		} catch (NumberFormatException e) {
 			logger.error(e.toString());
 			ret.setErrorCode("2020");
-			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
 		if (courseDao.deleteCourseByCourseId(courseId_)) {

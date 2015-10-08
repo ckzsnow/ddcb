@@ -38,7 +38,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 	@Override
 	public boolean addUserProfile(UserProfileModel userProfileModel) {
 		logger.debug("args userProfileModel : {}", userProfileModel.toString());
-		String sql = "insert into user_profile (user_id, name, photo, sex, industry, company, position, work_year_id, province_id, city_id, area_id, resume, create_time)"
+		String sql = "insert into user_profile (user_id, name, photo, sex, industry_id, company, position, work_year_id, province_id, city_id, area_id, resume, create_time)"
 				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int affectedRows = 0;
 		try {
@@ -61,6 +61,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 		int affectedRows = 0;
 		try {
 			affectedRows = jdbcTemplate.update(sql, userId);
+			affectedRows = affectedRows == 0 ? 1 : affectedRows;
 		} catch (Exception e) {
 			logger.debug("deleteUserProfileByUserId, exception : {}", e.toString());
 		}
@@ -74,66 +75,71 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
 		sql.append("update user_profile set ");
-		if(userProfileModel.getUserName() != null && !userProfileModel.getUserName().isEmpty()) {
-			sql.append("name=? ");
+		if (userProfileModel.getUserName() != null && !userProfileModel.getUserName().isEmpty()) {
+			sql.append("name=? ,");
 			argsList.add(userProfileModel.getUserName());
 		}
-		if(userProfileModel.getUserPhoto() != null && !userProfileModel.getUserPhoto().isEmpty()) {
-			sql.append(", photo=? ");
+		if (userProfileModel.getUserPhoto() != null && !userProfileModel.getUserPhoto().isEmpty()) {
+			sql.append("photo=? ,");
 			argsList.add(userProfileModel.getUserPhoto());
 		}
-		if(userProfileModel.getUserSex() != null) {
-			sql.append(", sex=? ");
+		if (userProfileModel.getUserSex() != null) {
+			sql.append("sex=? ,");
 			argsList.add(userProfileModel.getUserSex());
 		}
-		if(userProfileModel.getIndustryId() != null) {
-			sql.append(", industry_id=? ");
+		if (userProfileModel.getIndustryId() != null) {
+			sql.append("industry_id=? ,");
 			argsList.add(userProfileModel.getIndustryId());
 		}
-		if(userProfileModel.getCompanyName() != null && !userProfileModel.getCompanyName().isEmpty()) {
-			sql.append(", company=? ");
+		if (userProfileModel.getCompanyName() != null && !userProfileModel.getCompanyName().isEmpty()) {
+			sql.append("company=? ,");
 			argsList.add(userProfileModel.getCompanyName());
 		}
-		if(userProfileModel.getCompanyPosition() != null && !userProfileModel.getCompanyPosition().isEmpty()) {
-			sql.append(", position=? ");
+		if (userProfileModel.getCompanyPosition() != null && !userProfileModel.getCompanyPosition().isEmpty()) {
+			sql.append("position=? ,");
 			argsList.add(userProfileModel.getCompanyPosition());
 		}
-		if(userProfileModel.getWorkYearId() != null) {
-			sql.append(", work_year_id=? ");
+		if (userProfileModel.getWorkYearId() != null) {
+			sql.append("work_year_id=? ,");
 			argsList.add(userProfileModel.getWorkYearId());
 		}
-		if(userProfileModel.getProvinceId() != null && !userProfileModel.getProvinceId().isEmpty()) {
-			sql.append(", province_id=? ");
+		if (userProfileModel.getProvinceId() != null && !userProfileModel.getProvinceId().isEmpty()) {
+			sql.append("province_id=? ,");
 			argsList.add(userProfileModel.getProvinceId());
 		}
-		if(userProfileModel.getCityId() != null && !userProfileModel.getCityId().isEmpty()) {
-			sql.append(", city_id=? ");
+		if (userProfileModel.getCityId() != null && !userProfileModel.getCityId().isEmpty()) {
+			sql.append("city_id=? ,");
 			argsList.add(userProfileModel.getCityId());
 		}
-		if(userProfileModel.getAreaId() != null && !userProfileModel.getAreaId().isEmpty()) {
-			sql.append(", area_id=? ");
+		if (userProfileModel.getAreaId() != null && !userProfileModel.getAreaId().isEmpty()) {
+			sql.append("area_id=? ,");
 			argsList.add(userProfileModel.getAreaId());
 		}
-		if(userProfileModel.getResume() != null && !userProfileModel.getResume().isEmpty()) {
-			sql.append(", resume=? ");
+		if (userProfileModel.getResume() != null && !userProfileModel.getResume().isEmpty()) {
+			sql.append("resume=? ,");
 			argsList.add(userProfileModel.getResume());
 		}
-		if(argsList.size() == 0) {
+		if (argsList.size() == 0) {
 			logger.debug("valid args amount is 0, failed in updating.");
 			return false;
 		}
-		if(userProfileModel.getUserId() == null || userProfileModel.getUserId().isEmpty()) {
+		if (userProfileModel.getUserId() == null || userProfileModel.getUserId().isEmpty()) {
 			logger.debug("userId is invalid, failed in updating.");
 			return false;
-		} else {
-			sql.append("where user_id=?");
-			argsList.add(userProfileModel.getUserId());
-			Object[] args = (Object[])argsList.toArray(new Object[argsList.size()]);
+		}
+		if (sql.toString().endsWith(","))
+			sql.deleteCharAt(sql.length() - 1);
+		sql.append("where user_id=?");
+		argsList.add(userProfileModel.getUserId());
+		if (argsList.size() > 1) {
+			Object[] args = (Object[]) argsList.toArray(new Object[argsList.size()]);
 			try {
 				affectedRows = jdbcTemplate.update(sql.toString(), args);
 			} catch (Exception e) {
 				logger.debug("updateUserProfile, exception : {}", e.toString());
 			}
+		} else {
+			affectedRows = -1;
 		}
 		return affectedRows != 0;
 	}

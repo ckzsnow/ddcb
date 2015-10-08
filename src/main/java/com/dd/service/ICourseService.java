@@ -1,6 +1,5 @@
 package com.dd.service;
 
-import java.sql.Timestamp;
 import java.util.Map;
 
 import com.dd.models.ResultModel;
@@ -15,7 +14,7 @@ public interface ICourseService {
 	public ResultModel getCourseByIndustryIdAndFieldIdAndStageId(String industryId, String fieldId, String stageId, String courseStatus,
 			String courseType, String page, String amountPerPage);
 
-	public ResultModel getCourseBySchoolTime(Timestamp startTime, Timestamp endTime,
+	public ResultModel getCourseBySchoolTime(String startTime, String endTime,
 			String courseAuditStatus, String courseType, String page, String amountPerPage);
 
 	public ResultModel getCourseByCourseTypeAndCourseAuditStatus(String courseType,

@@ -14,6 +14,6 @@ public interface IUserCourseDao {
 		
 	public boolean addUserCourse(UserCourseModel userCourseModel);
 	
-	public boolean deleteUserCourseByUserIdAndCourseId(String userId, Long courseId);
+	public boolean deleteUserCourseByUserIdAndCourseIdAndUserType(String userId, Long courseId, UserType userType);
 	
 }

@@ -56,6 +56,7 @@ public class UserDaoImpl implements IUserDao {
 		int affectedRows = 0;
 		try {
 			affectedRows = jdbcTemplate.update(sql, userId);
+			affectedRows = affectedRows == 0 ? 1 : affectedRows;
 		} catch (Exception e) {
 			logger.debug("deleteUserByUserId, exception : {}", e.toString());
 		}

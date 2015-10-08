@@ -6,6 +6,6 @@ public interface IWorkYearInfoService {
 
 	public ResultModel getAllWorkYear();
 	
-	public ResultModel getWorkYearById(int id);
+	public ResultModel getWorkYearById(String id);
 	
 }

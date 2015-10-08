@@ -59,7 +59,7 @@ public interface Constant {
 	    }
     }
     
-    enum UserSex implements Constant {
+    /*enum UserSex implements Constant {
     	MALE(0), FEMALE(1);
     	
     	private int code;
@@ -76,6 +76,6 @@ public interface Constant {
 	    public String toString() {
 	        return String.valueOf(this.code);
 	    }
-    }
+    }*/
     
 }

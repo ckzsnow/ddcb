@@ -39,26 +39,28 @@ public class CourseDaoImpl implements ICourseDao {
 
 	@Override
 	public List<CourseModel> getCourseByCourseNameAndBriefAndDetails(String courseName, String courseBrief,
-			String courseDetails, CourseAuditStatus courseAuditStatus, CourseType courseType, int page, int amountPerPage) {
+			String courseDetails, CourseAuditStatus courseAuditStatus, CourseType courseType, int page,
+			int amountPerPage) {
 		logger.debug(
 				"args courseName : {}, courseBrief : {}, courseDetails : {}, courseAuditStatus : {}, courseType : {}",
 				courseName, courseBrief, courseDetails, courseAuditStatus, courseType);
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		courseName = courseName == null || courseName.isEmpty() ? "%%" : "%" + courseName + "%";
 		courseBrief = courseBrief == null || courseBrief.isEmpty() ? "%%" : "%" + courseBrief + "%";
 		courseDetails = courseDetails == null || courseDetails.isEmpty() ? "%%" : "%" + courseDetails + "%";
-		sql.append("select * from course where name like '"+courseName+"' and brief like '"+courseBrief+"' and details like '"+courseDetails+"' ");
+		sql.append("select * from course where name like '" + courseName + "' and brief like '" + courseBrief
+				+ "' and details like '" + courseDetails + "' ");
 		if (courseAuditStatus != CourseAuditStatus.ALL) {
 			sql.append("and audit_status =? ");
-			argsList.add(courseAuditStatus);
+			argsList.add(courseAuditStatus.value());
 		}
 		if (courseType != CourseType.ALL) {
 			sql.append("and course_type =? ");
-			argsList.add(courseType);
+			argsList.add(courseType.value());
 		}
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -81,7 +83,7 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course where industry_id=? and field_id=? and stage_id=? ");
 		argsList.add(industryId);
@@ -89,11 +91,11 @@ public class CourseDaoImpl implements ICourseDao {
 		argsList.add(stageId);
 		if (courseAuditStatus != CourseAuditStatus.ALL) {
 			sql.append("and audit_status =? ");
-			argsList.add(courseAuditStatus);
+			argsList.add(courseAuditStatus.value());
 		}
 		if (courseType != CourseType.ALL) {
 			sql.append("and course_type =? ");
-			argsList.add(courseType);
+			argsList.add(courseType.value());
 		}
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -116,18 +118,18 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course where create_time between ? and ? ");
 		argsList.add(startTime);
 		argsList.add(endTime);
 		if (courseAuditStatus != CourseAuditStatus.ALL) {
 			sql.append("and audit_status =? ");
-			argsList.add(courseAuditStatus);
+			argsList.add(courseAuditStatus.value());
 		}
 		if (courseType != CourseType.ALL) {
 			sql.append("and course_type =? ");
-			argsList.add(courseType);
+			argsList.add(courseType.value());
 		}
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -149,22 +151,22 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course ");
 		boolean where_flag = false;
 		if (courseAuditStatus != CourseAuditStatus.ALL) {
 			sql.append("where audit_status =? ");
-			argsList.add(courseAuditStatus);
+			argsList.add(courseAuditStatus.value());
 			where_flag = true;
 		}
 		if (courseType != CourseType.ALL) {
-			if(where_flag) {
+			if (where_flag) {
 				sql.append("and course_type =? ");
 			} else {
 				sql.append("where course_type =? ");
 			}
-			argsList.add(courseType);
+			argsList.add(courseType.value());
 		}
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -182,15 +184,14 @@ public class CourseDaoImpl implements ICourseDao {
 	@Override
 	public boolean addCourse(CourseModel courseModel) {
 		logger.debug("args courseModel : {}", courseModel.toString());
-		String sql = "insert into course (name, brief, details, industry_id, field_id, stage_id, school_time, doc_attatch, voice_attatach, course_type, audit_status, create_time)" + " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into course (name, brief, details, industry_id, field_id, stage_id, school_time, doc_attatch, voice_attatch, course_type, audit_status, create_time)"
+				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.update(sql, courseModel.getName(),
-					courseModel.getBrief(), courseModel.getDetails(),
-					courseModel.getIndustryId(), courseModel.getFieldId(),
-					courseModel.getStageId(), courseModel.getSchoolTime(),
-					courseModel.getDocAttatch(), courseModel.getVoiceAttatch(),
-					courseModel.getCourseType(), courseModel.getAuditStatus(),
+			affectedRows = jdbcTemplate.update(sql, courseModel.getName(), courseModel.getBrief(),
+					courseModel.getDetails(), courseModel.getIndustryId(), courseModel.getFieldId(),
+					courseModel.getStageId(), courseModel.getSchoolTime(), courseModel.getDocAttatch(),
+					courseModel.getVoiceAttatch(), courseModel.getCourseType(), courseModel.getAuditStatus(),
 					new Timestamp(System.currentTimeMillis()));
 		} catch (Exception e) {
 			logger.debug("addCourse, exception : {}", e.toString());
@@ -205,6 +206,7 @@ public class CourseDaoImpl implements ICourseDao {
 		int affectedRows = 0;
 		try {
 			affectedRows = jdbcTemplate.update(sql, courseId);
+			affectedRows = affectedRows == 0 ? 1 : affectedRows;
 		} catch (Exception e) {
 			logger.debug("deleteCourseByCourseId, exception : {}", e.toString());
 		}
@@ -218,62 +220,66 @@ public class CourseDaoImpl implements ICourseDao {
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
 		sql.append("update course set ");
-		if(courseModel.getName() != null && !courseModel.getName().isEmpty()) {
-			sql.append("name=? ");
+		if (courseModel.getName() != null && !courseModel.getName().isEmpty()) {
+			sql.append("name=? ,");
 			argsList.add(courseModel.getName());
 		}
-		if(courseModel.getBrief() != null && !courseModel.getBrief().isEmpty()) {
-			sql.append("brief=? ");
+		if (courseModel.getBrief() != null && !courseModel.getBrief().isEmpty()) {
+			sql.append("brief=? ,");
 			argsList.add(courseModel.getBrief());
-		}		
-		if(courseModel.getDetails() != null && !courseModel.getDetails().isEmpty()) {
-			sql.append("details=? ");
+		}
+		if (courseModel.getDetails() != null && !courseModel.getDetails().isEmpty()) {
+			sql.append("details=? ,");
 			argsList.add(courseModel.getDetails());
 		}
-		if(courseModel.getIndustryId() != null) {
-			sql.append("industry_id=? ");
+		if (courseModel.getIndustryId() != null) {
+			sql.append("industry_id=? ,");
 			argsList.add(courseModel.getIndustryId());
 		}
-		if(courseModel.getFieldId() != null) {
-			sql.append("field_id=? ");
+		if (courseModel.getFieldId() != null) {
+			sql.append("field_id=? ,");
 			argsList.add(courseModel.getFieldId());
 		}
-		if(courseModel.getStageId() != null) {
-			sql.append("stage_id=? ");
+		if (courseModel.getStageId() != null) {
+			sql.append("stage_id=? ,");
 			argsList.add(courseModel.getStageId());
 		}
-		if(courseModel.getSchoolTime() != null) {
-			sql.append("school_time=? ");
+		if (courseModel.getSchoolTime() != null) {
+			sql.append("school_time=? ,");
 			argsList.add(courseModel.getSchoolTime());
 		}
-		if(courseModel.getVoiceAttatch() != null && !courseModel.getVoiceAttatch().isEmpty()) {
-			sql.append("voice_attatach=? ");
+		if (courseModel.getVoiceAttatch() != null && !courseModel.getVoiceAttatch().isEmpty()) {
+			sql.append("voice_attatch=? ,");
 			argsList.add(courseModel.getVoiceAttatch());
 		}
-		if(courseModel.getDocAttatch() != null && !courseModel.getDocAttatch().isEmpty()) {
-			sql.append("doc_attatch=? ");
+		if (courseModel.getDocAttatch() != null && !courseModel.getDocAttatch().isEmpty()) {
+			sql.append("doc_attatch=? ,");
 			argsList.add(courseModel.getDocAttatch());
 		}
-		if(courseModel.getAuditStatus() != null) {
-			sql.append("audit_status=? ");
+		if (courseModel.getAuditStatus() != null) {
+			sql.append("audit_status=? ,");
 			argsList.add(courseModel.getAuditStatus());
 		}
-		if(courseModel.getCourseType() != null) {
-			sql.append("course_type=? ");
+		if (courseModel.getCourseType() != null) {
+			sql.append("course_type=? ,");
 			argsList.add(courseModel.getCourseType());
 		}
-		if(courseModel.getId() == null) {
+		if (courseModel.getId() == null) {
 			logger.debug("courseId is invalid, failed in updating.");
 			return false;
-		} else {
-			sql.append("where id=?");
-			argsList.add(courseModel.getId());
-			Object[] args = (Object[])argsList.toArray(new Object[argsList.size()]);
+		}
+		if(sql.toString().endsWith(",")) sql.deleteCharAt(sql.length() - 1 );
+		sql.append("where id=?");
+		argsList.add(courseModel.getId());
+		if (argsList.size() > 1) {
+			Object[] args = (Object[]) argsList.toArray(new Object[argsList.size()]);
 			try {
 				affectedRows = jdbcTemplate.update(sql.toString(), args);
 			} catch (Exception e) {
 				logger.debug("updateCourse, exception : {}", e.toString());
 			}
+		} else {
+			affectedRows = -1;
 		}
 		return affectedRows != 0;
 	}
