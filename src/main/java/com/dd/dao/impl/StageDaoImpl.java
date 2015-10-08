@@ -37,10 +37,10 @@ public class StageDaoImpl implements IStageDao {
 	@Override
 	public boolean addStage(StageModel stageModel) {
 		logger.debug("args stageModel : {}", stageModel.toString());
-		String sql = "insert into stage (field_id, name, create_time)" + " values (?, ?, ?)";
+		String sql = "insert into stage (name, create_time)" + " values (?, ?)";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.update(sql, stageModel.getFieldId(),
+			affectedRows = jdbcTemplate.update(sql,
 					stageModel.getName(), new Timestamp(System.currentTimeMillis()));
 		} catch (Exception e) {
 			logger.debug("addStage, exception : {}", e.toString());
@@ -64,7 +64,7 @@ public class StageDaoImpl implements IStageDao {
 	@Override
 	public boolean updateStageNameByStageId(String stageName, int stageId) {
 		logger.debug("args stageName : {}, stageId : {}", stageName, stageId);
-		String sql = "update stage set stageName=? where id=?";
+		String sql = "update stage set name=? where id=?";
 		int affectedRows = 0;
 		try {
 			affectedRows = jdbcTemplate.update(sql, stageName, stageId);
@@ -75,14 +75,13 @@ public class StageDaoImpl implements IStageDao {
 	}
 
 	@Override
-	public List<StageModel> getStageByFieldId(int fieldId) {
-		logger.debug("args industryId : {}", fieldId);
+	public List<StageModel> getAllStage() {
 		List<StageModel> stageList = null;
-		String sql = "select * from stage where field_id = ?";
+		String sql = "select * from stage";
 		try {
-			stageList = jdbcTemplate.query(sql, new Object[] { fieldId }, new StageModelMapper());
+			stageList = jdbcTemplate.query(sql, new StageModelMapper());
 		} catch (Exception e) {
-			logger.error("getFieldByIndustryId, exception : {}", e.toString());
+			logger.error("getAllStage, exception : {}", e.toString());
 		}
 		return stageList;
 	}

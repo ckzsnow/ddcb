@@ -80,6 +80,3 @@ resultList字段数据为json格式，样例如下：
 3001-未查询到数据
 resultList字段数据为json格式，样例如下：
 [{"id":1,"name":"求职面试","createTime":1444280451000},{"id":2,"name":"从业技能","createTime":1444280469000}]
-
-四：课程信息相关接口
-1.

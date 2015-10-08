@@ -47,7 +47,7 @@ public class UserProfileService implements IUserProfileService {
 			ret.setErrorMsg("userid不存在");
 			return ret;
 		}
-		ResultModel rm = categoryInfoService.getIndustryByIndustryId(userProgile.getIndustryId());
+		ResultModel rm = categoryInfoService.getIndustryByIndustryId(String.valueOf(userProgile.getIndustryId()));
 		if(!("3000").equals(rm.getErrorCode())) {
 			userProgile.setIndustryName("未知");
 		} else {

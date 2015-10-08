@@ -10,7 +10,7 @@ import com.dd.models.StageModel;
 public class StageModelMapper implements RowMapper<StageModel> {
 	public StageModel mapRow(ResultSet rs, int index) throws SQLException {
 		StageModel u = new StageModel(rs.getInt("id"),
-				rs.getInt("field_id"), rs.getString("stage_name"), rs.getTimestamp("create_time"));
+				rs.getString("name"), rs.getTimestamp("create_time"));
 		return u;
 	}
 }

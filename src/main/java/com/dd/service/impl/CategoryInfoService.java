@@ -3,6 +3,8 @@ package com.dd.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,33 +22,42 @@ public class CategoryInfoService implements ICategoryInfoService {
 
 	@Autowired
 	private IIndustryDao industryDao;
-	
+
 	@Autowired
 	private IFieldDao fieldDao;
-	
+
 	@Autowired
 	private IStageDao stageDao;
 
+	private static final Logger logger = LoggerFactory.getLogger(CategoryInfoService.class);
+
 	@Override
-	public ResultModel getStageByStageId(int stageId) {
+	public ResultModel getStageByStageId(String stageId) {
 		ResultModel ret = new ResultModel();
-		StageModel stageModel = stageDao.getStageByStageId(stageId);
-		if(stageModel == null) {
-			ret.setErrorCode("3001");
-			ret.setErrorMsg("未查询到数据");
-		} else {
-			ret.setErrorCode("3000");
-			ret.setErrorMsg("操作成功");
-			ret.setResult(stageModel);
+		try {
+			int stageId_ = Integer.valueOf(stageId);
+			StageModel stageModel = stageDao.getStageByStageId(stageId_);
+			if (stageModel == null) {
+				ret.setErrorCode("3001");
+				ret.setErrorMsg("未查询到数据");
+			} else {
+				ret.setErrorCode("3000");
+				ret.setErrorMsg("操作成功");
+				ret.setResult(stageModel);
+			}
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("3002");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
 		}
 		return ret;
 	}
 
 	@Override
-	public ResultModel getStageByFieldId(int fieldId) {
+	public ResultModel getAllStage() {
 		ResultModel ret = new ResultModel();
-		List<StageModel> stageModelList = stageDao.getStageByFieldId(fieldId);
-		if(stageModelList == null || stageModelList.size() == 0) {
+		List<StageModel> stageModelList = stageDao.getAllStage();
+		if (stageModelList == null || stageModelList.size() == 0) {
 			ret.setErrorCode("3001");
 			ret.setErrorMsg("未查询到数据");
 		} else {
@@ -58,46 +69,67 @@ public class CategoryInfoService implements ICategoryInfoService {
 	}
 
 	@Override
-	public ResultModel getFieldByFieldId(int fieldId) {
+	public ResultModel getFieldByFieldId(String fieldId) {
 		ResultModel ret = new ResultModel();
-		FieldModel fieldModel = fieldDao.getFieldByFieldId(fieldId);
-		if(fieldModel == null) {
-			ret.setErrorCode("3001");
-			ret.setErrorMsg("未查询到数据");
-		} else {
-			ret.setErrorCode("3000");
-			ret.setErrorMsg("操作成功");
-			ret.setResult(fieldModel);
+		try {
+			int fieldId_ = Integer.valueOf(fieldId);
+			FieldModel fieldModel = fieldDao.getFieldByFieldId(fieldId_);
+			if (fieldModel == null) {
+				ret.setErrorCode("3001");
+				ret.setErrorMsg("未查询到数据");
+			} else {
+				ret.setErrorCode("3000");
+				ret.setErrorMsg("操作成功");
+				ret.setResult(fieldModel);
+			}
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("3002");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
 		}
 		return ret;
 	}
 
 	@Override
-	public ResultModel getFieldByIndustryId(int industryId) {
+	public ResultModel getFieldByIndustryId(String industryId) {
 		ResultModel ret = new ResultModel();
-		List<FieldModel> fieldModelList = fieldDao.getFieldByIndustryId(industryId);
-		if(fieldModelList == null || fieldModelList.size() == 0) {
-			ret.setErrorCode("3001");
-			ret.setErrorMsg("未查询到数据");
-		} else {
-			ret.setErrorCode("3000");
-			ret.setErrorMsg("操作成功");
-			ret.setResultList(Arrays.asList(fieldModelList.toArray()));
+		try {
+			int industryId_ = Integer.valueOf(industryId);
+			List<FieldModel> fieldModelList = fieldDao.getFieldByIndustryId(industryId_);
+			if (fieldModelList == null || fieldModelList.size() == 0) {
+				ret.setErrorCode("3001");
+				ret.setErrorMsg("未查询到数据");
+			} else {
+				ret.setErrorCode("3000");
+				ret.setErrorMsg("操作成功");
+				ret.setResultList(Arrays.asList(fieldModelList.toArray()));
+			}
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("3002");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
 		}
 		return ret;
 	}
 
 	@Override
-	public ResultModel getIndustryByIndustryId(int industryId) {
+	public ResultModel getIndustryByIndustryId(String industryId) {
 		ResultModel ret = new ResultModel();
-		IndustryModel industryModel = industryDao.getIndustryByIndustryId(industryId);
-		if(industryModel == null) {
-			ret.setErrorCode("3001");
-			ret.setErrorMsg("未查询到数据");
-		} else {
-			ret.setErrorCode("3000");
-			ret.setErrorMsg("操作成功");
-			ret.setResult(industryModel);
+		try {
+			int industryId_ = Integer.valueOf(industryId);
+			IndustryModel industryModel = industryDao.getIndustryByIndustryId(industryId_);
+			if (industryModel == null) {
+				ret.setErrorCode("3001");
+				ret.setErrorMsg("未查询到数据");
+			} else {
+				ret.setErrorCode("3000");
+				ret.setErrorMsg("操作成功");
+				ret.setResult(industryModel);
+			}
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("3002");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
 		}
 		return ret;
 	}
@@ -106,7 +138,7 @@ public class CategoryInfoService implements ICategoryInfoService {
 	public ResultModel getAllIndustry() {
 		ResultModel ret = new ResultModel();
 		List<IndustryModel> industryModelList = industryDao.getAllIndustry();
-		if(industryModelList == null || industryModelList.size() == 0) {
+		if (industryModelList == null || industryModelList.size() == 0) {
 			ret.setErrorCode("3001");
 			ret.setErrorMsg("未查询到数据");
 		} else {

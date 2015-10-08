@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +26,26 @@ public class CourseService implements ICourseService {
 
 	@Autowired
 	private ICourseDao courseDao;
-	
+
 	@Autowired
 	private ICategoryInfoService categoryInfoService;
 
+	private static final Logger logger = LoggerFactory.getLogger(CourseService.class);
+
 	@Override
-	public ResultModel getCourseByCourseId(Long courseId) {
+	public ResultModel getCourseByCourseId(String courseId) {
 		ResultModel ret = new ResultModel();
-		CourseModel courseModel = courseDao.getCourseByCourseId(courseId);
-		if(courseModel == null) {
+		long courseId_ = 0;
+		try {
+			courseId_ = Long.valueOf(courseId);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		}
+		CourseModel courseModel = courseDao.getCourseByCourseId(courseId_);
+		if (courseModel == null) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 		} else {
@@ -46,16 +59,37 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public ResultModel getCourseByCourseNameAndBriefAndDetails(String courseName, String courseBrief,
-			String courseDetails, CourseAuditStatus courseAuditStatus, CourseType courseType, int page,
-			int amountPerPage) {
+			String courseDetails, String courseAuditStatus, String courseType, String page,
+			String amountPerPage) {
 		ResultModel ret = new ResultModel();
-		if(page <= 0 || amountPerPage <= 0) {
-			ret.setErrorCode("2002");
-			ret.setErrorMsg("页数或每页显示数量为负数");
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		CourseAuditStatus courseAuditStatus_ = CourseAuditStatus.ALL;
+		CourseType courseType_ = CourseType.ALL;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
+			courseType_ = Enum.valueOf(CourseType.class, courseType);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		} catch (IllegalArgumentException | NullPointerException  e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2021");
+			ret.setErrorMsg("传入枚举类型格式不正确");
 			return ret;
 		}
-		List<CourseModel> retList = courseDao.getCourseByCourseNameAndBriefAndDetails(courseName, courseBrief, courseDetails, courseAuditStatus, courseType, page, amountPerPage);
-		if(retList.size() != 0) {
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseModel> retList = courseDao.getCourseByCourseNameAndBriefAndDetails(courseName, courseBrief,
+				courseDetails, courseAuditStatus_, courseType_, page_, amountPerPage_);
+		if (retList != null && retList.size() != 0) {
 			ret.setErrorCode("0000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
@@ -68,16 +102,43 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel getCourseByIndustryIdAndFieldIdAndStageId(int industryId, int fieldId, int stageId,
-			CourseAuditStatus courseStatus, CourseType courseType, int page, int amountPerPage) {
+	public ResultModel getCourseByIndustryIdAndFieldIdAndStageId(String industryId, String fieldId, String stageId,
+			String courseStatus, String courseType, String page, String amountPerPage) {
 		ResultModel ret = new ResultModel();
-		if(page <= 0 || amountPerPage <= 0) {
-			ret.setErrorCode("2002");
-			ret.setErrorMsg("页数或每页显示数量为负数");
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		int industryId_ = 0;
+		int fieldId_ = 0;
+		int stageId_ = 0;
+		CourseAuditStatus courseAuditStatus_ = CourseAuditStatus.ALL;
+		CourseType courseType_ = CourseType.ALL;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+			industryId_ = Integer.valueOf(industryId);
+			fieldId_ = Integer.valueOf(fieldId);
+			stageId_ = Integer.valueOf(stageId);
+			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseStatus);
+			courseType_ = Enum.valueOf(CourseType.class, courseType);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		} catch (IllegalArgumentException | NullPointerException  e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2021");
+			ret.setErrorMsg("传入枚举类型格式不正确");
 			return ret;
 		}
-		List<CourseModel> retList = courseDao.getCourseByIndustryIdAndFieldIdAndStageId(industryId, fieldId, stageId, courseStatus, courseType, page, amountPerPage);
-		if(retList.size() != 0) {
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseModel> retList = courseDao.getCourseByIndustryIdAndFieldIdAndStageId(industryId_, fieldId_, stageId_,
+				courseAuditStatus_, courseType_, page_, amountPerPage_);
+		if (retList != null && retList.size() != 0) {
 			ret.setErrorCode("0000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
@@ -91,15 +152,36 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public ResultModel getCourseBySchoolTime(Timestamp startTime, Timestamp endTime,
-			CourseAuditStatus courseAuditStatus, CourseType courseType, int page, int amountPerPage) {
+			String courseAuditStatus, String courseType, String page, String amountPerPage) {
 		ResultModel ret = new ResultModel();
-		if(page <= 0 || amountPerPage <= 0) {
-			ret.setErrorCode("2002");
-			ret.setErrorMsg("页数或每页显示数量为负数");
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		CourseAuditStatus courseAuditStatus_ = CourseAuditStatus.ALL;
+		CourseType courseType_ = CourseType.ALL;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
+			courseType_ = Enum.valueOf(CourseType.class, courseType);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		} catch (IllegalArgumentException | NullPointerException  e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2021");
+			ret.setErrorMsg("传入枚举类型格式不正确");
 			return ret;
 		}
-		List<CourseModel> retList = courseDao.getCourseBySchoolTime(startTime, endTime, courseAuditStatus, courseType, page, amountPerPage);
-		if(retList.size() != 0) {
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseModel> retList = courseDao.getCourseBySchoolTime(startTime, endTime, courseAuditStatus_, courseType_,
+				page_, amountPerPage_);
+		if (retList != null && retList.size() != 0) {
 			ret.setErrorCode("0000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
@@ -112,16 +194,38 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel getCourseByCourseTypeAndCourseAuditStatus(CourseType courseType,
-			CourseAuditStatus courseAuditStatus, int page, int amountPerPage) {
+	public ResultModel getCourseByCourseTypeAndCourseAuditStatus(String courseType,
+			String courseAuditStatus, String page, String amountPerPage) {
 		ResultModel ret = new ResultModel();
-		if(page <= 0 || amountPerPage <= 0) {
-			ret.setErrorCode("2002");
-			ret.setErrorMsg("页数或每页显示数量为负数");
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		CourseAuditStatus courseAuditStatus_ = CourseAuditStatus.ALL;
+		CourseType courseType_ = CourseType.ALL;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+			courseAuditStatus_ = Enum.valueOf(CourseAuditStatus.class, courseAuditStatus);
+			courseType_ = Enum.valueOf(CourseType.class, courseType);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		} catch (IllegalArgumentException | NullPointerException  e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2021");
+			ret.setErrorMsg("传入枚举类型格式不正确");
 			return ret;
 		}
-		List<CourseModel> retList = courseDao.getCourseByCourseTypeAndCourseAuditStatus(courseType, courseAuditStatus, page, amountPerPage);
-		if(retList.size() != 0) {
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		
+		List<CourseModel> retList = courseDao.getCourseByCourseTypeAndCourseAuditStatus(courseType_, courseAuditStatus_,
+				page_, amountPerPage_);
+		if (retList != null && retList.size() != 0) {
 			ret.setErrorCode("0000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
@@ -137,53 +241,56 @@ public class CourseService implements ICourseService {
 	public ResultModel addCourse(Map<String, String> params) {
 		ResultModel ret = new ResultModel();
 		CourseModel courseModel = new CourseModel();
-		if(!params.containsKey("name")) {
+		if (!params.containsKey("name")) {
 			ret.setErrorCode("2004");
 			ret.setErrorMsg("name未设置");
 			return ret;
 		}
 		courseModel.setName(params.get("name"));
-		if(!params.containsKey("brief")) {
+		if (!params.containsKey("brief")) {
 			ret.setErrorCode("2005");
 			ret.setErrorMsg("brief未设置");
 			return ret;
 		}
 		courseModel.setBrief(params.get("brief"));
-		if(!params.containsKey("details")) {
+		if (!params.containsKey("details")) {
 			ret.setErrorCode("2006");
 			ret.setErrorMsg("details未设置");
 			return ret;
 		}
 		courseModel.setDetails(params.get("details"));
-		if(!params.containsKey("industry_id")) {
+		if (!params.containsKey("industry_id")) {
 			ret.setErrorCode("2007");
 			ret.setErrorMsg("industry_id未设置");
 			return ret;
 		}
 		courseModel.setIndustryId(Integer.valueOf(params.get("industry_id")));
-		if(!params.containsKey("field_id")) {
+		if (!params.containsKey("field_id")) {
 			ret.setErrorCode("2008");
 			ret.setErrorMsg("field_id未设置");
 			return ret;
 		}
 		courseModel.setFieldId(Integer.valueOf(params.get("field_id")));
-		if(!params.containsKey("stage_id")) {
+		if (!params.containsKey("stage_id")) {
 			ret.setErrorCode("2009");
 			ret.setErrorMsg("stage_id未设置");
 			return ret;
 		}
 		courseModel.setStageId(Integer.valueOf(params.get("stage_id")));
-		if(!params.containsKey("school_time")) {
+		if (!params.containsKey("school_time")) {
 			ret.setErrorCode("2010");
 			ret.setErrorMsg("school_time未设置");
 			return ret;
 		}
-		courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));//String的类型必须形如： yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选
+		courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));// String的类型必须形如：
+																				// yyyy-mm-dd
+																				// hh:mm:ss[.f...]
+																				// 这样的格式，中括号表示可选
 		courseModel.setDocAttatch(params.containsKey("doc_attatch") ? params.get("doc_attatch") : "");
 		courseModel.setVoiceAttatch(params.containsKey("voice_attatch") ? params.get("voice_attatch") : "");
-		courseModel.setCourseType(params.containsKey("course_type") ? Integer.valueOf(params.get("course_type")) : 0);
+		courseModel.setCourseType(0);
 		courseModel.setAuditStatus(0);
-		if(courseDao.addCourse(courseModel)) {
+		if (courseDao.addCourse(courseModel)) {
 			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 		} else {
@@ -197,40 +304,58 @@ public class CourseService implements ICourseService {
 	public ResultModel updateCourse(Map<String, String> params) {
 		ResultModel ret = new ResultModel();
 		CourseModel courseModel = new CourseModel();
-		if(params.containsKey("name")) {
+		if (params.containsKey("name")) {
 			courseModel.setName(params.get("name"));
 		}
-		if(params.containsKey("brief")) {
+		if (params.containsKey("brief")) {
 			courseModel.setBrief(params.get("brief"));
 		}
-		if(params.containsKey("details")) {
+		if (params.containsKey("details")) {
 			courseModel.setDetails(params.get("details"));
 		}
-		if(params.containsKey("industry_id")) {
+		if (params.containsKey("industry_id")) {
 			courseModel.setIndustryId(Integer.valueOf(params.get("industry_id")));
 		}
-		if(params.containsKey("field_id")) {
+		if (params.containsKey("field_id")) {
 			courseModel.setFieldId(Integer.valueOf(params.get("field_id")));
 		}
-		if(params.containsKey("stage_id")) {
+		if (params.containsKey("stage_id")) {
 			courseModel.setStageId(Integer.valueOf(params.get("stage_id")));
 		}
-		if(params.containsKey("school_time")) {
+		if (params.containsKey("school_time")) {
 			courseModel.setSchoolTime(Timestamp.valueOf(params.get("school_time")));
 		}
-		if(params.containsKey("doc_attatch")) {
+		if (params.containsKey("doc_attatch")) {
 			courseModel.setDocAttatch(params.get("doc_attatch"));
 		}
-		if(params.containsKey("voice_attatch")) {
+		if (params.containsKey("voice_attatch")) {
 			courseModel.setVoiceAttatch(params.get("voice_attatch"));
 		}
-		if(params.containsKey("course_type")) {
-			courseModel.setCourseType(Integer.valueOf(params.get("course_type")));
+		if (params.containsKey("course_type")) {
+			CourseType courseType_ = CourseType.ALL;
+			try {
+				courseType_ = Enum.valueOf(CourseType.class, params.get("course_type"));
+			} catch (IllegalArgumentException | NullPointerException  e) {
+				logger.error(e.toString());
+				ret.setErrorCode("2021");
+				ret.setErrorMsg("传入枚举类型格式不正确");
+				return ret;
+			}
+			courseModel.setCourseType(courseType_.value());
 		}
-		if(params.containsKey("audit_status")) {
-			courseModel.setAuditStatus(Integer.valueOf(params.get("audit_status")));
+		if (params.containsKey("audit_status")) {
+			CourseAuditStatus courseAuditStatus = CourseAuditStatus.ALL;
+			try {
+				courseAuditStatus = Enum.valueOf(CourseAuditStatus.class, params.get("audit_status"));
+			} catch (IllegalArgumentException | NullPointerException  e) {
+				logger.error(e.toString());
+				ret.setErrorCode("2021");
+				ret.setErrorMsg("传入枚举类型格式不正确");
+				return ret;
+			}
+			courseModel.setAuditStatus(courseAuditStatus.value());
 		}
-		if(courseDao.updateCourse(courseModel)) {
+		if (courseDao.updateCourse(courseModel)) {
 			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 		} else {
@@ -241,14 +366,23 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel deleteCourseByCourseId(Long courseId) {
+	public ResultModel deleteCourseByCourseId(String courseId) {
 		ResultModel ret = new ResultModel();
-		if(courseId == null) {
+		if (courseId == null) {
 			ret.setErrorCode("2012");
 			ret.setErrorMsg("course_id为空");
 			return ret;
 		}
-		if(courseDao.deleteCourseByCourseId(courseId)) {
+		long courseId_ = 0;
+		try {
+			courseId_ = Long.valueOf(courseId);
+		} catch (NumberFormatException e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数应为数字，数字格式不正确");
+			return ret;
+		}
+		if (courseDao.deleteCourseByCourseId(courseId_)) {
 			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 		} else {
@@ -257,35 +391,35 @@ public class CourseService implements ICourseService {
 		}
 		return ret;
 	}
-	
+
 	private void addExtraInfoForModel(CourseModel courseModel) {
 		this.addIFSName(courseModel);
 	}
-	
+
 	private void addExtraInfoForModelList(List<CourseModel> courseModelList) {
-		for(CourseModel model : courseModelList) {
+		for (CourseModel model : courseModelList) {
 			this.addIFSName(model);
 		}
 	}
-	
+
 	private void addIFSName(CourseModel courseModel) {
-		ResultModel rm = categoryInfoService.getIndustryByIndustryId(courseModel.getIndustryId());
-		if(!("3000").equals(rm.getErrorCode())) {
+		ResultModel rm = categoryInfoService.getIndustryByIndustryId(String.valueOf(courseModel.getIndustryId()));
+		if (!("3000").equals(rm.getErrorCode())) {
 			courseModel.setIndustryName("未知");
 		} else {
-			courseModel.setIndustryName(((IndustryModel)rm.getResult()).getName());
+			courseModel.setIndustryName(((IndustryModel) rm.getResult()).getName());
 		}
-		rm = categoryInfoService.getFieldByFieldId(courseModel.getFieldId());
-		if(!("3000").equals(rm.getErrorCode())) {
+		rm = categoryInfoService.getFieldByFieldId(String.valueOf(courseModel.getFieldId()));
+		if (!("3000").equals(rm.getErrorCode())) {
 			courseModel.setFieldName("未知");
 		} else {
-			courseModel.setFieldName(((FieldModel)rm.getResult()).getName());
+			courseModel.setFieldName(((FieldModel) rm.getResult()).getName());
 		}
-		rm = categoryInfoService.getStageByStageId(courseModel.getStageId());
-		if(!("3000").equals(rm.getErrorCode())) {
+		rm = categoryInfoService.getStageByStageId(String.valueOf(courseModel.getStageId()));
+		if (!("3000").equals(rm.getErrorCode())) {
 			courseModel.setStageName("未知");
 		} else {
-			courseModel.setStageName(((StageModel)rm.getResult()).getName());
+			courseModel.setStageName(((StageModel) rm.getResult()).getName());
 		}
 	}
 }

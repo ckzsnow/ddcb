@@ -11,6 +11,10 @@ public interface Constant {
 	        this.code = code;
 	    }
 
+	    public int value() {
+	    	return this.code;
+	    }
+	    
 	    @Override
 	    public String toString() {
 	        return String.valueOf(this.code);
@@ -26,6 +30,10 @@ public interface Constant {
 	        this.code = code;
 	    }
 
+	    public int value() {
+	    	return this.code;
+	    }
+	    
 	    @Override
 	    public String toString() {
 	        return String.valueOf(this.code);
@@ -41,6 +49,10 @@ public interface Constant {
 	        this.code = code;
 	    }
 
+	    public int value() {
+	    	return this.code;
+	    }
+	    
 	    @Override
 	    public String toString() {
 	        return String.valueOf(this.code);
@@ -56,6 +68,10 @@ public interface Constant {
 	        this.code = code;
 	    }
 
+	    public int value() {
+	    	return this.code;
+	    }
+	    
 	    @Override
 	    public String toString() {
 	        return String.valueOf(this.code);

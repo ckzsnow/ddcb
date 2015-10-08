@@ -6,16 +6,14 @@ public class StageModel implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer fieldId;
 	private String name;
 	private Timestamp createTime;
 
 	public StageModel() {
 	}
 
-	public StageModel(Integer id, Integer fieldId, String name, Timestamp createTime) {
+	public StageModel(Integer id, String name, Timestamp createTime) {
 		this.id = id;
-		this.fieldId = fieldId;
 		this.name = name;
 		this.createTime = createTime;
 	}
@@ -26,14 +24,6 @@ public class StageModel implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getFieldId() {
-		return fieldId;
-	}
-
-	public void setFieldId(Integer fieldId) {
-		this.fieldId = fieldId;
 	}
 
 	public String getName() {
@@ -54,7 +44,7 @@ public class StageModel implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "StageModel [id=" + id + ", fieldId=" + fieldId + ", name=" + name + ", createTime=" + createTime + "]";
+		return "StageModel [id=" + id + ", name=" + name + ", createTime=" + createTime + "]";
 	}
 
 }

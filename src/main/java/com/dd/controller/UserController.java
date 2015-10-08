@@ -13,6 +13,7 @@ import com.dd.models.ResultModel;
 import com.dd.service.IUserService;
 
 @Controller
+@RequestMapping("/safety")
 public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -20,7 +21,7 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
-	@RequestMapping("/safety/userRegister")
+	@RequestMapping("/userRegister")
 	@ResponseBody
 	public ResultModel userRegister(HttpServletRequest request) {
 		logger.debug("user register");
@@ -31,7 +32,7 @@ public class UserController {
 	
 	
 	
-	@RequestMapping("/safety/userLogin")
+	@RequestMapping("/userLogin")
 	@ResponseBody
 	public ResultModel userLogin(HttpServletRequest request) {
 		logger.debug("user register");

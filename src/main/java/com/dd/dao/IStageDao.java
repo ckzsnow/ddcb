@@ -8,7 +8,7 @@ public interface IStageDao {
 
 	public StageModel getStageByStageId(int stageId);
 	
-	public List<StageModel> getStageByFieldId(int fieldId);
+	public List<StageModel> getAllStage();
 	
 	public boolean addStage(StageModel stageModel);
 	

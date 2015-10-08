@@ -48,10 +48,10 @@ public class CourseDaoImpl implements ICourseDao {
 		List<Object> argsList = new ArrayList<>();
 		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
-		sql.append("select * from course where name like '%?%' or brief like '%?%' or details like '%?%' ");
-		argsList.add(courseName);
-		argsList.add(courseBrief);
-		argsList.add(courseDetails);
+		courseName = courseName == null || courseName.isEmpty() ? "%%" : "%" + courseName + "%";
+		courseBrief = courseBrief == null || courseBrief.isEmpty() ? "%%" : "%" + courseBrief + "%";
+		courseDetails = courseDetails == null || courseDetails.isEmpty() ? "%%" : "%" + courseDetails + "%";
+		sql.append("select * from course where name like '"+courseName+"' and brief like '"+courseBrief+"' and details like '"+courseDetails+"' ");
 		if (courseAuditStatus != CourseAuditStatus.ALL) {
 			sql.append("and audit_status =? ");
 			argsList.add(courseAuditStatus);

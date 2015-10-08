@@ -4,15 +4,15 @@ import com.dd.models.ResultModel;
 
 public interface ICategoryInfoService {
 
-	public ResultModel getStageByStageId(int stageId);
+	public ResultModel getStageByStageId(String stageId);
 	
-	public ResultModel getStageByFieldId(int fieldId);
+	public ResultModel getAllStage();
 	
-	public ResultModel getFieldByFieldId(int fieldId);
+	public ResultModel getFieldByFieldId(String fieldId);
 	
-	public ResultModel getFieldByIndustryId(int industryId);
+	public ResultModel getFieldByIndustryId(String industryId);
 	
-	public ResultModel getIndustryByIndustryId(int industryId);
+	public ResultModel getIndustryByIndustryId(String industryId);
 	
 	public ResultModel getAllIndustry();
 	
