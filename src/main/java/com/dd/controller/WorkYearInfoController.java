@@ -27,9 +27,7 @@ public class WorkYearInfoController {
 		logger.debug("getAllWorkYear");
 		return workYearInfoService.getAllWorkYear();
 	}
-	
-	
-	
+		
 	@RequestMapping("/getWorkYearById")
 	@ResponseBody
 	public ResultModel getWorkYearById(HttpServletRequest request) {

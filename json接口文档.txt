@@ -21,8 +21,9 @@
 
 3.用户手机号码验证接口路径:/safety/sendVerifyCode
 请求方式:HTTPS GET/POST
-请求参数:userId, userPwd
+请求参数:userId
 返回字段:errorCode, errorMsg
+(尚未完成)
 
 二：省市县三级联动相关接口
 1.获取所有省份接口路径:/regionInfo/getAllProvince
@@ -36,7 +37,7 @@ resultList字段数据为json格式，样例如下：
 
 2.根据provinceId获取对应的城市列表接口：/regionInfo/getAllCityByProvinceId
 请求方式:HTTP GET/POST
-请求参数:provinceId
+请求参数:provinceId-数字
 返回字段:errorCode, errorMsg, resultList
 4000-操作成功
 4001-未查询到数据
@@ -45,7 +46,7 @@ resultList字段数据为json格式，样例如下：
 
 3.根据cityId获取对应的地区列表接口：/regionInfo/getAllAreaByCityId
 请求方式:HTTP GET/POST
-请求参数:cityId
+请求参数:cityId-数字
 返回字段:errorCode, errorMsg, resultList
 4000-操作成功
 4001-未查询到数据
@@ -64,7 +65,7 @@ resultList字段数据为json格式，样例如下：
 
 2.获取行业id对应的领域信息接口路径:/courseCategoryInfo/getFieldByIndustryId
 请求方式:HTTP GET/POST
-请求参数:industryId
+请求参数:industryId-数字
 返回字段:errorCode, errorMsg, resultList
 3000-操作成功
 3001-未查询到数据
@@ -82,4 +83,339 @@ resultList字段数据为json格式，样例如下：
 [{"id":1,"name":"求职面试","createTime":1444280451000},{"id":2,"name":"从业技能","createTime":1444280469000}]
 
 四：课程信息相关接口
-1.
+1.根据课程id获取课程信息接口路径:/course/getCourseByCourseId
+请求方式:HTTP GET/POST
+请求参数:courseId-数字
+返回字段:errorCode, errorMsg, result
+2020-传入参数格式不正确
+2001-未查询到数据
+2000-操作成功
+result字段数据为json格式，样例如下：
+{"id":3,"name":"1","brief":"1","details":"1","industryId":2,"fieldId":3,"stageId":4,"industryName":"咨询","fieldName":"基金","stageName":"行业经验","schoolTime":1444310040000,"formatSchoolTime":"2015-10-08 21:14:00.0","docAttatch":"/opt/tmp/test.sql","voiceAttatch":"/opt/tmp/test.sql","courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444309179000},"resultList":null}
+courseTypeName共三个数值：COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程;
+courseAuditStatusName共三个数值：ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有;
+
+
+2.根据课程名、课程简介、课程详情、课程类型和课程审核状态获取课程信息接口路径:/course/getCourseByCourseNameAndBriefAndDetails
+
+请求方式:HTTP GET/POST
+
+请求参数:共计7个参数，如下
+courseName-课程名字, courseBrief-课程简介, courseDetails-课程详情(这三个参数均为字符串类型)
+courseAuditStatus-课程审核状态(参数为字符串类型,且必须为如下中的一个ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有)
+courseType-课程类型(参数为字符串类型，且必须为如下中的一个COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+2020-传入参数格式不正确
+2001-未查询到数据
+2002-页数或每页显示数量必须为正数
+2000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":3,"name":"1","brief":"1","details":"1","industryId":2,"fieldId":3,"stageId":4,"industryName":"咨询","fieldName":"基金","stageName":"行业经验","schoolTime":1444310040000,"formatSchoolTime":"2015-10-08 21:14:00.0","docAttatch":"/opt/tmp/test.sql","voiceAttatch":"/opt/tmp/test.sql","courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444309179000},{"id":2,"name":"你好","brief":"你好","details":"你哦好","industryId":3,"fieldId":1,"stageId":3,"industryName":"法律","fieldName":"投资银行","stageName":"创业","schoolTime":1444301762000,"formatSchoolTime":"2015-10-08 18:56:02.0","docAttatch":null,"voiceAttatch":null,"courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444301765000}]
+
+3.根据行业、领域、阶段、课程类型和课程审核状态获取课程信息接口路径:/course/getCourseByIndustryIdAndFieldIdAndStageId
+
+请求方式:HTTP GET/POST
+
+请求参数:共计7个参数，如下
+industryId-行业Id, fieldId-领域Id, stageId-阶段Id(这三个参数均为数字类型)
+courseAuditStatus-课程审核状态(参数为字符串类型,且必须为如下中的一个ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有)
+courseType-课程类型(参数为字符串类型，且必须为如下中的一个COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+2020-传入参数格式不正确
+2001-未查询到数据
+2002-页数或每页显示数量必须为正数
+2000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":3,"name":"1","brief":"1","details":"1","industryId":2,"fieldId":3,"stageId":4,"industryName":"咨询","fieldName":"基金","stageName":"行业经验","schoolTime":1444310040000,"formatSchoolTime":"2015-10-08 21:14:00.0","docAttatch":"/opt/tmp/test.sql","voiceAttatch":"/opt/tmp/test.sql","courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444309179000}]
+
+4.根据上课时间范围、课程类型和课程审核状态获取课程信息接口路径:/course/getCourseBySchoolTime
+
+请求方式:HTTP GET/POST
+
+请求参数:共计6个参数，如下
+startTime-起始时间, endTime-截止时间(这两个参数均为字符串类型，且格式必须如下：yyyy-mm-dd hh:mm:ss,例如2015-10-09 13:11:00)
+courseAuditStatus-课程审核状态(参数为字符串类型,且必须为如下中的一个ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有)
+courseType-课程类型(参数为字符串类型，且必须为如下中的一个COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+2020-传入参数格式不正确
+2001-未查询到数据
+2002-页数或每页显示数量必须为正数
+2000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":3,"name":"1","brief":"1","details":"1","industryId":2,"fieldId":3,"stageId":4,"industryName":"咨询","fieldName":"基金","stageName":"行业经验","schoolTime":1444310040000,"formatSchoolTime":"2015-10-08 21:14:00.0","docAttatch":"/opt/tmp/test.sql","voiceAttatch":"/opt/tmp/test.sql","courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444309179000},{"id":2,"name":"你好","brief":"你好","details":"你哦好","industryId":3,"fieldId":1,"stageId":3,"industryName":"法律","fieldName":"投资银行","stageName":"创业","schoolTime":1444301762000,"formatSchoolTime":"2015-10-08 18:56:02.0","docAttatch":null,"voiceAttatch":null,"courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444301765000}]
+
+5.根据课程类型和课程审核状态获取课程信息接口路径:/course/getCourseByCourseTypeAndCourseAuditStatus
+
+请求方式:HTTP GET/POST
+
+请求参数:共计4个参数，如下
+courseAuditStatus-课程审核状态(参数为字符串类型,且必须为如下中的一个ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有)
+courseType-课程类型(参数为字符串类型，且必须为如下中的一个COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+2020-传入参数格式不正确
+2001-未查询到数据
+2002-页数或每页显示数量必须为正数
+2000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":3,"name":"1","brief":"1","details":"1","industryId":2,"fieldId":3,"stageId":4,"industryName":"咨询","fieldName":"基金","stageName":"行业经验","schoolTime":1444310040000,"formatSchoolTime":"2015-10-08 21:14:00.0","docAttatch":"/opt/tmp/test.sql","voiceAttatch":"/opt/tmp/test.sql","courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444309179000},{"id":2,"name":"你好","brief":"你好","details":"你哦好","industryId":3,"fieldId":1,"stageId":3,"industryName":"法律","fieldName":"投资银行","stageName":"创业","schoolTime":1444301762000,"formatSchoolTime":"2015-10-08 18:56:02.0","docAttatch":null,"voiceAttatch":null,"courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444301765000}]
+
+6.添加课程信息接口路径:/course/addCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计7个参数，所有参数均为必须的参数，如下
+name-课程名称(字符串类型)
+brief-课程简介(字符串类型)
+details-课程详情(字符串类型)
+industry_id-行业Id(数字类型)
+field_id-领域Id(数字类型)
+stage_id-阶段Id(数字类型)
+school_time-上课时间(字符串类型,且格式必须如下：yyyy-mm-dd hh:mm:ss,例如2015-10-09 13:11:00)
+
+返回字段:errorCode, errorMsg
+2020-传入参数格式不正确
+2004-name未设置
+2005-brief未设置
+2006-details未设置
+2007-industry_id未设置
+2008-field_id未设置
+2009-stage_id未设置
+2010-school_time未设置
+2013-时间格式不正确
+2011-操作数据库失败
+2000-操作成功
+
+7.修改课程信息接口路径:/course/updateCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计10个参数，如下
+courseId-课程id(数字类型,必选参数)
+name-课程名称(字符串类型,可选)
+brief-课程简介(字符串类型,可选)
+details-课程详情(字符串类型,可选)
+industry_id-行业Id(数字类型,可选)
+field_id-领域Id(数字类型,可选)
+stage_id-阶段Id(数字类型,可选)
+school_time-上课时间(字符串类型,可选, 且格式必须如下：yyyy-mm-dd hh:mm:ss,例如2015-10-09 13:11:00)
+courseAuditStatus-课程审核状态(参数为字符串类型,可选, 且必须为如下中的一个ONGOING-审批中, PASS-审批通过, REJECT-审批未通过, ALL-所有)
+courseType-课程类型(参数为字符串类型,可选,且必须为如下中的一个COMMON-普通课程, CHOICENESS-精选课程, RECOMMEND-推荐课程, ALL-所有课程)
+
+返回字段:errorCode, errorMsg
+2020-传入参数格式不正确
+2021-传入枚举类型格式不正确
+2014-course_id未设置
+2011-操作数据库失败
+2000-操作成功
+
+8.删除课程信息接口路径:/course/deleteCourseByCourseId
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+courseId-课程id(数字类型,必选参数)
+
+返回字段:errorCode, errorMsg
+2020-传入参数格式不正确
+2014-course_id未设置
+2011-操作数据库失败
+2000-操作成功
+
+五：用户课程信息相关接口
+1.根据用户id和用户类型获取用户课程信息接口路径:/userCourse/getUserCourseByUserIdAndUserType
+
+请求方式:HTTP GET/POST
+
+请求参数:共计4个参数，如下
+userId-用户id(字符串类型,必选)
+userType-用户类型(参数为字符串类型,必选,且必须为如下中的一个LISTEN-听课者, TEACH-授课者)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":1,"userId":"111","courseId":1,"userType":0,"createTime":1444318172000}]
+
+2.根据课程id和用户类型获取用户课程信息接口路径:/userCourse/getUserCourseByCourseIdAndUserType
+
+请求方式:HTTP GET/POST
+
+请求参数:共计4个参数，如下
+courseId-课程id(数字类型,必选)
+userType-用户类型(参数为字符串类型,必选,且必须为如下中的一个LISTEN-听课者, TEACH-授课者)
+page-页码(参数为数字类型，且必须为正数)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+resultList字段数据为json格式，样例如下：
+[{"id":1,"userId":"111","courseId":1,"userType":0,"createTime":1444318172000}]
+
+3.根据课程id获取听课用户数量接口路径:/userCourse/getUserAmountForCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+courseId-课程id(数字类型,必选)
+
+返回字段:errorCode, errorMsg, result
+6010-传入参数格式不正确
+6000-操作成功
+
+4.添加用户课程信息接口路径:/userCourse/addUserCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计3个参数，如下
+user_id-用户id(字符串类型,必选)
+course_id-课程id(数字类型,必选)
+userType-用户类型(字符串类型,必选,且必须为如下中的一个LISTEN-听课者, TEACH-授课者)
+
+返回字段:errorCode, errorMsg
+6003-user_id未设置
+6004-course_id未设置
+6005-user_type未设置
+6011-传入枚举类型格式不正确
+6000-操作成功
+6006-操作数据失败
+
+5.删除用户课程信息接口路径:/userCourse/deleteUserCourseByUserIdAndCourseIdAndUserType
+
+请求方式:HTTP GET/POST
+
+请求参数:共计3个参数，如下
+user_id-用户id(字符串类型,必选)
+course_id-课程id(数字类型,必选)
+user_type-用户类型(字符串类型,必选,且必须为如下中的一个LISTEN-听课者, TEACH-授课者)
+
+返回字段:errorCode, errorMsg
+6010-传入参数格式不正确
+6011-传入枚举类型格式不正确
+6000-操作成功
+6006-操作数据失败
+
+六:用户详细信息相关接口
+1.获取用户详细信息接口路径:/userProfile/getUserProfile
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+userId-用户id(字符串类型,必选)
+
+返回字段:errorCode, errorMsg, result
+1001-用户id为空
+1014-用户id不存在
+1000-操作成功
+result字段数据为json格式，样例如下：
+{"userId":"111","userName":"1","userPhoto":"1","userSex":0,"industryId":1,"industryName":"金融","companyName":"2","companyPosition":"3","workYearId":1,"workYear":"1年","provinceId":"100100","provinceName":"未知","cityId":"100101","cityName":"未知","areaId":"100102","areaName":"未知","resume":"11","createTime":1444376372000}
+
+2.添加用户详细信息接口路径:/userProfile/addUserProfile
+
+请求方式:HTTP GET/POST
+
+请求参数:共计12个参数，11个参数为必选，如下
+user_id-用户id(字符串类型)
+name-用户姓名(字符串类型)
+photo-用户头像路径(字符串类型)
+sex-用户性别(数字类型,且必须为0或1,0-男，1-女)
+industry_id-行业id(数字类型)
+work_year_id-工作年限id(数字类型)
+company-公司名称(字符串类型)
+position-职位名称(字符串类型)
+province_id-省份id(字符串类型)
+city_id-城市id(字符串类型)
+area_id-区域id(字符串类型)
+resume-个人简介(字符串类型,可选)
+
+返回字段:errorCode, errorMsg
+1002-用户id未设置
+1003-name未设置
+1004-photo未设置
+1005-sex未设置
+1006-industry_id未设置
+1009-work_year_id未设置
+1020-参数格式不正确
+1007-company未设置
+1008-position未设置
+1010-province_id未设置
+1011-city_id未设置
+1012-area_id未设置
+1013-操作数据库失败
+1000-操作成功
+
+3.修改用户详细信息接口路径:/userProfile/updateUserProfile
+
+请求方式:HTTP GET/POST
+
+请求参数:共计12个参数，如下
+user_id-用户id(字符串类型, 必选)
+name-用户姓名(字符串类型,可选)
+photo-用户头像路径(字符串类型,可选)
+sex-用户性别(数字类型,且必须为0或1,0-男，1-女,可选)
+industry_id-行业id(数字类型,可选)
+work_year_id-工作年限id(数字类型,可选)
+company-公司名称(字符串类型,可选)
+position-职位名称(字符串类型,可选)
+province_id-省份id(字符串类型,可选)
+city_id-城市id(字符串类型,可选)
+area_id-区域id(字符串类型,可选)
+resume-个人简介(字符串类型,可选)
+
+返回字段:errorCode, errorMsg
+1002-用户id未设置
+1020-参数格式不正确
+1013-操作数据库失败
+1000-操作成功
+
+4.删除用户详细信息接口路径:/userProfile/deleteUserProfile
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+user_id-用户id(字符串类型, 必选)
+
+返回字段:errorCode, errorMsg
+1002-用户id未设置
+1013-操作数据库失败
+1000-操作成功
+
+七：工作年限相关接口
+1.获取所有工作年限信息接口路径:/workYearInfo/getAllWorkYear
+
+请求方式:HTTP GET/POST
+
+请求参数:无
+
+返回字段:errorCode, errorMsg, resultList
+resultList字段数据为json格式，样例如下：
+[{"id":1,"name":"1年","createTime":1444314708000},{"id":2,"name":"2年","createTime":1444314716000},{"id":3,"name":"3年","createTime":1444314726000},{"id":4,"name":"4年","createTime":1444314739000},{"id":5,"name":"5年","createTime":1444314753000},{"id":6,"name":"6年","createTime":1444314764000},{"id":7,"name":"7年","createTime":1444314773000},{"id":8,"name":"8年","createTime":1444314782000},{"id":9,"name":"9年","createTime":1444314791000},{"id":10,"name":"10年","createTime":1444314800000},{"id":11,"name":"10~15年","createTime":1444314816000},{"id":12,"name":"15年以上","createTime":1444314826000}]
+
+2.根据工作年限id获取工作年限名称接口路径:/workYearInfo/getWorkYearById
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+workYearId-工作年限id(数字类型, 必选)
+
+返回字段:errorCode, errorMsg, result
+result字段数据为json格式，样例如下：
+{"id":2,"name":"2年","createTime":1444314716000}

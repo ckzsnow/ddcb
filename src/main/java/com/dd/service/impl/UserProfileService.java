@@ -234,8 +234,8 @@ public class UserProfileService implements IUserProfileService {
 	public ResultModel deleteUserProfile(String userId) {
 		ResultModel ret = new ResultModel();
 		if (userId == null || userId.isEmpty()) {
-			ret.setErrorCode("1001");
-			ret.setErrorMsg("user_id为空");
+			ret.setErrorCode("1002");
+			ret.setErrorMsg("user_id未设置");
 			return ret;
 		}
 		if (userProfileDao.deleteUserProfileByUserId(userId)) {

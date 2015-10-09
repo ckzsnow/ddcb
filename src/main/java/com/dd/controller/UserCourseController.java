@@ -57,7 +57,7 @@ public class UserCourseController {
 	@RequestMapping("/addUserCourse")
 	@ResponseBody
 	public ResultModel addUserCourse(HttpServletRequest request) {
-		logger.debug("getUserAmountForCourse");
+		logger.debug("addUserCourse");
 		return userCourseService.addUserCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
 	}	
 	

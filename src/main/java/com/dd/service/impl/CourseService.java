@@ -85,13 +85,13 @@ public class CourseService implements ICourseService {
 		List<CourseModel> retList = courseDao.getCourseByCourseNameAndBriefAndDetails(courseName, courseBrief,
 				courseDetails, courseAuditStatus_, courseType_, page_, amountPerPage_);
 		if (retList != null && retList.size() != 0) {
-			ret.setErrorCode("0000");
+			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
 			ret.setResultList(Arrays.asList(retList.toArray()));
 		} else {
-			ret.setErrorCode("2003");
-			ret.setErrorMsg("查询结果为空");
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
 		}
 		return ret;
 	}
@@ -129,13 +129,13 @@ public class CourseService implements ICourseService {
 		List<CourseModel> retList = courseDao.getCourseByIndustryIdAndFieldIdAndStageId(industryId_, fieldId_, stageId_,
 				courseAuditStatus_, courseType_, page_, amountPerPage_);
 		if (retList != null && retList.size() != 0) {
-			ret.setErrorCode("0000");
+			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
 			ret.setResultList(Arrays.asList(retList.toArray()));
 		} else {
-			ret.setErrorCode("2003");
-			ret.setErrorMsg("查询结果为空");
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
 		}
 		return ret;
 	}
@@ -171,13 +171,13 @@ public class CourseService implements ICourseService {
 		List<CourseModel> retList = courseDao.getCourseBySchoolTime(startTime_, endTime_, courseAuditStatus_, courseType_,
 				page_, amountPerPage_);
 		if (retList != null && retList.size() != 0) {
-			ret.setErrorCode("0000");
+			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
 			ret.setResultList(Arrays.asList(retList.toArray()));
 		} else {
-			ret.setErrorCode("2003");
-			ret.setErrorMsg("查询结果为空");
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
 		}
 		return ret;
 	}
@@ -210,13 +210,13 @@ public class CourseService implements ICourseService {
 		List<CourseModel> retList = courseDao.getCourseByCourseTypeAndCourseAuditStatus(courseType_, courseAuditStatus_,
 				page_, amountPerPage_);
 		if (retList != null && retList.size() != 0) {
-			ret.setErrorCode("0000");
+			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 			this.addExtraInfoForModelList(retList);
 			ret.setResultList(Arrays.asList(retList.toArray()));
 		} else {
-			ret.setErrorCode("2003");
-			ret.setErrorMsg("查询结果为空");
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
 		}
 		return ret;
 	}
@@ -373,8 +373,8 @@ public class CourseService implements ICourseService {
 	public ResultModel deleteCourseByCourseId(String courseId) {
 		ResultModel ret = new ResultModel();
 		if (courseId == null) {
-			ret.setErrorCode("2012");
-			ret.setErrorMsg("course_id为空");
+			ret.setErrorCode("2014");
+			ret.setErrorMsg("course_id未设置");
 			return ret;
 		}
 		long courseId_ = 0;
@@ -425,5 +425,8 @@ public class CourseService implements ICourseService {
 		} else {
 			courseModel.setStageName(((StageModel) rm.getResult()).getName());
 		}
+		courseModel.setCourseAuditStatusName(CourseAuditStatus.values()[courseModel.getAuditStatus()].toString());
+		courseModel.setCourseTypeName(CourseType.values()[courseModel.getCourseType()].toString());
+		courseModel.setFormatSchoolTime(courseModel.getSchoolTime().toString());
 	}
 }

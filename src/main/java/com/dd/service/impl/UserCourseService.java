@@ -28,7 +28,7 @@ public class UserCourseService implements IUserCourseService {
 		ResultModel ret = new ResultModel();
 		int page_ = 0;
 		int amountPerPage_ = 0;
-		UserType userType_ = UserType.ALL;
+		UserType userType_ = UserType.LISTEN;
 		try {
 			page_ = Integer.valueOf(page);
 			amountPerPage_ = Integer.valueOf(amountPerPage);
@@ -45,7 +45,7 @@ public class UserCourseService implements IUserCourseService {
 			return ret;
 		}
 		List<UserCourseModel> retList = userCourseDao.getUserCourseByUserIdAndUserType(userId, userType_, page_, amountPerPage_);
-		if(retList.size() != 0) {
+		if(retList != null && retList.size() != 0) {
 			ret.setErrorCode("6000");
 			ret.setErrorMsg("操作成功");
 			ret.setResultList(Arrays.asList(retList.toArray()));
@@ -63,7 +63,7 @@ public class UserCourseService implements IUserCourseService {
 		int page_ = 0;
 		int amountPerPage_ = 0;
 		long courseId_ = 0;
-		UserType userType_ = UserType.ALL;
+		UserType userType_ = UserType.LISTEN;
 		try {
 			page_ = Integer.valueOf(page);
 			amountPerPage_ = Integer.valueOf(amountPerPage);
@@ -81,7 +81,7 @@ public class UserCourseService implements IUserCourseService {
 			return ret;
 		}
 		List<UserCourseModel> retList = userCourseDao.getUserCourseByCourseIdAndUserType(courseId_, userType_, page_, amountPerPage_);
-		if(retList.size() != 0) {
+		if(retList != null && retList.size() != 0) {
 			ret.setErrorCode("6000");
 			ret.setErrorMsg("操作成功");
 			ret.setResultList(Arrays.asList(retList.toArray()));
@@ -132,7 +132,7 @@ public class UserCourseService implements IUserCourseService {
 			ret.setErrorMsg("user_type未设置");
 			return ret;
 		}
-		UserType userType_ = UserType.ALL;
+		UserType userType_ = UserType.LISTEN;
 		try {
 			userType_ = Enum.valueOf(UserType.class, params.get("user_type"));
 		} catch (IllegalArgumentException | NullPointerException  e) {
@@ -164,7 +164,7 @@ public class UserCourseService implements IUserCourseService {
 			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
-		UserType userType_ = UserType.ALL;
+		UserType userType_ = UserType.LISTEN;
 		try {
 			userType_ = Enum.valueOf(UserType.class, userType);
 		} catch (IllegalArgumentException | NullPointerException  e) {

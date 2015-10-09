@@ -16,10 +16,13 @@ public class CourseModel implements java.io.Serializable {
 	private String fieldName;
 	private String stageName;
 	private Timestamp schoolTime;
+	private String formatSchoolTime;
 	private String docAttatch;
 	private String voiceAttatch;
 	private Integer courseType;
-	private Integer auditStatus;	
+	private String courseTypeName;
+	private Integer auditStatus;
+	private String courseAuditStatusName;
 	private Timestamp createTime;
 
 	// Constructors
@@ -45,6 +48,30 @@ public class CourseModel implements java.io.Serializable {
 		this.courseType = courseType;
 		this.auditStatus = auditStatus;
 		this.createTime = createTime;
+	}
+
+	public String getFormatSchoolTime() {
+		return formatSchoolTime;
+	}
+
+	public void setFormatSchoolTime(String formatSchoolTime) {
+		this.formatSchoolTime = formatSchoolTime;
+	}
+
+	public String getCourseTypeName() {
+		return courseTypeName;
+	}
+
+	public void setCourseTypeName(String courseTypeName) {
+		this.courseTypeName = courseTypeName;
+	}
+
+	public String getCourseAuditStatusName() {
+		return courseAuditStatusName;
+	}
+
+	public void setCourseAuditStatusName(String courseAuditStatusName) {
+		this.courseAuditStatusName = courseAuditStatusName;
 	}
 
 	public String getIndustryName() {
@@ -184,7 +211,8 @@ public class CourseModel implements java.io.Serializable {
 		return "CourseModel [id=" + id + ", name=" + name + ", brief=" + brief + ", details=" + details
 				+ ", industryId=" + industryId + ", fieldId=" + fieldId + ", stageId=" + stageId + ", industryName="
 				+ industryName + ", fieldName=" + fieldName + ", stageName=" + stageName + ", schoolTime=" + schoolTime
-				+ ", docAttatch=" + docAttatch + ", voiceAttatch=" + voiceAttatch + ", courseType=" + courseType
-				+ ", auditStatus=" + auditStatus + ", createTime=" + createTime + "]";
+				+ ", formatSchoolTime=" + formatSchoolTime + ", docAttatch=" + docAttatch + ", voiceAttatch="
+				+ voiceAttatch + ", courseType=" + courseType + ", courseTypeName=" + courseTypeName + ", auditStatus="
+				+ auditStatus + ", courseAuditStatusName=" + courseAuditStatusName + ", createTime=" + createTime + "]";
 	}
 }

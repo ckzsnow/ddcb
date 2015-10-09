@@ -3,12 +3,15 @@ package com.dd.constant;
 public interface Constant {
 
 	enum CourseAuditStatus implements Constant {
-        ONGOING(0), PASS(1), REJECT(2), ALL(3);
+        ONGOING("ONGOING", 0), PASS("PASS", 1), REJECT("REJECT", 2), ALL("ALL", 3);
 
 		private int code;
+		
+		private String name;
 
-	    private CourseAuditStatus(int code) {
+	    private CourseAuditStatus(String name, int code) {
 	        this.code = code;
+	        this.name = name;
 	    }
 
 	    public int value() {
@@ -17,17 +20,20 @@ public interface Constant {
 	    
 	    @Override
 	    public String toString() {
-	        return String.valueOf(this.code);
+	        return this.name;
 	    }
     }
 
     enum CourseType implements Constant {
-    	COMMON(0), CHOICENESS(1), ALL(2);
+    	COMMON("COMMON", 0), CHOICENESS("CHOICENESS", 1), RECOMMEND("RECOMMEND", 2), ALL("ALL", 3);
     	
     	private int code;
+    	
+    	private String name;
 
-	    private CourseType(int code) {
+	    private CourseType(String name, int code) {
 	        this.code = code;
+	        this.name = name;
 	    }
 
 	    public int value() {
@@ -36,17 +42,20 @@ public interface Constant {
 	    
 	    @Override
 	    public String toString() {
-	        return String.valueOf(this.code);
+	        return this.name;
 	    }
     }
     
     enum UserType implements Constant {
-    	LISTEN(0), TEACH(1), ALL(2);
+    	LISTEN("LISTEN", 0), TEACH("TEACH", 1);
     	
     	private int code;
+    	
+    	private String name;
 
-	    private UserType(int code) {
+	    private UserType(String name, int code) {
 	        this.code = code;
+	        this.name = name;
 	    }
 
 	    public int value() {
@@ -55,7 +64,7 @@ public interface Constant {
 	    
 	    @Override
 	    public String toString() {
-	        return String.valueOf(this.code);
+	        return this.name;
 	    }
     }
     
