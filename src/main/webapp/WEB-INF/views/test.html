@@ -10,7 +10,7 @@
             function display() { 
                 //var valueLabel = document.getElementById("valueLabel"); 
                 //valueLabel.innerHTML = ""; 
-                ws=new WebSocket("ws://localhost:8080/ddcb/websocket"); 
+                ws=new WebSocket("ws://localhost:8080/ddcb/websocket?user_id=111"); 
                 //鐩戝惉娑堟伅
                 ws.onmessage = function(event) { 
                     //valueLabel.innerHTML+ = event.data; 

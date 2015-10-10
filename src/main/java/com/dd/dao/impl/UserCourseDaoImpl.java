@@ -2,7 +2,6 @@ package com.dd.dao.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,15 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<UserCourseModel> getUserCourseByUserIdAndUserType(String userId, UserType userType, int page,
 			int amountPerPage) {
-		logger.debug("args userId : {}, userType : {}, page : {}, amountPerPage : {}", userId, userType, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		logger.debug("args userId : {}, userType : {}, page : {}, amountPerPage : {}", userId, userType, page,
+				amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		String sql = "select * from user_course where user_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
 		try {
-			userCourseList = jdbcTemplate.query(sql, new Object[] { userId, userType.value(), limitBegin, limitEnd }, new UserCourseModelMapper());
+			userCourseList = jdbcTemplate.query(sql, new Object[] { userId, userType.value(), limitBegin, limitEnd },
+					new UserCourseModelMapper());
 		} catch (Exception e) {
 			logger.debug("getUserCourseByUserIdAndUserType, exception : {}", e.toString());
 		}
@@ -44,7 +45,8 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		String sql = "select count(*) from user_course where course_id=? and user_type=?";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { courseId, UserType.LISTEN.value() }, Integer.class);
+			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { courseId, UserType.LISTEN.value() },
+					Integer.class);
 		} catch (Exception e) {
 			logger.debug("getUserAmountForCourse, exception : {}", e.toString());
 		}
@@ -54,12 +56,19 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public boolean addUserCourse(UserCourseModel userCourseModel) {
 		logger.debug("args userCourseModel : {}", userCourseModel.toString());
+		String checkSql = "select * from user_course where user_id=? and course_id = ? and user_type=?";
 		String sql = "insert into user_course (user_id, course_id, user_type, create_time)" + " values (?, ?, ?, ?)";
+		List<UserCourseModel> userCourseList = null;
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.update(sql, userCourseModel.getUserId(),
-					userCourseModel.getCourseId(), userCourseModel.getUserType(),
-					new Timestamp(System.currentTimeMillis()));
+			userCourseList = jdbcTemplate.query(checkSql, new Object[] { userCourseModel.getUserId(),
+					userCourseModel.getCourseId(), userCourseModel.getUserType() }, new UserCourseModelMapper());
+			if (userCourseList == null || userCourseList.isEmpty()) {
+				affectedRows = jdbcTemplate.update(sql, userCourseModel.getUserId(), userCourseModel.getCourseId(),
+						userCourseModel.getUserType(), new Timestamp(System.currentTimeMillis()));
+			} else {
+				affectedRows = 1;
+			}
 		} catch (Exception e) {
 			logger.debug("addUserCourse, exception : {}", e.toString());
 		}
@@ -83,13 +92,15 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<UserCourseModel> getUserCourseByCourseIdAndUserType(Long courseId, UserType userType, int page,
 			int amountPerPage) {
-		logger.debug("args courseId : {}, userType : {}, page : {}, amountPerPage : {}", courseId, userType, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		logger.debug("args courseId : {}, userType : {}, page : {}, amountPerPage : {}", courseId, userType, page,
+				amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
 		int limitEnd = limitBegin + amountPerPage;
 		String sql = "select * from user_course where course_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
 		try {
-			userCourseList = jdbcTemplate.query(sql, new Object[] { courseId, userType.value(), limitBegin, limitEnd }, new UserCourseModelMapper());
+			userCourseList = jdbcTemplate.query(sql, new Object[] { courseId, userType.value(), limitBegin, limitEnd },
+					new UserCourseModelMapper());
 		} catch (Exception e) {
 			logger.debug("getUserCourseByUserIdAndUserType, exception : {}", e.toString());
 		}
