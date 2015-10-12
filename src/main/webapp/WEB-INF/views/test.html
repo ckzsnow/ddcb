@@ -10,7 +10,7 @@
             function display() { 
                 //var valueLabel = document.getElementById("valueLabel"); 
                 //valueLabel.innerHTML = ""; 
-                ws=new WebSocket("ws://localhost:8080/ddcb/websocket?user_id=111"); 
+                ws=new WebSocket("ws://192.168.2.65:8080/ddcb/websocket?userId=111&userName=chaikuaizhang&userPhoto=/views/p1.jpg"); 
                 //鐩戝惉娑堟伅
                 ws.onmessage = function(event) { 
                     //valueLabel.innerHTML+ = event.data; 
@@ -34,7 +34,7 @@
    if (document.readyState !== "complete") {  
        log.buffer.push(s);  
    } else {  
-       document.getElementById("contentId").innerHTML += (s + "\n");  
+       document.getElementById("contentId").innerHTML += (s + "\r\n");  
    }  
 }  
             function sendMsg(){
