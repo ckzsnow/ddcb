@@ -50,18 +50,22 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 		if (session == null) return;
 		String courseId = (String) session.getHandshakeAttributes().get("courseId");
 		String message = (String) session.getHandshakeAttributes().get("userName") + "进入了";
-		sendSystemMessageToCourse(courseId, message, null);
+		Set<String> exculdeUserIdSet = new HashSet<>();
+		exculdeUserIdSet.add(userId);
+		sendSystemMessageToCourseUser(courseId, message, exculdeUserIdSet);
 	}
 
-	private void broadcastUserLeave(String userId) {
+	/*private void broadcastUserLeave(String userId) {
 		WebSocketSession session = userSessionMap.get(userId);
 		if (session == null) return;
 		String courseId = (String) session.getHandshakeAttributes().get("courseId");
 		String message = (String) session.getHandshakeAttributes().get("userName") + "离开了";
-		sendSystemMessageToCourse(courseId, message, null);
-	}
+		Set<String> exculdeUserIdSet = new HashSet<>();
+		exculdeUserIdSet.add(userId);
+		sendSystemMessageToCourse(courseId, message, exculdeUserIdSet);
+	}*/
 
-	private void sendSystemMessageToCourse(String courseId, String message, Set<String> exculdeUserIdSet) {
+	private void sendSystemMessageToCourseUser(String courseId, String message, Set<String> exculdeUserIdSet) {
 		Set<String> userIdSet = getAllUserByCourseId(courseId);
 		if (userIdSet == null) return;
 		for (String userId : userIdSet) {
@@ -69,7 +73,7 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 			WebSocketSession session = userSessionMap.get(userId);
 			if(session == null) continue;
 			WebSocketDataModel wsd = new WebSocketDataModel();
-			wsd.setMessageType(0);
+			wsd.setMessageType("0");
 			wsd.setMessage(message);
 			JSONObject json = JSONObject.fromObject(wsd);
 			TextMessage returnMessage = new TextMessage(json.toString());
@@ -107,20 +111,24 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+		String userId = (String) session.getHandshakeAttributes().get("userId");
 		String courseId = (String) session.getHandshakeAttributes().get("courseId");
-		sendUserMessageToOthers(courseId, message.getPayload());
+		sendUserMessageToOthers(userId, courseId, message.getPayload());
 	}
 	
-	private void sendUserMessageToOthers(String courseId, String message) {
+	private void sendUserMessageToOthers(String excludeUserId, String courseId, String message) {
 		Set<String> userIdSet = getAllUserByCourseId(courseId);
 		if (userIdSet == null) return;
+		WebSocketSession excludeUserSession = userSessionMap.get(excludeUserId);
+		if(excludeUserSession == null) return;
 		for (String userId : userIdSet) {
+			if(excludeUserId != null && excludeUserId.equals(userId)) continue;
 			WebSocketSession session = userSessionMap.get(userId);
 			if(session == null) continue;
 			WebSocketDataModel wsd = new WebSocketDataModel();
-			wsd.setMessageType(1);
-			wsd.setUserName((String) session.getHandshakeAttributes().get("userName"));
-			wsd.setUserPhoto((String) session.getHandshakeAttributes().get("userPhoto"));
+			wsd.setMessageType("1");
+			wsd.setUserName((String) excludeUserSession.getHandshakeAttributes().get("userName"));
+			wsd.setUserPhoto((String) excludeUserSession.getHandshakeAttributes().get("userPhoto"));
 			wsd.setMessage(message);
 			JSONObject json = JSONObject.fromObject(wsd);
 			TextMessage returnMessage = new TextMessage(json.toString());
@@ -149,7 +157,6 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
 		logger.debug("websocket connection closed......");
 		userSessionMap.remove((String) session.getHandshakeAttributes().get("userId"));
-		broadcastUserLeave((String) session.getHandshakeAttributes().get("userId"));
 	}
 
 	@Override

@@ -15,27 +15,30 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Map<String, Object> attributes) throws Exception {
+		if (request.getHeaders().containsKey("Sec-WebSocket-Extensions")) {
+			request.getHeaders().set("Sec-WebSocket-Extensions", "permessage-deflate");
+		}
 		if (request instanceof ServletServerHttpRequest) {
-            ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-            HttpSession session = servletRequest.getServletRequest().getSession(false);
-            if (session == null) {
-            	String userId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userId");
-        		String courseId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("courseId");
-        		String userName = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userName");
-        		String userPhoto = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userPhoto");
-        		attributes.put("userId", userId);
-        		attributes.put("courseId", courseId);
-        		attributes.put("userName", userName);
-        		attributes.put("userPhoto", userPhoto);
-            }
-        }
+			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
+			HttpSession session = servletRequest.getServletRequest().getSession(false);
+			if (session == null) {
+				String userId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userId");
+				String courseId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("courseId");
+				String userName = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userName");
+				String userPhoto = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userPhoto");
+				attributes.put("userId", userId);
+				attributes.put("courseId", courseId);
+				attributes.put("userName", userName);
+				attributes.put("userPhoto", userPhoto);
+			}
+		}
 		return super.beforeHandshake(request, response, wsHandler, attributes);
 	}
 
 	@Override
 	public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
 			Exception ex) {
-		//System.out.println("After Handshake");
+		// System.out.println("After Handshake");
 		super.afterHandshake(request, response, wsHandler, ex);
 	}
 

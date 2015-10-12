@@ -1,5 +1,7 @@
 package com.dd.models;
 
+import java.sql.Timestamp;
+
 public class WebSocketDataModel implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -7,13 +9,26 @@ public class WebSocketDataModel implements java.io.Serializable {
 	private String userName;
 	private String message;
 	private String userPhoto;
-	private int messageType;//0-系统消息，1-用户消息
+	private String messageType;//0-系统消息，1-用户消息
+	private String time;
 
-	public int getMessageType() {
+	public WebSocketDataModel() {
+		this.time = new Timestamp(System.currentTimeMillis()).toString(); 
+	}
+	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getMessageType() {
 		return messageType;
 	}
 
-	public void setMessageType(int messageType) {
+	public void setMessageType(String messageType) {
 		this.messageType = messageType;
 	}
 
@@ -23,9 +38,6 @@ public class WebSocketDataModel implements java.io.Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public WebSocketDataModel() {
 	}
 
 	public String getUserId() {
