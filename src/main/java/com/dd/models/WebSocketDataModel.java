@@ -4,9 +4,26 @@ public class WebSocketDataModel implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String userId;
+	private String userName;
 	private String message;
 	private String userPhoto;
-	private WebSocketDataModel[] historyMessage;
+	private int messageType;//0-系统消息，1-用户消息
+
+	public int getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(int messageType) {
+		this.messageType = messageType;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public WebSocketDataModel() {
 	}
@@ -33,14 +50,6 @@ public class WebSocketDataModel implements java.io.Serializable {
 
 	public void setUserPhoto(String userPhoto) {
 		this.userPhoto = userPhoto;
-	}
-
-	public WebSocketDataModel[] getHistoryMessage() {
-		return historyMessage;
-	}
-
-	public void setHistoryMessage(WebSocketDataModel[] historyMessage) {
-		this.historyMessage = historyMessage;
 	}
 
 	public static long getSerialversionuid() {
