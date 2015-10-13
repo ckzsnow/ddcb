@@ -1,0 +1,60 @@
+<html> 
+    <head> 
+        <title>WebSoket Demo</title> 
+        <script type="text/javascript"> 
+            //楠岃瘉娴忚鍣ㄦ槸鍚︽敮鎸乄ebSocket鍗忚
+            if (!window.WebSocket) { 
+                alert("WebSocket not supported by this browser!"); 
+            } 
+             var ws;
+            function display() { 
+                //var valueLabel = document.getElementById("valueLabel"); 
+                //valueLabel.innerHTML = ""; 
+                ws=new WebSocket("ws://127.0.0.1:8080/ddcb/websocket?courseId=2&userId=222&userName=luoxiaoju&userPhoto=/views/p2.jpg"); 
+                //鐩戝惉娑堟伅
+                ws.onmessage = function(event) { 
+                    //valueLabel.innerHTML+ = event.data; 
+                    var obj = eval("("+event.data+")");
+                    if(obj.messageType == '0') {
+                    	document.getElementById("contentId").innerHTML += (obj.message + "\r\n");  
+                    } else {
+                    	var content = obj.time + "  " + obj.userName + "<img src='"+obj.userPhoto+"' width='50px;' height='50px;'/>" + "\r\n" + obj.message;
+                    	document.getElementById("contentId").innerHTML += (content + "\r\n");
+                    }
+                }; 
+                // 鎵撳紑WebSocket 
+                ws.onclose = function(event) { 
+                  //WebSocket Status:: Socket Closed
+                }; 
+                // 鎵撳紑WebSocket
+                ws.onopen = function(event) { 
+                   //WebSocket Status:: Socket Open
+                    //// 鍙戦�佷竴涓垵濮嬪寲娑堟伅
+                    //ws.send("Hello, Server!"); 
+                }; 
+                ws.onerror =function(event){
+                    //WebSocket Status:: Error was reported
+                };
+            } 
+            var log = function(s) {  
+   if (document.readyState !== "complete") {  
+       log.buffer.push(s);  
+   } else {  
+       document.getElementById("contentId").innerHTML += (s + "\r\n");  
+   }  
+}  
+            function sendMsg(){
+                var msg=document.getElementById("messageId");
+                //alert(msg.value);
+                ws.send(msg.value); 
+            }
+        </script> 
+    </head> 
+    <body onload="display();"> 
+        <div id="valueLabel"></div> 
+        <textarea rows="20" cols="30" id="contentId"></textarea>
+        <br/>
+        <input name="message" id="messageId"/>
+        <button id="sendButton" onClick="javascript:sendMsg()" >Send</button>
+    </body> 
+</html>
