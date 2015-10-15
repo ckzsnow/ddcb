@@ -9,18 +9,19 @@
              var ws;
             function display() { 
                 //var valueLabel = document.getElementById("valueLabel"); 
-                //valueLabel.innerHTML = ""; 
-                ws=new WebSocket("ws://127.0.0.1:8080/ddcb/websocket?courseId=2&userId=111&userName=chaikuaizhang&userPhoto=/views/p1.jpg"); 
+                //valueLabel.innerHTML = "";  
+                ws=new WebSocket("ws://139.196.23.131:7070/ddcb/websocket?courseId=2&userId=111&userName=chaikuaizhang&userPhoto=/views/p1.jpg"); 
                 //鐩戝惉娑堟伅
-                ws.onmessage = function(event) { 
+                ws.onmessage = function(event) {
                     //valueLabel.innerHTML+ = event.data; 
                     var obj = eval("("+event.data+")");
                     if(obj.messageType == '0') {
                     	document.getElementById("contentId").innerHTML += (obj.message + "\r\n");  
                     } else {
-                    	var content = obj.time + "  " + obj.userName + "<img src='"+obj.userPhoto+"' width='50px;' height='50px;'/>" + "\r\n" + obj.message;
+                    	var content = obj.time + "  " + obj.userName + " : " + obj.message;
                     	document.getElementById("contentId").innerHTML += (content + "\r\n");
                     }
+                    document.getElementById('contentId').scrollTop = document.getElementById('contentId').scrollHeight ;
                 }; 
                 // 鎵撳紑WebSocket 
                 ws.onclose = function(event) { 
@@ -38,8 +39,14 @@
             }  
             function sendMsg(){
                 var msg=document.getElementById("messageId");
+                if(msg.value == null || msg.value == "") {
+                	return;//alert('不能发送空信息!');
+                } else {
+                	//alert('信息已发送!');
+                }
                 //alert(msg.value);
-                ws.send(msg.value); 
+                ws.send(msg.value);
+                document.getElementById("messageId").value="";
             }
         </script> 
     </head> 
@@ -50,4 +57,7 @@
         <input name="message" id="messageId"/>
         <button id="sendButton" onClick="javascript:sendMsg()" >Send</button>
     </body> 
+    <script type="text/javascript"> 
+    
+        </script> 
 </html>
