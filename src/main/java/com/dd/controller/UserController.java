@@ -32,7 +32,6 @@ public class UserController {
 		String userVerifyCode = request.getParameter("userVerifyCode");
 		return userService.userRegister(userId, userPwd, sendedSMSCode, userVerifyCode);
 	}
-		
 	
 	@RequestMapping("/userLogin")
 	@ResponseBody

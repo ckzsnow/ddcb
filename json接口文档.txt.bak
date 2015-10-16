@@ -23,6 +23,7 @@
 请求方式:HTTPS GET/POST
 请求参数:userId
 返回字段:errorCode, errorMsg
+(尚未完成)
 
 二：省市县三级联动相关接口
 1.获取所有省份接口路径:/regionInfo/getAllProvince
