@@ -1,6 +1,7 @@
 package com.dd.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +28,11 @@ public class UserController {
 		logger.debug("user register");
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
-		return userService.userRegister(userId, userPwd);
+		String sendedSMSCode = (String) request.getSession().getAttribute("USER_PHONE_VERIFY_CODE");
+		String userVerifyCode = request.getParameter("userVerifyCode");
+		return userService.userRegister(userId, userPwd, sendedSMSCode, userVerifyCode);
 	}
-	
-	
+		
 	
 	@RequestMapping("/userLogin")
 	@ResponseBody
@@ -39,6 +41,19 @@ public class UserController {
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
 		return userService.userLogin(userId, userPwd);
+	}
+	
+	@RequestMapping("/sendVerifyCode")
+	@ResponseBody
+	public ResultModel sendVerifyCode(HttpSession httpSession, HttpServletRequest request) {
+		logger.debug("sendVerifyCode");
+		String userId = request.getParameter("userId");
+		ResultModel rm = userService.sendVerifyCode(userId);
+		if(("0000").equals(rm.getErrorCode())) {
+			httpSession.setAttribute("USER_PHONE_VERIFY_CODE",
+					rm.getExtraInfo());
+		}
+		return rm;
 	}	
 	
 }

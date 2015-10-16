@@ -8,9 +8,19 @@ public class ResultModel {
 	
 	private String errorMsg;
 	
+	private String extraInfo;
+	
 	private Object result;
 	
 	private List<Object> resultList;
+
+	public String getExtraInfo() {
+		return extraInfo;
+	}
+
+	public void setExtraInfo(String extraInfo) {
+		this.extraInfo = extraInfo;
+	}
 
 	public String getErrorCode() {
 		return errorCode;

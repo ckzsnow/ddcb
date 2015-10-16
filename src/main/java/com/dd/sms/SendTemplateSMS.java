@@ -1,6 +1,7 @@
 package com.dd.sms;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -13,8 +14,11 @@ public class SendTemplateSMS {
 	private static final Logger logger = LoggerFactory.getLogger(SendTemplateSMS.class);
 	
 	private static CCPRestSmsSDK restAPI;
+	
+	private static Random random;
 
 	static {
+		random = new Random();
 		restAPI = new CCPRestSmsSDK();
 		// ******************************注释*********************************************
 		// *初始化服务器地址和端口 *
@@ -56,10 +60,10 @@ public class SendTemplateSMS {
 		//result = restAPI.sendTemplateSMS("", "", new String[] { "", "" });
 	}
 	
-	public static boolean sendSMS(String targetPhone) {
-		boolean status = false;
-		
-		Map<String, Object> result = restAPI.sendTemplateSMS(targetPhone, "1", new String[] {, "30"});
+	public static String sendSMS(String targetPhone) {
+		String verifyCode = "";
+        int code = random.nextInt(999999)%(1000000);
+		Map<String, Object> result = restAPI.sendTemplateSMS(targetPhone, "1", new String[] {String.valueOf(code), "30"});
 		logger.debug("sendSMS result : {}", result.toString());
 		if("000000".equals(result.get("statusCode"))){
 			@SuppressWarnings("unchecked")
@@ -69,12 +73,11 @@ public class SendTemplateSMS {
 				Object object = data.get(key);
 				logger.debug("{} = {}", key, object);
 			}
-			status = true;
+			verifyCode = String.valueOf(code);
 		}else{
 			logger.debug("错误码={}, 错误信息={}", result.get("statusCode"), result.get("statusMsg"));
-			status = false;
 		}
-		return status;
+		return verifyCode;
 	}
 
 }

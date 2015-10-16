@@ -11,6 +11,7 @@ import com.dd.models.ResultModel;
 import com.dd.models.UserModel;
 import com.dd.service.IUserProfileService;
 import com.dd.service.IUserService;
+import com.dd.sms.SendTemplateSMS;
 import com.dd.utils.MD5Encrypt;
 
 @Service("userService")
@@ -23,11 +24,21 @@ public class UserService implements IUserService {
 	private IUserProfileService userProfileService;
 	
 	@Override
-	public ResultModel userRegister(String userId, String pwd) {
+	public ResultModel userRegister(String userId, String pwd, String sendedSMSCode, String userVerifyCode) {
 		ResultModel ret = new ResultModel();
 		if(userId == null || userId.isEmpty()) {
 			ret.setErrorCode("0001");
 			ret.setErrorMsg("用户id为空");
+			return ret;
+		}
+		if(userVerifyCode == null || userVerifyCode.isEmpty()) {
+			ret.setErrorCode("0007");
+			ret.setErrorMsg("验证码为空");
+			return ret;
+		}
+		if(!userVerifyCode.equals(sendedSMSCode)) {
+			ret.setErrorCode("0009");
+			ret.setErrorMsg("验证码不正确或已经过期");
 			return ret;
 		}
 		if(pwd == null || pwd.isEmpty()) {
@@ -162,6 +173,26 @@ public class UserService implements IUserService {
 		} else {
 			ret.setErrorCode("0008");
 			ret.setErrorMsg("查询结果为空");
+		}
+		return ret;
+	}
+
+	@Override
+	public ResultModel sendVerifyCode(String userId) {
+		ResultModel ret = new ResultModel();
+		if(userId == null || userId.isEmpty()) {
+			ret.setErrorCode("0001");
+			ret.setErrorMsg("用户id为空");
+			return ret;
+		}
+		String verifyCode = SendTemplateSMS.sendSMS(userId);
+		if(verifyCode == null || verifyCode.isEmpty()) {
+			ret.setErrorCode("0008");
+			ret.setErrorMsg("发送短信验证码失败");
+		} else {
+			ret.setExtraInfo(verifyCode);
+			ret.setErrorCode("0000");
+			ret.setErrorMsg("操作成功");
 		}
 		return ret;
 	}
