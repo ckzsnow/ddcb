@@ -1,0 +1,40 @@
+<html> 
+    <head> 
+        <title>WebSoket Demo</title> 
+		<script type="text/javascript" src="jquery-1.8.3.min.js"></script> 
+        <script type="text/javascript"> 
+           
+		   function sendVerifyCode() {
+			   $.ajax({
+					url : 'http://localhost:8080/ddcb/safety/sendVerifyCode?userId=18601615517',
+					type : "POST",
+					data : {},
+					success : function(data) {
+						alert(data.errorMsg);
+					}
+				});
+		   }
+
+		   function userRegister() {
+			   var code = document.getElementById("code").value;
+				$.ajax({
+					url : 'http://localhost:8080/ddcb/safety/userRegister?userId=18601615517&userPwd=123&userVerifyCode=' + code,
+					type : "POST",
+					data : {},
+					success : function(data) {
+						alert(data.errorMsg);
+					}
+				});
+		   }
+        </script> 
+    </head> 
+    <body> 
+
+		<button onclick='sendVerifyCode()'>发送验证码</button>
+
+		<input type='text' id='code' name='code'>
+
+		<button onclick='userRegister()'>注册</button>
+     
+    </body>
+</html>

@@ -1,7 +1,6 @@
 package com.dd.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,8 @@ public class UserController {
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
 		String sendedSMSCode = (String) request.getSession().getAttribute("USER_PHONE_VERIFY_CODE");
+		logger.debug("userRegister session id : {}", request.getSession().getId());
+		logger.debug("userRegister session smscode : {}", sendedSMSCode);
 		String userVerifyCode = request.getParameter("userVerifyCode");
 		return userService.userRegister(userId, userPwd, sendedSMSCode, userVerifyCode);
 	}
@@ -44,15 +45,18 @@ public class UserController {
 	
 	@RequestMapping("/sendVerifyCode")
 	@ResponseBody
-	public ResultModel sendVerifyCode(HttpSession httpSession, HttpServletRequest request) {
+	public ResultModel sendVerifyCode(HttpServletRequest request) {
 		logger.debug("sendVerifyCode");
 		String userId = request.getParameter("userId");
 		ResultModel rm = userService.sendVerifyCode(userId);
+		logger.debug("sendVerifyCode session id : {}", request.getSession().getId());
 		if(("0000").equals(rm.getErrorCode())) {
-			httpSession.setAttribute("USER_PHONE_VERIFY_CODE",
+			request.getSession().setAttribute("USER_PHONE_VERIFY_CODE",
 					rm.getExtraInfo());
+			logger.debug("sendVerifyCode session record : {}", rm.getExtraInfo());
+			logger.debug("success sendVerifyCode session id : {}", request.getSession().getId());
 		}
 		return rm;
-	}	
+	}
 	
 }
