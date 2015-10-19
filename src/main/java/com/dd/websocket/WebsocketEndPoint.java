@@ -38,7 +38,7 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
 		logger.debug("connect to the websocket success......");
-		String userId = (String) session.getHandshakeAttributes().get("userId");
+		String userId = (String) session.getAttributes().get("userId");
 		userSessionMap.put(userId, session);
 		if (userId != null) {
 			broadcastUserEnter(userId);
@@ -48,8 +48,8 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 	private void broadcastUserEnter(String userId) {
 		WebSocketSession session = userSessionMap.get(userId);
 		if (session == null) return;
-		String courseId = (String) session.getHandshakeAttributes().get("courseId");
-		String message = (String) session.getHandshakeAttributes().get("userName") + "进入了";
+		String courseId = (String) session.getAttributes().get("courseId");
+		String message = (String) session.getAttributes().get("userName") + "进入了";
 		Set<String> exculdeUserIdSet = new HashSet<>();
 		exculdeUserIdSet.add(userId);
 		sendSystemMessageToCourseUser(courseId, message, exculdeUserIdSet);
@@ -111,8 +111,8 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) {
-		String userId = (String) session.getHandshakeAttributes().get("userId");
-		String courseId = (String) session.getHandshakeAttributes().get("courseId");
+		String userId = (String) session.getAttributes().get("userId");
+		String courseId = (String) session.getAttributes().get("courseId");
 		sendUserMessageToOthers(userId, courseId, message.getPayload());
 	}
 	
@@ -127,8 +127,8 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 			if(session == null) continue;
 			WebSocketDataModel wsd = new WebSocketDataModel();
 			wsd.setMessageType("1");
-			wsd.setUserName((String) excludeUserSession.getHandshakeAttributes().get("userName"));
-			wsd.setUserPhoto((String) excludeUserSession.getHandshakeAttributes().get("userPhoto"));
+			wsd.setUserName((String) excludeUserSession.getAttributes().get("userName"));
+			wsd.setUserPhoto((String) excludeUserSession.getAttributes().get("userPhoto"));
 			wsd.setMessage(message);
 			JSONObject json = JSONObject.fromObject(wsd);
 			TextMessage returnMessage = new TextMessage(json.toString());
@@ -147,7 +147,7 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 				session.close();
 			}
 			logger.debug("websocket connection closed......");
-			userSessionMap.remove((String) session.getHandshakeAttributes().get("userId"));
+			userSessionMap.remove((String) session.getAttributes().get("userId"));
 		} catch (IOException e) {
 			logger.error(e.toString());
 		}
@@ -156,7 +156,7 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
 		logger.debug("websocket connection closed......");
-		userSessionMap.remove((String) session.getHandshakeAttributes().get("userId"));
+		userSessionMap.remove((String) session.getAttributes().get("userId"));
 	}
 
 	@Override

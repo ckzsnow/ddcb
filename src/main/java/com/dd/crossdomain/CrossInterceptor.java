@@ -9,11 +9,12 @@ public class CrossInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Access-Control-Allow-Methods", "*");
-		response.addHeader("Access-Control-Max-Age", "100");
-		response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-		response.addHeader("Access-Control-Allow-Credentials", "false");
-		return super.preHandle(request, response, handler);
+		String origin = request.getHeader("Origin");
+		response.addHeader("Access-Control-Allow-Origin", origin);
+		response.addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE");
+		response.addHeader("Access-Control-Max-Age", "1800");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Credentials", "true");
+		return true;
 	}
 }
