@@ -13,6 +13,7 @@ import com.dd.models.ProvinceModel;
 import com.dd.models.ResultModel;
 import com.dd.models.UserProfileModel;
 import com.dd.models.WorkYearModel;
+import com.dd.redis.service.IRedisService;
 import com.dd.service.ICategoryInfoService;
 import com.dd.service.IRegionInfoService;
 import com.dd.service.IUserProfileService;
@@ -32,6 +33,9 @@ public class UserProfileService implements IUserProfileService {
 
 	@Autowired
 	private IRegionInfoService regionInfoService;
+	
+	@Autowired
+	private IRedisService redisService;
 
 	@Override
 	public ResultModel getUserProfile(String userId) {
@@ -167,6 +171,7 @@ public class UserProfileService implements IUserProfileService {
 			ret.setErrorCode("1013");
 			ret.setErrorMsg("操作数据库失败");
 		}
+		redisService.addUserInfo(profileModel);
 		return ret;
 	}
 

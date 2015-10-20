@@ -1,5 +1,7 @@
 package com.dd.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -26,7 +28,13 @@ public class UserProfileController {
 	@ResponseBody
 	public ResultModel getUserProfile(HttpServletRequest request) {
 		logger.debug("getUserProfile");
-		String userId = request.getParameter("userId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		return userProfileService.getUserProfile(userId);
 	}
 	
@@ -34,7 +42,13 @@ public class UserProfileController {
 	@ResponseBody
 	public ResultModel deleteUserProfile(HttpServletRequest request) {
 		logger.debug("deleteUserProfile");
-		String userId = request.getParameter("userId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		return userProfileService.deleteUserProfile(userId);
 	}
 	
@@ -42,13 +56,31 @@ public class UserProfileController {
 	@ResponseBody
 	public ResultModel addUserProfile(HttpServletRequest request) {
 		logger.debug("addUserProfile");
-		return userProfileService.addUserProfile(ConvertRequestMapToMap.convert(request.getParameterMap()));
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
+		paramsMap.put("userId", userId);
+		return userProfileService.addUserProfile(paramsMap);
 	}
 	
 	@RequestMapping("/updateUserProfile")
 	@ResponseBody
 	public ResultModel updateUserProfile(HttpServletRequest request) {
 		logger.debug("updateUserProfile");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
+		paramsMap.put("userId", userId);
 		return userProfileService.updateUserProfile(ConvertRequestMapToMap.convert(request.getParameterMap()));
 	}
 	

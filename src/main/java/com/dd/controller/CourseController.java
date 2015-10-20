@@ -26,6 +26,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel getCourseByCourseId(HttpServletRequest request) {
 		logger.debug("getCourseByCourseId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseId = request.getParameter("courseId");
 		return courseService.getCourseByCourseId(courseId);
 	}
@@ -34,6 +41,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel getCourseByCourseNameAndBriefAndDetails(HttpServletRequest request) {
 		logger.debug("getCourseByCourseNameAndBriefAndDetails");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseName = request.getParameter("courseName");
 		String courseBrief = request.getParameter("courseBrief");
 		String courseDetails = request.getParameter("courseDetails");
@@ -49,6 +63,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel getCourseByIndustryIdAndFieldIdAndStageId(HttpServletRequest request) {
 		logger.debug("getCourseByIndustryIdAndFieldIdAndStageId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String industryId = request.getParameter("industryId");
 		String fieldId = request.getParameter("fieldId");
 		String stageId = request.getParameter("stageId");
@@ -64,6 +85,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel getCourseBySchoolTime(HttpServletRequest request) {
 		logger.debug("getCourseBySchoolTime");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String startTime = request.getParameter("startTime");
 		String endTime = request.getParameter("endTime");
 		String courseAuditStatus = request.getParameter("courseAuditStatus");
@@ -78,6 +106,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel getCourseByCourseTypeAndCourseAuditStatus(HttpServletRequest request) {
 		logger.debug("getCourseByCourseTypeAndCourseAuditStatus");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseAuditStatus = request.getParameter("courseAuditStatus");
 		String courseType = request.getParameter("courseType");
 		String page = request.getParameter("page");
@@ -90,6 +125,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel addCourse(HttpServletRequest request) {
 		logger.debug("addCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		return courseService.addCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
 	}
 
@@ -97,6 +139,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel updateCourse(HttpServletRequest request) {
 		logger.debug("updateCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		return courseService.updateCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
 	}
 
@@ -104,6 +153,13 @@ public class CourseController {
 	@ResponseBody
 	public ResultModel deleteCourseByCourseId(HttpServletRequest request) {
 		logger.debug("deleteCourseByCourseId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseId = request.getParameter("courseId");
 		return courseService.deleteCourseByCourseId(courseId);
 	}

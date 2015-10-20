@@ -13,7 +13,7 @@ import com.dd.constant.Constant.UserType;
 import com.dd.dao.IUserCourseDao;
 import com.dd.models.ResultModel;
 import com.dd.models.UserCourseModel;
-import com.dd.redis.service.IUserCourseRedisService;
+import com.dd.redis.service.IRedisService;
 import com.dd.service.IUserCourseService;
 
 @Service("userCourseService")
@@ -23,7 +23,7 @@ public class UserCourseService implements IUserCourseService {
 	private IUserCourseDao userCourseDao;
 	
 	@Autowired
-	private IUserCourseRedisService userCourseRedisService;
+	private IRedisService redisService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserCourseService.class);
 
@@ -153,7 +153,7 @@ public class UserCourseService implements IUserCourseService {
 			ret.setErrorCode("6006");
 			ret.setErrorMsg("操作数据库失败");
 		}
-		userCourseRedisService.addUserCourse(userCourseModel);
+		redisService.addUserCourse(userCourseModel);
 		return ret;
 	}
 

@@ -40,6 +40,10 @@ public class UserController {
 		logger.debug("user register");
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
+		ResultModel rm = userService.userLogin(userId, userPwd);
+		if(("0000").equals(rm.getErrorCode())) {
+			request.getSession().setAttribute("userId", userId);
+		}
 		return userService.userLogin(userId, userPwd);
 	}
 	

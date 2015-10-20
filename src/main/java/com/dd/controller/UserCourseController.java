@@ -26,7 +26,13 @@ public class UserCourseController {
 	@ResponseBody
 	public ResultModel getUserCourseByUserIdAndUserType(HttpServletRequest request) {
 		logger.debug("getUserCourseByUserIdAndUserType");
-		String userId = request.getParameter("userId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String userType = request.getParameter("userType");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
@@ -39,6 +45,13 @@ public class UserCourseController {
 	@ResponseBody
 	public ResultModel getUserCourseByCourseIdAndUserType(HttpServletRequest request) {
 		logger.debug("getUserCourseByCourseIdAndUserType");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseId = request.getParameter("courseId");
 		String userType = request.getParameter("userType");
 		String page = request.getParameter("page");
@@ -50,6 +63,13 @@ public class UserCourseController {
 	@ResponseBody
 	public ResultModel getUserAmountForCourse(HttpServletRequest request) {
 		logger.debug("getUserAmountForCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseId = request.getParameter("courseId");
 		return userCourseService.getUserAmountForCourse(courseId);
 	}	
@@ -58,6 +78,13 @@ public class UserCourseController {
 	@ResponseBody
 	public ResultModel addUserCourse(HttpServletRequest request) {
 		logger.debug("addUserCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		return userCourseService.addUserCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
 	}	
 	
@@ -65,7 +92,13 @@ public class UserCourseController {
 	@ResponseBody
 	public ResultModel deleteUserCourseByUserIdAndCourseIdAndUserType(HttpServletRequest request) {
 		logger.debug("deleteUserCourseByUserIdAndCourseIdAndUserType");
-		String userId = request.getParameter("userId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
 		String courseId = request.getParameter("courseId");
 		String userType = request.getParameter("userType");
 		return userCourseService.deleteUserCourseByUserIdAndCourseIdAndUserType(userId, courseId, userType);
