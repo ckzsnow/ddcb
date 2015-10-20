@@ -30,6 +30,9 @@ public class UserProfileService implements IUserProfileService {
 
 	@Autowired
 	private IWorkYearInfoService workYearInfoService;
+	
+	@Autowired
+	private IWorkYearInfoService workYearInfoService;
 
 	@Autowired
 	private IRegionInfoService regionInfoService;
@@ -74,6 +77,12 @@ public class UserProfileService implements IUserProfileService {
 			userProgile.setAreaName("未知");
 		} else {
 			userProgile.setAreaName(((AreaModel) rm.getResult()).getArea());
+		}
+		rm = workYearInfoService.getWorkYearById(String.valueOf(userProgile.getWorkYearId()));
+		if (!("5000").equals(rm.getErrorCode())) {
+			userProgile.setWorkYear("未知");
+		} else {
+			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
 		}
 		rm = workYearInfoService.getWorkYearById(String.valueOf(userProgile.getWorkYearId()));
 		if (!("5000").equals(rm.getErrorCode())) {

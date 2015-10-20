@@ -12,6 +12,8 @@ public class UserProfileModel implements java.io.Serializable {
 	
 	private String userPhoto;
 	
+	private String userVisitCard;
+	
 	private Integer userSex;
 	
 	private Integer industryId;
@@ -24,7 +26,11 @@ public class UserProfileModel implements java.io.Serializable {
 	
 	private Integer workYearId;
 	
+	private Integer careerPlanId;
+	
 	private String workYear;
+	
+	private String careerPlan;
 	
 	private String provinceId;
 	
@@ -44,23 +50,50 @@ public class UserProfileModel implements java.io.Serializable {
 
 	public UserProfileModel() {}
 
-	public UserProfileModel(String userId, String userName, String userPhoto, Integer userSex, Integer industryId,
-			String companyName, String companyPosition, Integer workYearId, String provinceId, String cityId,
-			String areaId, String resume, Timestamp createTime) {
+	public UserProfileModel(String userId, String userName, String userPhoto, String userVisitCard, Integer userSex,
+			Integer industryId, String companyName, String companyPosition, Integer workYearId,
+			Integer careerPlanId, String provinceId, 
+			String cityId, String areaId, String resume, Timestamp createTime) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userPhoto = userPhoto;
+		this.userVisitCard = userVisitCard;
 		this.userSex = userSex;
 		this.industryId = industryId;
 		this.companyName = companyName;
 		this.companyPosition = companyPosition;
 		this.workYearId = workYearId;
+		this.careerPlanId = careerPlanId;
 		this.provinceId = provinceId;
 		this.cityId = cityId;
 		this.areaId = areaId;
 		this.resume = resume;
 		this.createTime = createTime;
+	}
+
+	public Integer getCareerPlanId() {
+		return careerPlanId;
+	}
+
+	public void setCareerPlanId(Integer careerPlanId) {
+		this.careerPlanId = careerPlanId;
+	}
+
+	public String getCareerPlan() {
+		return careerPlan;
+	}
+
+	public void setCareerPlan(String careerPlan) {
+		this.careerPlan = careerPlan;
+	}
+
+	public String getUserVisitCard() {
+		return userVisitCard;
+	}
+
+	public void setUserVisitCard(String userVisitCard) {
+		this.userVisitCard = userVisitCard;
 	}
 
 	public String getIndustryName() {
@@ -214,11 +247,12 @@ public class UserProfileModel implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return "UserProfileModel [userId=" + userId + ", userName=" + userName + ", userPhoto=" + userPhoto
-				+ ", userSex=" + userSex + ", industryId=" + industryId + ", industryName=" + industryName
-				+ ", companyName=" + companyName + ", companyPosition=" + companyPosition + ", workYearId=" + workYearId
-				+ ", workYear=" + workYear + ", provinceId=" + provinceId + ", provinceName=" + provinceName
-				+ ", cityId=" + cityId + ", cityName=" + cityName + ", areaId=" + areaId + ", areaName=" + areaName
-				+ ", resume=" + resume + ", createTime=" + createTime + "]";
+				+ ", userVisitCard=" + userVisitCard + ", userSex=" + userSex + ", industryId=" + industryId
+				+ ", industryName=" + industryName + ", companyName=" + companyName + ", companyPosition="
+				+ companyPosition + ", workYearId=" + workYearId + ", careerPlanId=" + careerPlanId + ", workYear="
+				+ workYear + ", careerPlan=" + careerPlan + ", provinceId=" + provinceId + ", provinceName="
+				+ provinceName + ", cityId=" + cityId + ", cityName=" + cityName + ", areaId=" + areaId + ", areaName="
+				+ areaName + ", resume=" + resume + ", createTime=" + createTime + "]";
 	}
 		
 }

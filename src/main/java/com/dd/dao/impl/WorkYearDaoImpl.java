@@ -35,13 +35,13 @@ public class WorkYearDaoImpl implements IWorkYearDao {
 
 	@Override
 	public List<WorkYearModel> getAllWorkYear() {
-		List<WorkYearModel> areaList = null;
+		List<WorkYearModel> workYearList = null;
 		String sql = "select * from work_year";
 		try {
-			areaList = jdbcTemplate.query(sql, new WorkYearModelMapper());
+			workYearList = jdbcTemplate.query(sql, new WorkYearModelMapper());
 		} catch (Exception e) {
 			logger.error("getAllWorkYear, exception : {}", e.toString());
 		}
-		return areaList;
+		return workYearList;
 	}
 }

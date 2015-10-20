@@ -42,11 +42,15 @@ public class RedisService implements IRedisService {
 	                throws DataAccessException {  
 	            RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 	            String userPhoto = userProfileModel.getUserPhoto();
+	            String userName = userProfileModel.getUserName();
 	            String userId = userProfileModel.getUserId();
-	            byte[] key  = serializer.serialize("user_info");
-	            byte[] field = serializer.serialize(userId);
-	            byte[] value = serializer.serialize(userPhoto);
-	            connection.hSet(key, field, value);
+	            byte[] key  = serializer.serialize(userId);
+	            byte[] nameField = serializer.serialize("userName");
+	            byte[] nameValue = serializer.serialize(userName);
+	            byte[] photoField = serializer.serialize("userPhoto");
+	            byte[] photoValue = serializer.serialize(userPhoto);
+	            connection.hSet(key, nameField, nameValue);
+	            connection.hSet(key, photoField, photoValue);
 	            return true;
 	        }  
 	    }, false, true);

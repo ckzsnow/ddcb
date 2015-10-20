@@ -24,12 +24,8 @@ public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
 			if (session == null) {
 				String userId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userId");
 				String courseId = ((ServletServerHttpRequest) request).getServletRequest().getParameter("courseId");
-				String userName = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userName");
-				String userPhoto = ((ServletServerHttpRequest) request).getServletRequest().getParameter("userPhoto");
 				attributes.put("userId", userId);
 				attributes.put("courseId", courseId);
-				attributes.put("userName", userName);
-				attributes.put("userPhoto", userPhoto);
 			}
 		}
 		return super.beforeHandshake(request, response, wsHandler, attributes);

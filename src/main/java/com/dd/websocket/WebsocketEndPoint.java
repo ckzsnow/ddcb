@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -30,7 +32,9 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 
 	private static final Map<String, WebSocketSession> userSessionMap = new ConcurrentHashMap<>();
 
-	private static final Map<String, Set<String>> courseToUserSetMap = new HashMap<>();
+	private static final Map<String, Set<String>> courseToUserSetMap = new WeakHashMap<>();
+	
+	private static final Map<String, Map<String, String>> userInfoMap = new WeakHashMap<>();
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
@@ -109,6 +113,30 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 		return result;
 	}
 
+	private Map<String, String> getUserInfo(String userId) {
+		Map<String, String> result = null;
+		if (!userInfoMap.containsKey(userId)) {
+			result = stringRedisTemplate.execute(new RedisCallback<Map<String, String>>() {
+				public Map<String, String> doInRedis(RedisConnection connection) throws DataAccessException {
+					RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
+					byte[] key = serializer.serialize(userId);
+					Map<byte[], byte[]> map = connection.hGetAll(key);
+					if (map == null) {
+						return null;
+					}
+					Map<String, String> userMap = new HashMap<>();
+					for (Entry<byte[], byte[]> entry : map.entrySet()) {
+						userMap.put(serializer.deserialize(entry.getKey()), serializer.deserialize(entry.getValue()));
+					}
+					return userMap;
+				}
+			});
+		} else {
+			result = userInfoMap.get(userId);
+		}
+		return result;
+	}
+	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) {
 		String userId = (String) session.getAttributes().get("userId");
@@ -125,10 +153,15 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 			if(excludeUserId != null && excludeUserId.equals(userId)) continue;
 			WebSocketSession session = userSessionMap.get(userId);
 			if(session == null) continue;
+			if(!userInfoMap.containsKey(userId)) {
+				userInfoMap.put(userId, getUserInfo(userId));
+			}
+			String userName = userInfoMap.get(userId).get("userName");
+			String userPhoto = userInfoMap.get(userId).get("userPhoto");
 			WebSocketDataModel wsd = new WebSocketDataModel();
 			wsd.setMessageType("1");
-			wsd.setUserName((String) excludeUserSession.getAttributes().get("userName"));
-			wsd.setUserPhoto((String) excludeUserSession.getAttributes().get("userPhoto"));
+			wsd.setUserName(userName);
+			wsd.setUserPhoto(userPhoto);
 			wsd.setMessage(message);
 			JSONObject json = JSONObject.fromObject(wsd);
 			TextMessage returnMessage = new TextMessage(json.toString());

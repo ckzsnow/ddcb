@@ -38,14 +38,14 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 	@Override
 	public boolean addUserProfile(UserProfileModel userProfileModel) {
 		logger.debug("args userProfileModel : {}", userProfileModel.toString());
-		String sql = "insert into user_profile (user_id, name, photo, sex, industry_id, company, position, work_year_id, province_id, city_id, area_id, resume, create_time)"
-				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into user_profile (user_id, name, photo, visit_card, sex, industry_id, company, position, work_year_id, career_plan_id, province_id, city_id, area_id, resume, create_time)"
+				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int affectedRows = 0;
 		try {
 			affectedRows = jdbcTemplate.update(sql, userProfileModel.getUserId(), userProfileModel.getUserName(),
-					userProfileModel.getUserPhoto(), userProfileModel.getUserSex(), userProfileModel.getIndustryId(),
+					userProfileModel.getUserPhoto(), userProfileModel.getUserVisitCard(), userProfileModel.getUserSex(), userProfileModel.getIndustryId(),
 					userProfileModel.getCompanyName(), userProfileModel.getCompanyPosition(),
-					userProfileModel.getWorkYearId(), userProfileModel.getProvinceId(), userProfileModel.getCityId(),
+					userProfileModel.getWorkYearId(), userProfileModel.getCareerPlanId(), userProfileModel.getProvinceId(), userProfileModel.getCityId(),
 					userProfileModel.getAreaId(), userProfileModel.getResume(),
 					new Timestamp(System.currentTimeMillis()));
 		} catch (Exception e) {
@@ -83,6 +83,10 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 			sql.append("photo=? ,");
 			argsList.add(userProfileModel.getUserPhoto());
 		}
+		if (userProfileModel.getUserVisitCard() != null && !userProfileModel.getUserVisitCard().isEmpty()) {
+			sql.append("visit_card=? ,");
+			argsList.add(userProfileModel.getUserVisitCard());
+		}
 		if (userProfileModel.getUserSex() != null) {
 			sql.append("sex=? ,");
 			argsList.add(userProfileModel.getUserSex());
@@ -102,6 +106,10 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 		if (userProfileModel.getWorkYearId() != null) {
 			sql.append("work_year_id=? ,");
 			argsList.add(userProfileModel.getWorkYearId());
+		}
+		if (userProfileModel.getCareerPlanId() != null) {
+			sql.append("career_plan_id=? ,");
+			argsList.add(userProfileModel.getCareerPlanId());
 		}
 		if (userProfileModel.getProvinceId() != null && !userProfileModel.getProvinceId().isEmpty()) {
 			sql.append("province_id=? ,");
