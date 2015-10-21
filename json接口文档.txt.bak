@@ -1,13 +1,15 @@
 一：用户登录注册相关接口
 1.用户注册接口路径:/safety/userRegister
 请求方式:HTTPS GET/POST
-请求参数:userId, userPwd
+请求参数:userId, userPwd, userVerifyCode
 返回字段:errorCode, errorMsg
 0000-操作成功
 0001-用户Id为空
 0002-用户密码为空
 0003-用户id已经存在
 0004-操作数据库失败
+0007-验证码为空
+0009-验证码不正确或已经过期
 
 2.用户登陆接口路径:/safety/userLogin
 请求方式:HTTPS GET/POST
@@ -23,7 +25,9 @@
 请求方式:HTTPS GET/POST
 请求参数:userId
 返回字段:errorCode, errorMsg
-(尚未完成)
+0000-操作成功
+0001-用户Id为空
+0008-发送短信验证码失败
 
 二：省市县三级联动相关接口
 1.获取所有省份接口路径:/regionInfo/getAllProvince
@@ -369,7 +373,9 @@ resume-个人简介(字符串类型,可选)
 请求参数:共计12个参数，如下
 user_id-用户id(字符串类型, 必选)
 name-用户姓名(字符串类型,可选)
-photo-用户头像路径(字符串类型,可选)
+nick_name-用户昵称(字符串类型,可选)//新增字段
+career_plan_id-职业规划id(数字类型,可选)//新增字段(职业规划信息获取参看接口八)
+########photo-用户头像路径(字符串类型,可选)//该参数去掉，上传头像时后台自动更新改字段(参看接口九)
 sex-用户性别(数字类型,且必须为0或1,0-男，1-女,可选)
 industry_id-行业id(数字类型,可选)
 work_year_id-工作年限id(数字类型,可选)
@@ -419,3 +425,58 @@ workYearId-工作年限id(数字类型, 必选)
 返回字段:errorCode, errorMsg, result
 result字段数据为json格式，样例如下：
 {"id":2,"name":"2年","createTime":1444314716000}
+
+八：职业规划相关接口
+1.获取所有职业规划信息接口路径:/careerPlan/getAllCareerPlan
+
+请求方式:HTTP GET/POST
+
+请求参数:无
+
+返回字段:errorCode, errorMsg, resultList
+resultList字段数据为json格式，样例如下：
+[{"id":1,"name":"升职","createTime":1445325535000},{"id":2,"name":"求职","createTime":1445430956000}]}
+
+2.根据职业规划id获取职业规划名称接口路径:/careerPlan/getCareerPlan
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+careerPlanId-工作年限id(数字类型, 必选)
+
+返回字段:errorCode, errorMsg, result
+result字段数据为json格式，样例如下：
+{"id":1,"name":"升职","createTime":1445325535000}
+
+九：文件上传接口
+1.用户头像文件上传接口:/upload/uploadUserPhoto
+请求参数：1个   userPhotoFile  (html中的input type='file'标签的id需要为userPhotoFile，如果采用ajax方式，请在请求中指明fileElementId为userPhotoFile)
+返回字段:errorCode, errorMsg
+8800-上传成功
+8801，8802-上传失败
+注意：该方法上传后会修改用户的详细信息中的photo字段
+
+2.用户名片上传接口:/upload/uploadUserVisitCard
+请求参数：1个   userVisitCardFile  (html中的input type='file'标签的id需要为userVisitCardFile，如果采用ajax方式，请在请求中指明fileElementId为userVisitCardFile)
+返回字段:errorCode, errorMsg
+8800-上传成功
+8801，8802-上传失败
+注意：该方法上传后会修改用户的详细信息中的visit_card字段
+
+3.用户课程文档上传接口:/upload/uploadCourseDoc
+请求参数：2个   
+(1)courseDocFile  (html中的input type='file'标签的id需要为courseDocFile，如果采用ajax方式，请在请求中指明fileElementId为courseDocFile)
+(2)courseId-课程id(数字类型, 必选)
+返回字段:errorCode, errorMsg
+8800-上传成功
+8801，8802-上传失败
+注意：该方法上传后会修改课程信息中的doc_attatch字段
+
+4.用户音频文件上传接口:/upload/uploadCourseVoice
+请求参数：2个   
+(1)courseVoiceFile  (html中的input type='file'标签的id需要为courseVoiceFile，如果采用ajax方式，请在请求中指明fileElementId为courseVoiceFile)
+(2)courseId-课程id(数字类型, 必选)
+返回字段:errorCode, errorMsg
+8800-上传成功
+8801，8802-上传失败
+注意：该方法上传后会修改课程信息中的doc_attatch字段

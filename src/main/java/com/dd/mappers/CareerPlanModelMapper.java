@@ -10,7 +10,7 @@ import com.dd.models.CareerPlanModel;
 public class CareerPlanModelMapper implements RowMapper<CareerPlanModel> {
 	public CareerPlanModel mapRow(ResultSet rs, int index) throws SQLException {
 		CareerPlanModel u = new CareerPlanModel(rs.getInt("id"),
-				rs.getString("year"), rs.getTimestamp("create_time"));
+				rs.getString("name"), rs.getTimestamp("create_time"));
 		return u;
 	}
 }
