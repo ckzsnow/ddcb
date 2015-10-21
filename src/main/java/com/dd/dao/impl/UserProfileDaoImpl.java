@@ -38,11 +38,11 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 	@Override
 	public boolean addUserProfile(UserProfileModel userProfileModel) {
 		logger.debug("args userProfileModel : {}", userProfileModel.toString());
-		String sql = "insert into user_profile (user_id, name, photo, visit_card, sex, industry_id, company, position, work_year_id, career_plan_id, province_id, city_id, area_id, resume, create_time)"
-				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into user_profile (user_id, name, nick_name, photo, visit_card, sex, industry_id, company, position, work_year_id, career_plan_id, province_id, city_id, area_id, resume, create_time)"
+				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		int affectedRows = 0;
 		try {
-			affectedRows = jdbcTemplate.update(sql, userProfileModel.getUserId(), userProfileModel.getUserName(),
+			affectedRows = jdbcTemplate.update(sql, userProfileModel.getUserId(), userProfileModel.getUserName(), userProfileModel.getNickName(),
 					userProfileModel.getUserPhoto(), userProfileModel.getUserVisitCard(), userProfileModel.getUserSex(), userProfileModel.getIndustryId(),
 					userProfileModel.getCompanyName(), userProfileModel.getCompanyPosition(),
 					userProfileModel.getWorkYearId(), userProfileModel.getCareerPlanId(), userProfileModel.getProvinceId(), userProfileModel.getCityId(),
@@ -78,6 +78,10 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 		if (userProfileModel.getUserName() != null && !userProfileModel.getUserName().isEmpty()) {
 			sql.append("name=? ,");
 			argsList.add(userProfileModel.getUserName());
+		}
+		if (userProfileModel.getNickName() != null && !userProfileModel.getNickName().isEmpty()) {
+			sql.append("nick_name=? ,");
+			argsList.add(userProfileModel.getNickName());
 		}
 		if (userProfileModel.getUserPhoto() != null && !userProfileModel.getUserPhoto().isEmpty()) {
 			sql.append("photo=? ,");

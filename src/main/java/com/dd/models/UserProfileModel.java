@@ -10,6 +10,8 @@ public class UserProfileModel implements java.io.Serializable {
 	
 	private String userName;
 	
+	private String nickName;
+	
 	private String userPhoto;
 	
 	private String userVisitCard;
@@ -50,13 +52,14 @@ public class UserProfileModel implements java.io.Serializable {
 
 	public UserProfileModel() {}
 
-	public UserProfileModel(String userId, String userName, String userPhoto, String userVisitCard, Integer userSex,
+	public UserProfileModel(String userId, String userName, String nickName, String userPhoto, String userVisitCard, Integer userSex,
 			Integer industryId, String companyName, String companyPosition, Integer workYearId,
 			Integer careerPlanId, String provinceId, 
 			String cityId, String areaId, String resume, Timestamp createTime) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
+		this.nickName = nickName;
 		this.userPhoto = userPhoto;
 		this.userVisitCard = userVisitCard;
 		this.userSex = userSex;
@@ -70,6 +73,14 @@ public class UserProfileModel implements java.io.Serializable {
 		this.areaId = areaId;
 		this.resume = resume;
 		this.createTime = createTime;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public Integer getCareerPlanId() {
@@ -246,13 +257,13 @@ public class UserProfileModel implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "UserProfileModel [userId=" + userId + ", userName=" + userName + ", userPhoto=" + userPhoto
-				+ ", userVisitCard=" + userVisitCard + ", userSex=" + userSex + ", industryId=" + industryId
-				+ ", industryName=" + industryName + ", companyName=" + companyName + ", companyPosition="
-				+ companyPosition + ", workYearId=" + workYearId + ", careerPlanId=" + careerPlanId + ", workYear="
-				+ workYear + ", careerPlan=" + careerPlan + ", provinceId=" + provinceId + ", provinceName="
-				+ provinceName + ", cityId=" + cityId + ", cityName=" + cityName + ", areaId=" + areaId + ", areaName="
-				+ areaName + ", resume=" + resume + ", createTime=" + createTime + "]";
+		return "UserProfileModel [userId=" + userId + ", userName=" + userName + ", nickName=" + nickName
+				+ ", userPhoto=" + userPhoto + ", userVisitCard=" + userVisitCard + ", userSex=" + userSex
+				+ ", industryId=" + industryId + ", industryName=" + industryName + ", companyName=" + companyName
+				+ ", companyPosition=" + companyPosition + ", workYearId=" + workYearId + ", careerPlanId="
+				+ careerPlanId + ", workYear=" + workYear + ", careerPlan=" + careerPlan + ", provinceId=" + provinceId
+				+ ", provinceName=" + provinceName + ", cityId=" + cityId + ", cityName=" + cityName + ", areaId="
+				+ areaId + ", areaName=" + areaName + ", resume=" + resume + ", createTime=" + createTime + "]";
 	}
 		
 }

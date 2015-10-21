@@ -81,7 +81,7 @@ public class UserProfileController {
 		}
 		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
 		paramsMap.put("userId", userId);
-		return userProfileService.updateUserProfile(ConvertRequestMapToMap.convert(request.getParameterMap()));
+		return userProfileService.updateUserProfile(paramsMap);
 	}
 	
 }

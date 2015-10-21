@@ -9,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dd.dao.ICareerPlanDao;
-import com.dd.dao.IWorkYearDao;
 import com.dd.models.CareerPlanModel;
 import com.dd.models.ResultModel;
-import com.dd.models.WorkYearModel;
 import com.dd.service.ICareerPlanService;
-import com.dd.service.IWorkYearInfoService;
 
 @Service("careerPlanService")
 public class CareerPlanService implements ICareerPlanService {
@@ -42,23 +39,23 @@ public class CareerPlanService implements ICareerPlanService {
 	@Override
 	public ResultModel getCareerPlanById(String id) {
 		ResultModel ret = new ResultModel();
-		int workYearId = 0;
+		int careerPlanId = 0;
 		try {
-			workYearId = Integer.valueOf(id);
+			careerPlanId = Integer.valueOf(id);
 		} catch (NumberFormatException e) {
 			logger.error(e.toString());
 			ret.setErrorCode("1202");
 			ret.setErrorMsg("传入参数格式不正确");
 			return ret;
 		}
-		WorkYearModel workYearModel = careerPlanDao.getCareerPlanById(id);
-		if(workYearModel == null) {
-			ret.setErrorCode("5001");
+		CareerPlanModel careerPlanModel = careerPlanDao.getCareerPlanById(careerPlanId);
+		if(careerPlanModel == null) {
+			ret.setErrorCode("1201");
 			ret.setErrorMsg("未查询到数据");
 		} else {
-			ret.setErrorCode("5000");
+			ret.setErrorCode("1200");
 			ret.setErrorMsg("操作成功");
-			ret.setResult(workYearModel);
+			ret.setResult(careerPlanModel);
 		}
 		return ret;
 	}

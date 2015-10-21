@@ -14,6 +14,7 @@ import com.dd.models.ResultModel;
 import com.dd.models.UserProfileModel;
 import com.dd.models.WorkYearModel;
 import com.dd.redis.service.IRedisService;
+import com.dd.service.ICareerPlanService;
 import com.dd.service.ICategoryInfoService;
 import com.dd.service.IRegionInfoService;
 import com.dd.service.IUserProfileService;
@@ -32,7 +33,7 @@ public class UserProfileService implements IUserProfileService {
 	private IWorkYearInfoService workYearInfoService;
 	
 	@Autowired
-	private IWorkYearInfoService workYearInfoService;
+	private ICareerPlanService careerPlanService;
 
 	@Autowired
 	private IRegionInfoService regionInfoService;
@@ -84,8 +85,8 @@ public class UserProfileService implements IUserProfileService {
 		} else {
 			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
 		}
-		rm = workYearInfoService.getWorkYearById(String.valueOf(userProgile.getWorkYearId()));
-		if (!("5000").equals(rm.getErrorCode())) {
+		rm = careerPlanService.getCareerPlanById(String.valueOf(userProgile.getWorkYearId()));
+		if (!("1200").equals(rm.getErrorCode())) {
 			userProgile.setWorkYear("未知");
 		} else {
 			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
@@ -112,6 +113,12 @@ public class UserProfileService implements IUserProfileService {
 			return ret;
 		}
 		profileModel.setUserName(profileParams.get("name"));
+		if (!profileParams.containsKey("nick_name")) {
+			ret.setErrorCode("1020");
+			ret.setErrorMsg("nick name未设置");
+			return ret;
+		}
+		profileModel.setNickName(profileParams.get("nick_name"));
 		if (!profileParams.containsKey("photo")) {
 			ret.setErrorCode("1004");
 			ret.setErrorMsg("photo未设置");
@@ -198,8 +205,14 @@ public class UserProfileService implements IUserProfileService {
 		if (profileParams.containsKey("name")) {
 			profileModel.setUserName(profileParams.get("name"));
 		}
+		if (profileParams.containsKey("nick_name")) {
+			profileModel.setNickName(profileParams.get("nick_name"));
+		}
 		if (profileParams.containsKey("photo")) {
 			profileModel.setUserPhoto(profileParams.get("photo"));
+		}
+		if (profileParams.containsKey("visit_card")) {
+			profileModel.setUserVisitCard(profileParams.get("visit_card"));
 		}
 		try {
 			if (profileParams.containsKey("sex")) {
@@ -210,6 +223,9 @@ public class UserProfileService implements IUserProfileService {
 			}
 			if (profileParams.containsKey("work_year_id")) {
 				profileModel.setWorkYearId(Integer.valueOf(profileParams.get("work_year_id")));
+			}
+			if (profileParams.containsKey("career_plan_id")) {
+				profileModel.setCareerPlanId(Integer.valueOf(profileParams.get("career_plan_id")));
 			}
 		} catch (Exception e) {
 			ret.setErrorCode("1020");

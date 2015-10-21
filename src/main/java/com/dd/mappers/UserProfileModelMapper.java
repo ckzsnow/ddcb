@@ -10,7 +10,7 @@ import com.dd.models.UserProfileModel;
 public class UserProfileModelMapper implements RowMapper<UserProfileModel> {
 	public UserProfileModel mapRow(ResultSet rs, int index) throws SQLException {
 		UserProfileModel u = new UserProfileModel(rs.getString("user_id"),
-				rs.getString("name"), rs.getString("photo"), rs.getString("visit_card"),
+				rs.getString("name"), rs.getString("nick_name"), rs.getString("photo"), rs.getString("visit_card"),
 				rs.getInt("sex"),
 				rs.getInt("industry_id"), rs.getString("company"),
 				rs.getString("position"), rs.getInt("work_year_id"), rs.getInt("career_plan_id"), 
