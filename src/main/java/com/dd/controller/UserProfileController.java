@@ -64,7 +64,7 @@ public class UserProfileController {
 			return rm;
 		}
 		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
-		paramsMap.put("userId", userId);
+		paramsMap.put("user_id", userId);
 		return userProfileService.addUserProfile(paramsMap);
 	}
 	
@@ -80,7 +80,7 @@ public class UserProfileController {
 			return rm;
 		}
 		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
-		paramsMap.put("userId", userId);
+		paramsMap.put("user_id", userId);
 		return userProfileService.updateUserProfile(paramsMap);
 	}
 	

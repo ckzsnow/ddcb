@@ -40,7 +40,7 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />
-		<property name="maxUploadSize" value="204800000000"></property>
+		<property name="maxUploadSize" value="204800000"></property>
 	</bean>
 
 	<bean
@@ -101,5 +101,14 @@
 	</mvc:interceptors>
 
 	<mvc:resources mapping="/views/**" location="/WEB-INF/views/"></mvc:resources>
+	
+	<mvc:resources mapping="/appfile/icons/industry/**" location="file:/home/appfile/icons/industry/"/>
+	<mvc:resources mapping="/appfile/icons/field/**" location="file:/home/appfile/icons/field/"/>
+	<mvc:resources mapping="/appfile/icons/stage/**" location="file:/home/appfile/icons/stage/"/>
+	
+	<mvc:resources mapping="/appfile/usercoursedoc/**" location="file:/home/appfile/usercoursedoc/"/>
+	<mvc:resources mapping="/appfile/usercoursevoice/**" location="file:/home/appfile/usercoursevoice/"/>
+	<mvc:resources mapping="/appfile/userphoto/**" location="file:/home/appfile/userphoto/"/>
+	<mvc:resources mapping="/appfile/uservisitcard/**" location="file:/home/appfile/uservisitcard/"/>
 
 </beans>

@@ -1,5 +1,9 @@
 package com.dd.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.dd.constant.Constant.CourseAuditStatus;
@@ -182,21 +189,36 @@ public class CourseDaoImpl implements ICourseDao {
 	}
 
 	@Override
-	public boolean addCourse(CourseModel courseModel) {
+	public long addCourse(CourseModel courseModel) {
 		logger.debug("args courseModel : {}", courseModel.toString());
-		String sql = "insert into course (name, brief, details, industry_id, field_id, stage_id, school_time, doc_attatch, voice_attatch, course_type, audit_status, create_time)"
-				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		int affectedRows = 0;
+		KeyHolder keyHolder = new GeneratedKeyHolder();
 		try {
-			affectedRows = jdbcTemplate.update(sql, courseModel.getName(), courseModel.getBrief(),
-					courseModel.getDetails(), courseModel.getIndustryId(), courseModel.getFieldId(),
-					courseModel.getStageId(), courseModel.getSchoolTime(), courseModel.getDocAttatch(),
-					courseModel.getVoiceAttatch(), courseModel.getCourseType(), courseModel.getAuditStatus(),
-					new Timestamp(System.currentTimeMillis()));
+			jdbcTemplate.update(new PreparedStatementCreator() {
+				public PreparedStatement createPreparedStatement(
+						Connection connection) throws SQLException {
+					String sql = "insert into course (name, brief, details, industry_id, field_id, stage_id, school_time, doc_attatch, voice_attatch, course_type, audit_status, create_time)"
+							+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					PreparedStatement ps = connection.prepareStatement(sql,
+							Statement.RETURN_GENERATED_KEYS);
+					ps.setString(1, courseModel.getName());
+					ps.setString(2, courseModel.getBrief());
+					ps.setString(3, courseModel.getDetails());
+					ps.setInt(4, courseModel.getIndustryId());
+					ps.setInt(5, courseModel.getFieldId());
+					ps.setInt(6, courseModel.getStageId());
+					ps.setTimestamp(7, courseModel.getSchoolTime());
+					ps.setString(8, courseModel.getDocAttatch());
+					ps.setString(9, courseModel.getVoiceAttatch());
+					ps.setInt(10, courseModel.getCourseType());
+					ps.setInt(11, courseModel.getAuditStatus());
+					ps.setTimestamp(12, new Timestamp(System.currentTimeMillis()));
+					return ps;
+				}
+			}, keyHolder);
 		} catch (Exception e) {
 			logger.debug("addCourse, exception : {}", e.toString());
 		}
-		return affectedRows != 0;
+		return keyHolder.getKey().longValue();
 	}
 
 	@Override

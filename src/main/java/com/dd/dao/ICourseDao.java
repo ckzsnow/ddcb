@@ -23,7 +23,7 @@ public interface ICourseDao {
 	public List<CourseModel> getCourseByCourseTypeAndCourseAuditStatus(CourseType courseType,
 			CourseAuditStatus courseAuditStatus, int page, int amountPerPage);
 
-	public boolean addCourse(CourseModel courseModel);
+	public long addCourse(CourseModel courseModel);
 	
 	public boolean updateCourse(CourseModel courseModel);
 

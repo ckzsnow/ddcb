@@ -1,5 +1,7 @@
 package com.dd.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -132,7 +134,9 @@ public class CourseController {
 			rm.setErrorMsg("会话已过期，请重新登录");
 			return rm;
 		}
-		return courseService.addCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
+		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
+		paramsMap.put("user_id", userId);
+		return courseService.addCourse(paramsMap);
 	}
 
 	@RequestMapping("/updateCourse")

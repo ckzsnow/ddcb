@@ -14,6 +14,6 @@ public interface IUserCourseService {
 		
 	public ResultModel addUserCourse(Map<String, String> params);
 	
-	public ResultModel deleteUserCourseByUserIdAndCourseIdAndUserType(String userId, String courseId, String userType);
+	public ResultModel deleteUserCourseByCourseIdAndUserType(String userId, String courseId, String userType);
 	
 }

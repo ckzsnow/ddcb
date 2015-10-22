@@ -7,6 +7,7 @@ public class IndustryModel implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
+	private String icon;
 	private Timestamp createTime;
 
 	// Constructors
@@ -22,13 +23,22 @@ public class IndustryModel implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IndustryModel(Integer id, String name, Timestamp createTime) {
+	public IndustryModel(Integer id, String name, String icon, Timestamp createTime) {
 		this.id = id;
 		this.name = name;
+		this.icon = icon;
 		this.createTime = createTime;
 	}
 
 	// Property accessors
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -56,7 +66,7 @@ public class IndustryModel implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "IndustryModel [id=" + id + ", name=" + name + ", createTime=" + createTime + "]";
+		return "IndustryModel [id=" + id + ", name=" + name + ", icon=" + icon + ", createTime=" + createTime + "]";
 	}
 
 }

@@ -139,7 +139,7 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 			logger.debug("userId is invalid, failed in updating.");
 			return false;
 		}
-		if (sql.toString().endsWith(","))
+		if(sql.toString().endsWith(","))
 			sql.deleteCharAt(sql.length() - 1);
 		sql.append("where user_id=?");
 		argsList.add(userProfileModel.getUserId());

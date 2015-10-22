@@ -8,16 +8,26 @@ public class FieldModel implements java.io.Serializable {
 	private Integer id;
 	private Integer industryId;
 	private String name;
+	private String icon;
 	private Timestamp createTime;
 
 	public FieldModel() {
 	}
 
-	public FieldModel(Integer id, Integer industryId, String name, Timestamp createTime) {
+	public FieldModel(Integer id, Integer industryId, String name, String icon, Timestamp createTime) {
 		this.id = id;
 		this.industryId = industryId;
 		this.name = name;
+		this.icon = icon;
 		this.createTime = createTime;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	public Integer getId() {
@@ -54,8 +64,8 @@ public class FieldModel implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "FieldModel [id=" + id + ", industryId=" + industryId + ", name=" + name + ", createTime=" + createTime
-				+ "]";
+		return "FieldModel [id=" + id + ", industryId=" + industryId + ", name=" + name + ", icon=" + icon
+				+ ", createTime=" + createTime + "]";
 	}
 
 }

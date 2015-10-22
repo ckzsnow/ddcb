@@ -7,15 +7,25 @@ public class StageModel implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
+	private String icon;
 	private Timestamp createTime;
 
 	public StageModel() {
 	}
 
-	public StageModel(Integer id, String name, Timestamp createTime) {
+	public StageModel(Integer id, String name, String icon, Timestamp createTime) {
 		this.id = id;
 		this.name = name;
+		this.icon = icon;
 		this.createTime = createTime;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	public Integer getId() {
@@ -44,7 +54,7 @@ public class StageModel implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "StageModel [id=" + id + ", name=" + name + ", createTime=" + createTime + "]";
+		return "StageModel [id=" + id + ", name=" + name + ", icon=" + icon + ", createTime=" + createTime + "]";
 	}
 
 }

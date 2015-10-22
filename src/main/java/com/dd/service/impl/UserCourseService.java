@@ -1,5 +1,6 @@
 package com.dd.service.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dd.constant.Constant.UserType;
+import com.dd.dao.ICourseDao;
 import com.dd.dao.IUserCourseDao;
+import com.dd.models.CourseModel;
 import com.dd.models.ResultModel;
 import com.dd.models.UserCourseModel;
 import com.dd.redis.service.IRedisService;
@@ -21,6 +24,9 @@ public class UserCourseService implements IUserCourseService {
 
 	@Autowired
 	private IUserCourseDao userCourseDao;
+	
+	@Autowired
+	private ICourseDao courseDao;
 	
 	@Autowired
 	private IRedisService redisService;
@@ -49,10 +55,16 @@ public class UserCourseService implements IUserCourseService {
 			return ret;
 		}
 		List<UserCourseModel> retList = userCourseDao.getUserCourseByUserIdAndUserType(userId, userType_, page_, amountPerPage_);
-		if(retList != null && retList.size() != 0) {
+		List<CourseModel> courseModelList = new ArrayList<>();
+		for(UserCourseModel ucm : retList) {
+			Long courseId = ucm.getCourseId();
+			CourseModel cm = courseDao.getCourseByCourseId(courseId);
+			if(cm != null) courseModelList.add(cm);
+		}
+		if(courseModelList != null && courseModelList.size() != 0) {
 			ret.setErrorCode("6000");
 			ret.setErrorMsg("操作成功");
-			ret.setResultList(Arrays.asList(retList.toArray()));
+			ret.setResultList(Arrays.asList(courseModelList.toArray()));
 		} else {
 			ret.setErrorCode("6002");
 			ret.setErrorMsg("查询结果为空");
@@ -158,7 +170,7 @@ public class UserCourseService implements IUserCourseService {
 	}
 
 	@Override
-	public ResultModel deleteUserCourseByUserIdAndCourseIdAndUserType(String userId, String courseId, String userType) {
+	public ResultModel deleteUserCourseByCourseIdAndUserType(String userId, String courseId, String userType) {
 		ResultModel ret = new ResultModel();
 		long courseId_ = 0;
 		try {

@@ -1,5 +1,7 @@
 package com.dd.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -22,7 +24,7 @@ public class UserCourseController {
 	@Autowired
 	private IUserCourseService userCourseService;
 	
-	@RequestMapping("/getUserCourseByUserIdAndUserType")
+	@RequestMapping("/getUserCourseByUserType")
 	@ResponseBody
 	public ResultModel getUserCourseByUserIdAndUserType(HttpServletRequest request) {
 		logger.debug("getUserCourseByUserIdAndUserType");
@@ -38,8 +40,6 @@ public class UserCourseController {
 		String amountPerPage = request.getParameter("amountPerPage");
 		return userCourseService.getUserCourseByUserIdAndUserType(userId, userType, page, amountPerPage);
 	}
-	
-	
 	
 	@RequestMapping("/getUserCourseByCourseIdAndUserType")
 	@ResponseBody
@@ -85,10 +85,12 @@ public class UserCourseController {
 			rm.setErrorMsg("会话已过期，请重新登录");
 			return rm;
 		}
-		return userCourseService.addUserCourse(ConvertRequestMapToMap.convert(request.getParameterMap()));
+		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
+		paramsMap.put("user_id", userId);
+		return userCourseService.addUserCourse(paramsMap);
 	}	
 	
-	@RequestMapping("/deleteUserCourseByUserIdAndCourseIdAndUserType")
+	@RequestMapping("/deleteUserCourseByCourseIdAndUserType")
 	@ResponseBody
 	public ResultModel deleteUserCourseByUserIdAndCourseIdAndUserType(HttpServletRequest request) {
 		logger.debug("deleteUserCourseByUserIdAndCourseIdAndUserType");
@@ -101,7 +103,7 @@ public class UserCourseController {
 		}
 		String courseId = request.getParameter("courseId");
 		String userType = request.getParameter("userType");
-		return userCourseService.deleteUserCourseByUserIdAndCourseIdAndUserType(userId, courseId, userType);
+		return userCourseService.deleteUserCourseByCourseIdAndUserType(userId, courseId, userType);
 	}	
 	
 }

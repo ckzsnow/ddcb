@@ -10,7 +10,7 @@ import com.dd.models.IndustryModel;
 public class IndustryModelMapper implements RowMapper<IndustryModel> {
 	public IndustryModel mapRow(ResultSet rs, int index) throws SQLException {
 		IndustryModel u = new IndustryModel(rs.getInt("id"),
-				rs.getString("name"), rs.getTimestamp("create_time"));
+				rs.getString("name"), rs.getString("icon"), rs.getTimestamp("create_time"));
 		return u;
 	}
 }

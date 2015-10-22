@@ -10,14 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dd.constant.Constant;
 import com.dd.constant.Constant.CourseAuditStatus;
 import com.dd.constant.Constant.CourseType;
 import com.dd.dao.ICourseDao;
+import com.dd.dao.IUserCourseDao;
 import com.dd.models.CourseModel;
 import com.dd.models.FieldModel;
 import com.dd.models.IndustryModel;
 import com.dd.models.ResultModel;
 import com.dd.models.StageModel;
+import com.dd.models.UserCourseModel;
 import com.dd.service.ICategoryInfoService;
 import com.dd.service.ICourseService;
 
@@ -26,6 +29,9 @@ public class CourseService implements ICourseService {
 
 	@Autowired
 	private ICourseDao courseDao;
+	
+	@Autowired
+	private IUserCourseDao userCourseDao;
 
 	@Autowired
 	private ICategoryInfoService categoryInfoService;
@@ -279,7 +285,16 @@ public class CourseService implements ICourseService {
 		courseModel.setVoiceAttatch(params.containsKey("voice_attatch") ? params.get("voice_attatch") : "");
 		courseModel.setCourseType(0);
 		courseModel.setAuditStatus(0);
-		if (courseDao.addCourse(courseModel)) {
+		Long courseId = courseDao.addCourse(courseModel);
+		boolean opStatus = false;
+		if(courseId != null) {
+			UserCourseModel ucm = new UserCourseModel();
+			ucm.setUserId(params.get("user_id"));
+			ucm.setCourseId(courseId);
+			ucm.setUserType(Constant.UserType.TEACH.value());
+			opStatus = userCourseDao.addUserCourse(ucm);
+		}
+		if(opStatus) {
 			ret.setErrorCode("2000");
 			ret.setErrorMsg("操作成功");
 		} else {

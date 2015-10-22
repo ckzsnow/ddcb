@@ -57,37 +57,37 @@ public class UserProfileService implements IUserProfileService {
 		}
 		ResultModel rm = categoryInfoService.getIndustryByIndustryId(String.valueOf(userProgile.getIndustryId()));
 		if (!("3000").equals(rm.getErrorCode())) {
-			userProgile.setIndustryName("未知");
+			userProgile.setIndustryName("未设定");
 		} else {
 			userProgile.setIndustryName(((IndustryModel) rm.getResult()).getName());
 		}
 		rm = regionInfoService.getProvinceByProvinceId(userProgile.getProvinceId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setProvinceName("未知");
+			userProgile.setProvinceName("未设定");
 		} else {
 			userProgile.setProvinceName(((ProvinceModel) rm.getResult()).getProvince());
 		}
 		rm = regionInfoService.getCityByCityId(userProgile.getCityId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setCityName("未知");
+			userProgile.setCityName("未设定");
 		} else {
 			userProgile.setCityName(((CityModel) rm.getResult()).getCity());
 		}
 		rm = regionInfoService.getAreaByAreaId(userProgile.getAreaId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setAreaName("未知");
+			userProgile.setAreaName("未设定");
 		} else {
 			userProgile.setAreaName(((AreaModel) rm.getResult()).getArea());
 		}
 		rm = workYearInfoService.getWorkYearById(String.valueOf(userProgile.getWorkYearId()));
 		if (!("5000").equals(rm.getErrorCode())) {
-			userProgile.setWorkYear("未知");
+			userProgile.setWorkYear("未设定");
 		} else {
 			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
 		}
 		rm = careerPlanService.getCareerPlanById(String.valueOf(userProgile.getWorkYearId()));
 		if (!("1200").equals(rm.getErrorCode())) {
-			userProgile.setWorkYear("未知");
+			userProgile.setWorkYear("未设定");
 		} else {
 			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
 		}
@@ -204,28 +204,44 @@ public class UserProfileService implements IUserProfileService {
 		}
 		if (profileParams.containsKey("name")) {
 			profileModel.setUserName(profileParams.get("name"));
+		} else {
+			profileModel.setUserName("");
 		}
 		if (profileParams.containsKey("nick_name")) {
 			profileModel.setNickName(profileParams.get("nick_name"));
+		} else {
+			profileModel.setNickName("");
 		}
 		if (profileParams.containsKey("photo")) {
 			profileModel.setUserPhoto(profileParams.get("photo"));
+		} else {
+			profileModel.setUserPhoto("");
 		}
 		if (profileParams.containsKey("visit_card")) {
 			profileModel.setUserVisitCard(profileParams.get("visit_card"));
+		} else {
+			profileModel.setUserVisitCard("");
 		}
 		try {
 			if (profileParams.containsKey("sex")) {
 				profileModel.setUserSex(Integer.valueOf(profileParams.get("sex")));
+			} else {
+				profileModel.setUserSex(0);
 			}
 			if (profileParams.containsKey("industry_id")) {
 				profileModel.setIndustryId(Integer.valueOf(profileParams.get("industry_id")));
+			} else {
+				profileModel.setIndustryId(0);
 			}
 			if (profileParams.containsKey("work_year_id")) {
 				profileModel.setWorkYearId(Integer.valueOf(profileParams.get("work_year_id")));
+			} else {
+				profileModel.setWorkYearId(0);
 			}
 			if (profileParams.containsKey("career_plan_id")) {
 				profileModel.setCareerPlanId(Integer.valueOf(profileParams.get("career_plan_id")));
+			} else {
+				profileModel.setCareerPlanId(0);
 			}
 		} catch (Exception e) {
 			ret.setErrorCode("1020");
@@ -234,28 +250,44 @@ public class UserProfileService implements IUserProfileService {
 		}
 		if (profileParams.containsKey("company")) {
 			profileModel.setCompanyName(profileParams.get("company"));
+		} else {
+			profileModel.setCompanyName("");
 		}
 		if (profileParams.containsKey("position")) {
 			profileModel.setCompanyPosition(profileParams.get("position"));
+		} else {
+			profileModel.setCompanyPosition("");
 		}
 		if (profileParams.containsKey("province_id")) {
 			profileModel.setProvinceId(profileParams.get("province_id"));
+		} else {
+			profileModel.setProvinceId("0");
 		}
 		if (profileParams.containsKey("city_id")) {
 			profileModel.setCityId(profileParams.get("city_id"));
+		} else {
+			profileModel.setCityId("0");
 		}
 		if (profileParams.containsKey("area_id")) {
 			profileModel.setAreaId(profileParams.get("area_id"));
+		} else {
+			profileModel.setAreaId("0");
 		}
 		if (profileParams.containsKey("resume")) {
 			profileModel.setResume(profileParams.get("resume"));
-		}
-		if (userProfileDao.updateUserProfile(profileModel)) {
-			ret.setErrorCode("1000");
-			ret.setErrorMsg("操作成功");
 		} else {
-			ret.setErrorCode("1013");
-			ret.setErrorMsg("操作数据库失败");
+			profileModel.setResume("");
+		}
+		if(userProfileDao.getUserProfileByUserId(profileParams.get("user_id")) != null) {
+			if (userProfileDao.updateUserProfile(profileModel)) {
+				ret.setErrorCode("1000");
+				ret.setErrorMsg("操作成功");
+			} else {
+				ret.setErrorCode("1013");
+				ret.setErrorMsg("操作数据库失败");
+			}
+		} else {
+			userProfileDao.addUserProfile(profileModel);
 		}
 		return ret;
 	}
