@@ -156,4 +156,17 @@ public class UserProfileDaoImpl implements IUserProfileDao {
 		return affectedRows != 0;
 	}
 
+	@Override
+	public boolean updateUserId(String userId, String newUserId) {
+		logger.debug("args userId : {}, newUserId : {}", userId, newUserId);
+		String sql = "update user_profile set user_id=? where user_id=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, newUserId, userId);
+		} catch (Exception e) {
+			logger.debug("updateUserId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
 }

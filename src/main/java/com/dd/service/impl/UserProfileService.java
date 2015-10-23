@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.dd.dao.IUserProfileDao;
 import com.dd.models.AreaModel;
+import com.dd.models.CareerPlanModel;
 import com.dd.models.CityModel;
 import com.dd.models.IndustryModel;
 import com.dd.models.ProvinceModel;
@@ -57,39 +58,39 @@ public class UserProfileService implements IUserProfileService {
 		}
 		ResultModel rm = categoryInfoService.getIndustryByIndustryId(String.valueOf(userProgile.getIndustryId()));
 		if (!("3000").equals(rm.getErrorCode())) {
-			userProgile.setIndustryName("未设定");
+			userProgile.setIndustryName("");
 		} else {
 			userProgile.setIndustryName(((IndustryModel) rm.getResult()).getName());
 		}
 		rm = regionInfoService.getProvinceByProvinceId(userProgile.getProvinceId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setProvinceName("未设定");
+			userProgile.setProvinceName("");
 		} else {
 			userProgile.setProvinceName(((ProvinceModel) rm.getResult()).getProvince());
 		}
 		rm = regionInfoService.getCityByCityId(userProgile.getCityId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setCityName("未设定");
+			userProgile.setCityName("");
 		} else {
 			userProgile.setCityName(((CityModel) rm.getResult()).getCity());
 		}
 		rm = regionInfoService.getAreaByAreaId(userProgile.getAreaId());
 		if (!("4000").equals(rm.getErrorCode())) {
-			userProgile.setAreaName("未设定");
+			userProgile.setAreaName("");
 		} else {
 			userProgile.setAreaName(((AreaModel) rm.getResult()).getArea());
 		}
 		rm = workYearInfoService.getWorkYearById(String.valueOf(userProgile.getWorkYearId()));
 		if (!("5000").equals(rm.getErrorCode())) {
-			userProgile.setWorkYear("未设定");
+			userProgile.setWorkYear("");
 		} else {
 			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
 		}
 		rm = careerPlanService.getCareerPlanById(String.valueOf(userProgile.getWorkYearId()));
 		if (!("1200").equals(rm.getErrorCode())) {
-			userProgile.setWorkYear("未设定");
+			userProgile.setCareerPlan("");
 		} else {
-			userProgile.setWorkYear(((WorkYearModel) rm.getResult()).getName());
+			userProgile.setCareerPlan(((CareerPlanModel)rm.getResult()).getName());
 		}
 		ret.setErrorCode("1000");
 		ret.setErrorMsg("操作成功");

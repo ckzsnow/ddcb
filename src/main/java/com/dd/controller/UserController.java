@@ -47,6 +47,49 @@ public class UserController {
 		return userService.userLogin(userId, userPwd);
 	}
 	
+	@RequestMapping("/userChangePwd")
+	@ResponseBody
+	public ResultModel userChangePwd(HttpServletRequest request) {
+		logger.debug("userChangePwd");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String userOldPwd = request.getParameter("userOldPwd");
+		String userNewPwd = request.getParameter("userNewPwd");
+		ResultModel rm = userService.userChangePwd(userId, userOldPwd, userNewPwd);
+		if(("0000").equals(rm.getErrorCode())) {
+			request.getSession().setAttribute("userId", "");
+		}
+		return rm;
+	}
+	
+	@RequestMapping("/userChangeUserId")
+	@ResponseBody
+	public ResultModel userChangeUserId(HttpServletRequest request) {
+		logger.debug("userChangePwd");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String sendedSMSCode = (String) request.getSession().getAttribute("USER_PHONE_VERIFY_CODE");
+		logger.debug("userChangeUserId session id : {}", request.getSession().getId());
+		logger.debug("userChangeUserId session smscode : {}", sendedSMSCode);
+		String userVerifyCode = request.getParameter("userVerifyCode");
+		String newUserId = request.getParameter("newUserId");
+		ResultModel rm = userService.userChangeUserId(userId, newUserId, sendedSMSCode, userVerifyCode);
+		if(("0000").equals(rm.getErrorCode())) {
+			request.getSession().setAttribute("userId", "");
+		}
+		return rm;
+	}
+	
 	@RequestMapping("/sendVerifyCode")
 	@ResponseBody
 	public ResultModel sendVerifyCode(HttpServletRequest request) {

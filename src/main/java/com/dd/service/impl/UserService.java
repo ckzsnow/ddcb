@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dd.dao.IUserCourseDao;
 import com.dd.dao.IUserDao;
+import com.dd.dao.IUserProfileDao;
 import com.dd.models.ResultModel;
 import com.dd.models.UserModel;
 import com.dd.service.IUserProfileService;
@@ -19,6 +21,12 @@ public class UserService implements IUserService {
 
 	@Autowired
 	private IUserDao userDao;
+	
+	@Autowired
+	private IUserProfileDao userProfileDao;
+	
+	@Autowired
+	private IUserCourseDao userCourseDao;
 	
 	@Autowired
 	private IUserProfileService userProfileService;
@@ -194,6 +202,65 @@ public class UserService implements IUserService {
 			ret.setErrorCode("0000");
 			ret.setErrorMsg("操作成功");
 		}
+		return ret;
+	}
+
+	@Override
+	public ResultModel userChangePwd(String userId, String oldPwd, String newPwd) {
+		ResultModel ret = new ResultModel();
+		if(userId == null || userId.isEmpty()) {
+			ret.setErrorCode("0001");
+			ret.setErrorMsg("用户id为空");
+			return ret;
+		}
+		if(oldPwd == null || oldPwd.isEmpty() || newPwd == null || newPwd.isEmpty()) {
+			ret.setErrorCode("0002");
+			ret.setErrorMsg("用户密码为空");
+			return ret;
+		}
+		
+		UserModel user = userDao.getUserByUserId(userId);
+		if(!MD5Encrypt.EncryptPasswordByMd5(oldPwd).equals(user.getPwd())) {
+			ret.setErrorCode("0006");
+			ret.setErrorMsg("密码不正确");
+			return ret;
+		}
+		if(userDao.updateUserPwdByUserId(MD5Encrypt.EncryptPasswordByMd5(newPwd), userId)) {
+			ret.setErrorCode("0000");
+			ret.setErrorMsg("操作成功");
+		} else {
+			ret.setErrorCode("0004");
+			ret.setErrorMsg("数据库操作失败");
+		}
+		return ret;
+	}
+
+	@Override
+	public ResultModel userChangeUserId(String userId, String newUserId, String sendedSMSCode, String userVerifyCode) {
+		ResultModel ret = new ResultModel();
+		if(userId == null || userId.isEmpty() || newUserId == null || newUserId.isEmpty()) {
+			ret.setErrorCode("0001");
+			ret.setErrorMsg("用户id为空");
+			return ret;
+		}
+		if(userVerifyCode == null || userVerifyCode.isEmpty()) {
+			ret.setErrorCode("0007");
+			ret.setErrorMsg("验证码为空");
+			return ret;
+		}
+		if(!userVerifyCode.equals(sendedSMSCode)) {
+			ret.setErrorCode("0009");
+			ret.setErrorMsg("验证码不正确或已经过期");
+			return ret;
+		}
+		if(!userDao.updateUserId(userId, newUserId)) {
+			ret.setErrorCode("0004");
+			ret.setErrorMsg("数据库操作失败");
+		}
+		userProfileDao.updateUserId(userId, newUserId);
+		userCourseDao.updateUserId(userId, newUserId);
+		ret.setErrorCode("0000");
+		ret.setErrorMsg("操作成功");
 		return ret;
 	}
 

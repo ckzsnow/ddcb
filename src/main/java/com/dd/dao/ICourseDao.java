@@ -28,5 +28,7 @@ public interface ICourseDao {
 	public boolean updateCourse(CourseModel courseModel);
 
 	public boolean deleteCourseByCourseId(Long courseId);
+	
+	public boolean praiseByCourseId(Long courseId);
 
 }

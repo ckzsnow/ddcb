@@ -59,6 +59,11 @@ public class UserCourseService implements IUserCourseService {
 		for(UserCourseModel ucm : retList) {
 			Long courseId = ucm.getCourseId();
 			CourseModel cm = courseDao.getCourseByCourseId(courseId);
+			if(userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseId)) {
+				cm.setIsEnter("true");
+			} else {
+				cm.setIsEnter("false");
+			}
 			if(cm != null) courseModelList.add(cm);
 		}
 		if(courseModelList != null && courseModelList.size() != 0) {

@@ -107,4 +107,45 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		return userCourseList;
 	}
 
+	@Override
+	public boolean userIsEnterCourseByUserIdAndCourseIdAndUserType(String userId, Long courseId) {
+		logger.debug("args courseId : {}", courseId);
+		String sql = "select count(*) from user_course where user_id=? and course_id=? and user_type=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { userId, courseId, UserType.LISTEN.value() },
+					Integer.class);
+		} catch (Exception e) {
+			logger.debug("userIsEnterCourseByUserIdAndCourseIdAndUserType, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
+	@Override
+	public boolean deleteUserCourseByCourseId(Long courseId) {
+		logger.debug("args courseId : {}", courseId);
+		String sql = "delete from user_course where course_id = ?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, courseId);
+			affectedRows = affectedRows == 0 ? 1 : affectedRows;
+		} catch (Exception e) {
+			logger.debug("deleteUserCourseByCourseId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
+	@Override
+	public boolean updateUserId(String userId, String newUserId) {
+		logger.debug("args userId : {}, newUserId : {}", userId, newUserId);
+		String sql = "update user_course set user_id=? where user_id=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, newUserId, userId);
+		} catch (Exception e) {
+			logger.debug("updateUserId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
 }

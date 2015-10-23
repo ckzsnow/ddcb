@@ -29,6 +29,16 @@
 0001-用户Id为空
 0008-发送短信验证码失败
 
+4.用户密码修改接口路径:/safety/userChangePwd
+请求方式:HTTPS GET/POST
+请求参数:userOldPwd，userNewPwd
+返回字段:errorCode, errorMsg
+0000-操作成功
+0001-用户Id为空
+0002-用户密码为空
+0006-用户密码不正确
+0004-操作数据库失败
+
 二：省市县三级联动相关接口
 1.获取所有省份接口路径:/regionInfo/getAllProvince
 请求方式:HTTP GET/POST
@@ -479,4 +489,4 @@ result字段数据为json格式，样例如下：
 返回字段:errorCode, errorMsg
 8800-上传成功
 8801，8802-上传失败
-注意：该方法上传后会修改课程信息中的doc_attatch字段
+注意：该方法上传后会修改课程信息中的voice_attatch字段

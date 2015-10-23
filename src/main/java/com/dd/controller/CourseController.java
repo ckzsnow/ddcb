@@ -36,7 +36,7 @@ public class CourseController {
 			return rm;
 		}
 		String courseId = request.getParameter("courseId");
-		return courseService.getCourseByCourseId(courseId);
+		return courseService.getCourseByCourseId(userId, courseId);
 	}
 
 	@RequestMapping("/getCourseByCourseNameAndBriefAndDetails")
@@ -57,7 +57,7 @@ public class CourseController {
 		String courseType = request.getParameter("courseType");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
-		return courseService.getCourseByCourseNameAndBriefAndDetails(courseName, courseBrief, courseDetails,
+		return courseService.getCourseByCourseNameAndBriefAndDetails(userId, courseName, courseBrief, courseDetails,
 				courseAuditStatus, courseType, page, amountPerPage);
 	}
 
@@ -79,7 +79,7 @@ public class CourseController {
 		String courseType = request.getParameter("courseType");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
-		return courseService.getCourseByIndustryIdAndFieldIdAndStageId(industryId, fieldId, stageId, courseAuditStatus,
+		return courseService.getCourseByIndustryIdAndFieldIdAndStageId(userId, industryId, fieldId, stageId, courseAuditStatus,
 				courseType, page, amountPerPage);
 	}
 
@@ -100,7 +100,7 @@ public class CourseController {
 		String courseType = request.getParameter("courseType");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
-		return courseService.getCourseBySchoolTime(startTime, endTime, courseAuditStatus, courseType, page,
+		return courseService.getCourseBySchoolTime(userId, startTime, endTime, courseAuditStatus, courseType, page,
 				amountPerPage);
 	}
 
@@ -119,7 +119,7 @@ public class CourseController {
 		String courseType = request.getParameter("courseType");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
-		return courseService.getCourseByCourseTypeAndCourseAuditStatus(courseType, courseAuditStatus, page,
+		return courseService.getCourseByCourseTypeAndCourseAuditStatus(userId, courseType, courseAuditStatus, page,
 				amountPerPage);
 	}
 
@@ -167,5 +167,41 @@ public class CourseController {
 		String courseId = request.getParameter("courseId");
 		return courseService.deleteCourseByCourseId(courseId);
 	}
-
+	
+	@RequestMapping("/praiseByCourseId")
+	@ResponseBody
+	public ResultModel praiseByCourseId(HttpServletRequest request) {
+		logger.debug("praiseByCourseId");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String courseId = request.getParameter("courseId");
+		return courseService.praiseByCourseId(courseId);
+	}
+	
+	@RequestMapping("/get")
+	@ResponseBody
+	public ResultModel getCourseByCourseNameAndBriefAndDetails(HttpServletRequest request) {
+		logger.debug("getCourseByCourseNameAndBriefAndDetails");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String courseName = request.getParameter("courseName");
+		String courseBrief = request.getParameter("courseBrief");
+		String courseDetails = request.getParameter("courseDetails");
+		String courseAuditStatus = request.getParameter("courseAuditStatus");
+		String courseType = request.getParameter("courseType");
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return courseService.getCourseByCourseNameAndBriefAndDetails(userId, courseName, courseBrief, courseDetails,
+				courseAuditStatus, courseType, page, amountPerPage);
+	}
 }

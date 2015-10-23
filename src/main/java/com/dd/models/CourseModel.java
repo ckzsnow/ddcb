@@ -24,6 +24,8 @@ public class CourseModel implements java.io.Serializable {
 	private Integer auditStatus;
 	private String courseAuditStatusName;
 	private Timestamp createTime;
+	private String isEnter;
+	private Integer praiseAmount;
 
 	// Constructors
 
@@ -33,7 +35,7 @@ public class CourseModel implements java.io.Serializable {
 
 	public CourseModel(Long id, String name, String brief, String details, Integer industryId, Integer fieldId,
 			Integer stageId, Timestamp schoolTime, String docAttatch, String voiceAttatch, Integer courseType,
-			Integer auditStatus, Timestamp createTime) {
+			Integer auditStatus, Integer praiseAmount, Timestamp createTime) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -47,7 +49,24 @@ public class CourseModel implements java.io.Serializable {
 		this.voiceAttatch = voiceAttatch;
 		this.courseType = courseType;
 		this.auditStatus = auditStatus;
+		this.praiseAmount = praiseAmount;
 		this.createTime = createTime;
+	}
+
+	public Integer getPraiseAmount() {
+		return praiseAmount;
+	}
+
+	public void setPraiseAmount(Integer praiseAmount) {
+		this.praiseAmount = praiseAmount;
+	}
+
+	public String getIsEnter() {
+		return isEnter;
+	}
+
+	public void setIsEnter(String isEnter) {
+		this.isEnter = isEnter;
 	}
 
 	public String getFormatSchoolTime() {
@@ -213,6 +232,7 @@ public class CourseModel implements java.io.Serializable {
 				+ industryName + ", fieldName=" + fieldName + ", stageName=" + stageName + ", schoolTime=" + schoolTime
 				+ ", formatSchoolTime=" + formatSchoolTime + ", docAttatch=" + docAttatch + ", voiceAttatch="
 				+ voiceAttatch + ", courseType=" + courseType + ", courseTypeName=" + courseTypeName + ", auditStatus="
-				+ auditStatus + ", courseAuditStatusName=" + courseAuditStatusName + ", createTime=" + createTime + "]";
+				+ auditStatus + ", courseAuditStatusName=" + courseAuditStatusName + ", createTime=" + createTime
+				+ ", isEnter=" + isEnter + ", praiseAmount=" + praiseAmount + "]";
 	}
 }

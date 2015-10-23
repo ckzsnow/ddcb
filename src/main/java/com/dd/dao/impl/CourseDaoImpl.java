@@ -305,4 +305,17 @@ public class CourseDaoImpl implements ICourseDao {
 		}
 		return affectedRows != 0;
 	}
+
+	@Override
+	public boolean praiseByCourseId(Long courseId) {
+		logger.debug("args courseId : {}", courseId);
+		String sql = "update course set praise_amount = praise_amount + 1 where id=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, courseId);
+		} catch (Exception e) {
+			logger.debug("praiseByCourseId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
 }

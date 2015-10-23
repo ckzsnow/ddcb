@@ -14,7 +14,7 @@ public class CourseModelMapper implements RowMapper<CourseModel> {
 				rs.getInt("field_id"), rs.getInt("stage_id"), rs.getTimestamp("school_time"),
 				rs.getString("doc_attatch"), rs.getString("voice_attatch"),
 				rs.getInt("course_type"), rs.getInt("audit_status"),
-				rs.getTimestamp("create_time"));
+				rs.getInt("praise_amount"), rs.getTimestamp("create_time"));
 		return u;
 	}
 }

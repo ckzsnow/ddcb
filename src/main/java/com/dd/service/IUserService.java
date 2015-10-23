@@ -8,6 +8,10 @@ public interface IUserService {
 	
 	public ResultModel userLogin(String userId, String pwd);
 	
+	public ResultModel userChangePwd(String userId, String oldPwd, String newPwd);
+	
+	public ResultModel userChangeUserId(String userId, String newUserId, String sendedSMSCode, String userVerifyCode);
+	
 	public ResultModel sendVerifyCode(String userId);
 	
 	public ResultModel deleteUser(String userId);

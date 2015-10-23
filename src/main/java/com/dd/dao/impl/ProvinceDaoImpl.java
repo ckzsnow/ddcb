@@ -23,7 +23,7 @@ public class ProvinceDaoImpl implements IProvinceDao {
 	@Override
 	public ProvinceModel getProvinceByProvinceId(String provinceId) {
 		logger.debug("args provinceId : {}", provinceId);
-		String sql = "select * from province where cityID = ?";
+		String sql = "select * from province where provinceID = ?";
 		ProvinceModel cityModel = null;
 		try {
 			cityModel = jdbcTemplate.queryForObject(sql, new Object[] { provinceId }, new ProvinceModelMapper());

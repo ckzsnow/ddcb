@@ -12,4 +12,6 @@ public interface IUserProfileDao {
 	
 	public boolean updateUserProfile(UserProfileModel userProfileModel);
 	
+	public boolean updateUserId(String userId, String newUserId);
+	
 }

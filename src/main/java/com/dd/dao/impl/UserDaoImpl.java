@@ -91,4 +91,17 @@ public class UserDaoImpl implements IUserDao {
 		return userList;
 	}
 
+	@Override
+	public boolean updateUserId(String userId, String newUserId) {
+		logger.debug("args userId : {}, newUserId : {}", userId, newUserId);
+		String sql = "update user set user_id=? where user_id=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, newUserId, userId);
+		} catch (Exception e) {
+			logger.debug("updateUserId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
 }

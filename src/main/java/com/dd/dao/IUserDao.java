@@ -16,4 +16,6 @@ public interface IUserDao {
 	
 	public boolean updateUserPwdByUserId(String pwd, String userId);
 	
+	public boolean updateUserId(String userId, String newUserId);
+	
 }
