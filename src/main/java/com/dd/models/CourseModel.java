@@ -26,12 +26,9 @@ public class CourseModel implements java.io.Serializable {
 	private Timestamp createTime;
 	private String isEnter;
 	private Integer praiseAmount;
-<<<<<<< HEAD
 	private Integer enterAmount;
 	private String userId;
-=======
 	private Integer notifyStatus;
->>>>>>> 3dc0795d3a88d1c157a18f6670cfaa4129e6a8b2
 
 	// Constructors
 
@@ -41,11 +38,7 @@ public class CourseModel implements java.io.Serializable {
 
 	public CourseModel(Long id, String name, String brief, String details, Integer industryId, Integer fieldId,
 			Integer stageId, Timestamp schoolTime, String docAttatch, String voiceAttatch, Integer courseType,
-<<<<<<< HEAD
-			Integer auditStatus, Integer praiseAmount, Integer enterAmount, Timestamp createTime, String userId) {
-=======
-			Integer auditStatus, Integer praiseAmount, Timestamp createTime, Integer nofityStatus) {
->>>>>>> 3dc0795d3a88d1c157a18f6670cfaa4129e6a8b2
+			Integer auditStatus, Integer praiseAmount, Integer enterAmount, Timestamp createTime, String userId, Integer nofityStatus) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -62,8 +55,8 @@ public class CourseModel implements java.io.Serializable {
 		this.praiseAmount = praiseAmount;
 		this.enterAmount = enterAmount;
 		this.createTime = createTime;
-<<<<<<< HEAD
 		this.userId = userId;
+		this.notifyStatus = nofityStatus;
 	}
 
 	public String getUserId() {
@@ -80,8 +73,6 @@ public class CourseModel implements java.io.Serializable {
 
 	public void setEnterAmount(Integer enterAmount) {
 		this.enterAmount = enterAmount;
-=======
-		this.notifyStatus = nofityStatus;
 	}
 
 	public Integer getNotifyStatus() {
@@ -90,7 +81,6 @@ public class CourseModel implements java.io.Serializable {
 
 	public void setNotifyStatus(Integer notifyStatus) {
 		this.notifyStatus = notifyStatus;
->>>>>>> 3dc0795d3a88d1c157a18f6670cfaa4129e6a8b2
 	}
 
 	public Integer getPraiseAmount() {
@@ -273,10 +263,7 @@ public class CourseModel implements java.io.Serializable {
 				+ ", formatSchoolTime=" + formatSchoolTime + ", docAttatch=" + docAttatch + ", voiceAttatch="
 				+ voiceAttatch + ", courseType=" + courseType + ", courseTypeName=" + courseTypeName + ", auditStatus="
 				+ auditStatus + ", courseAuditStatusName=" + courseAuditStatusName + ", createTime=" + createTime
-<<<<<<< HEAD
-				+ ", isEnter=" + isEnter + ", praiseAmount=" + praiseAmount + ", enterAmount=" + enterAmount + "]";
-=======
-				+ ", isEnter=" + isEnter + ", praiseAmount=" + praiseAmount + ", notifyStatus=" + notifyStatus + "]";
->>>>>>> 3dc0795d3a88d1c157a18f6670cfaa4129e6a8b2
+				+ ", isEnter=" + isEnter + ", praiseAmount=" + praiseAmount + ", enterAmount=" + enterAmount
+				+ ", userId=" + userId + ", notifyStatus=" + notifyStatus + "]";
 	}
 }
