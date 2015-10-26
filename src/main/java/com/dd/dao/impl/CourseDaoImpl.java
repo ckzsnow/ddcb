@@ -17,6 +17,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.dd.constant.Constant;
 import com.dd.constant.Constant.CourseAuditStatus;
 import com.dd.constant.Constant.CourseType;
 import com.dd.dao.ICourseDao;
@@ -315,6 +316,159 @@ public class CourseDaoImpl implements ICourseDao {
 			affectedRows = jdbcTemplate.update(sql, courseId);
 		} catch (Exception e) {
 			logger.debug("praiseByCourseId, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
+
+	@Override
+	public List<CourseModel> getCarefullyChosenCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage) {
+		List<CourseModel> courseList = null;
+		StringBuilder sql = new StringBuilder();
+		List<Object> argsList = new ArrayList<>();
+		sql.append("select * from course where course_type=?");
+		argsList.add(Constant.CourseType.CHOICENESS.value());
+		processQueryParams(sql, argsList, industryId, fieldId, stageId);
+		sql.append(" ORDER BY school_time DESC ");
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		sql.append(" limit ?,? ");
+		argsList.add(limitBegin);
+		argsList.add(limitEnd);
+		logger.debug("sql : {}", sql);
+		try {
+			Object[] args = (Object[]) argsList.toArray(new Object[argsList.size()]);
+			courseList = jdbcTemplate.query(sql.toString(), args, new CourseModelMapper());
+		} catch (Exception e) {
+			logger.error("getCarefullyChosenCourse, exception : {}", e.toString());
+		}
+		return courseList;
+	}
+
+	@Override
+	public List<CourseModel> getLatestCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage) {
+		List<CourseModel> courseList = null;
+		StringBuilder sql = new StringBuilder();
+		List<Object> argsList = new ArrayList<>();
+		sql.append("select * from course where course_type=?");
+		argsList.add(Constant.CourseType.COMMON.value());
+		processQueryParams(sql, argsList, industryId, fieldId, stageId);
+		sql.append(" ORDER BY school_time DESC ");
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		sql.append(" limit ?,? ");
+		argsList.add(limitBegin);
+		argsList.add(limitEnd);
+		logger.debug("sql : {}", sql);
+		try {
+			Object[] args = (Object[]) argsList.toArray(new Object[argsList.size()]);
+			courseList = jdbcTemplate.query(sql.toString(), args, new CourseModelMapper());
+		} catch (Exception e) {
+			logger.error("getLatestCourse, exception : {}", e.toString());
+		}
+		return courseList;
+	}
+
+	@Override
+	public List<CourseModel> getRecommendCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage) {
+		List<CourseModel> courseList = null;
+		StringBuilder sql = new StringBuilder();
+		List<Object> argsList = new ArrayList<>();
+		sql.append("select * from course");
+		Integer industryId_ = 0;
+		try {
+			industryId_ = Integer.valueOf(industryId);
+		} catch(Exception ex) {
+			logger.error(ex.toString());
+		}
+		if(industryId_ != 0) {
+			sql.append(" where industry_id = ? ");
+			argsList.add(industryId_);
+		}
+		sql.append(" ORDER BY school_time DESC ");
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		sql.append(" limit ?,? ");
+		argsList.add(limitBegin);
+		argsList.add(limitEnd);
+		logger.debug("sql : {}", sql);
+		try {
+			Object[] args = (Object[]) argsList.toArray(new Object[argsList.size()]);
+			courseList = jdbcTemplate.query(sql.toString(), args, new CourseModelMapper());
+		} catch (Exception e) {
+			logger.error("getRecommendCourse, exception : {}", e.toString());
+		}
+		return courseList;
+	}
+	
+	private void processQueryParams(StringBuilder sql, List<Object> argsList, String industryId, String fieldId, String stageId) {
+		if (industryId != null && !industryId.isEmpty()) {
+			String[] industry = industryId.split(",");
+			sql.append(" and (");
+			for(String id : industry) {
+				Integer id_ = 0;
+				try {
+					id_ = Integer.valueOf(id);
+				} catch (Exception ex) {
+					logger.error(ex.toString());
+					continue;
+				}
+				sql.append(" industry_id =? or ");
+				argsList.add(id_);
+			}
+			if(sql.toString().endsWith("or ")) {
+				sql.delete(sql.length() - 3, sql.length());
+			}
+			sql.append(")");
+		}
+		if (fieldId != null && !fieldId.isEmpty()) {
+			String[] field = fieldId.split(",");
+			sql.append(" and (");
+			for(String id : field) {
+				Integer id_ = 0;
+				try {
+					id_ = Integer.valueOf(id);
+				} catch (Exception ex) {
+					logger.error(ex.toString());
+					continue;
+				}
+				sql.append(" field_id =? or ");
+				argsList.add(id_);
+			}
+			if(sql.toString().endsWith("or ")) {
+				sql.delete(sql.length() - 3, sql.length());
+			}
+			sql.append(")");
+		}
+		if (stageId != null && !stageId.isEmpty()) {
+			String[] stage = stageId.split(",");
+			sql.append(" and (");
+			for(String id : stage) {
+				Integer id_ = 0;
+				try {
+					id_ = Integer.valueOf(id);
+				} catch (Exception ex) {
+					logger.error(ex.toString());
+					continue;
+				}
+				sql.append(" stage_id =? or ");
+				argsList.add(id_);
+			}
+			if(sql.toString().endsWith("or ")) {
+				sql.delete(sql.length() - 3, sql.length());
+			}
+			sql.append(")");
+		}
+	}
+
+	@Override
+	public boolean incListenerAmountForCourse(Long courseId) {
+		logger.debug("args courseId : {}", courseId);
+		String sql = "update course set enter_amount = enter_amount + 1 where id=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.update(sql, courseId);
+		} catch (Exception e) {
+			logger.debug("incListenerAmountForCourse, exception : {}", e.toString());
 		}
 		return affectedRows != 0;
 	}

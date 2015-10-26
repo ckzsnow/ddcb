@@ -106,4 +106,85 @@ public class UserCourseController {
 		return userCourseService.deleteUserCourseByCourseIdAndUserType(userId, courseId, userType);
 	}	
 	
+	@RequestMapping("/getOngoingSubscribeCourse")
+	@ResponseBody
+	public ResultModel getOngoingSubscribeCourse(HttpServletRequest request) {
+		logger.debug("getOngoingSubscribeCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return userCourseService.getOngoingSubscribeCourse(userId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/getFinishedSubscribeCourse")
+	@ResponseBody
+	public ResultModel getFinishedSubscribeCourse(HttpServletRequest request) {
+		logger.debug("getFinishedSubscribeCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return userCourseService.getFinishedSubscribeCourse(userId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/getOngoingPublishCourse")
+	@ResponseBody
+	public ResultModel getOngoingPublishCourse(HttpServletRequest request) {
+		logger.debug("getOngoingPublishCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return userCourseService.getOngoingPublishCourse(userId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/getFinishedPublishCourse")
+	@ResponseBody
+	public ResultModel getFinishedPublishCourse(HttpServletRequest request) {
+		logger.debug("getFinishedPublishCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return userCourseService.getFinishedPublishCourse(userId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/enterNameForCourse")
+	@ResponseBody
+	public ResultModel enterNameForCourse(HttpServletRequest request) {
+		logger.debug("enterNameForCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		Map<String, String> paramsMap = ConvertRequestMapToMap.convert(request.getParameterMap());
+		paramsMap.put("user_id", userId);
+		paramsMap.put("user_type", "LISTEN");
+		return userCourseService.addUserCourse(paramsMap);
+	}
+	
 }

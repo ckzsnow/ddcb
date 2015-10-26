@@ -28,4 +28,10 @@ public interface ICourseService {
 	
 	public ResultModel praiseByCourseId(String courseId);
 	
+	public ResultModel getCarefullyChosenCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage);
+	
+	public ResultModel getLatestCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage);
+	
+	public ResultModel getRecommendCourse(String userId, String page, String amountPerPage);
+	
 }

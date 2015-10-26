@@ -183,10 +183,10 @@ public class CourseController {
 		return courseService.praiseByCourseId(courseId);
 	}
 	
-	@RequestMapping("/get")
+	@RequestMapping("/getCarefullyChosenCourse")
 	@ResponseBody
-	public ResultModel getCourseByCourseNameAndBriefAndDetails(HttpServletRequest request) {
-		logger.debug("getCourseByCourseNameAndBriefAndDetails");
+	public ResultModel getCarefullyChosenCourse(HttpServletRequest request) {
+		logger.debug("getCarefullyChosenCourse");
 		String userId = (String) request.getSession().getAttribute("userId");
 		if(userId == null || userId.isEmpty()) {
 			ResultModel rm = new ResultModel();
@@ -194,14 +194,49 @@ public class CourseController {
 			rm.setErrorMsg("会话已过期，请重新登录");
 			return rm;
 		}
-		String courseName = request.getParameter("courseName");
-		String courseBrief = request.getParameter("courseBrief");
-		String courseDetails = request.getParameter("courseDetails");
-		String courseAuditStatus = request.getParameter("courseAuditStatus");
-		String courseType = request.getParameter("courseType");
+		String industryId = request.getParameter("industryId");
+		String fieldId = request.getParameter("fieldId");
+		String stageId = request.getParameter("stageId");
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
-		return courseService.getCourseByCourseNameAndBriefAndDetails(userId, courseName, courseBrief, courseDetails,
-				courseAuditStatus, courseType, page, amountPerPage);
+		return courseService.getCarefullyChosenCourse(userId, industryId, fieldId, stageId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/getLatestCourse")
+	@ResponseBody
+	public ResultModel getLatestCourse(HttpServletRequest request) {
+		logger.debug("getLatestCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String industryId = request.getParameter("industryId");
+		String fieldId = request.getParameter("fieldId");
+		String stageId = request.getParameter("stageId");
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return courseService.getLatestCourse(userId, industryId, fieldId, stageId, page, amountPerPage);
+	}
+	
+	@RequestMapping("/getRecommendCourse")
+	@ResponseBody
+	public ResultModel getRecommendCourse(HttpServletRequest request) {
+		logger.debug("getRecommendCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		/*String industryId = request.getParameter("industryId");
+		String fieldId = request.getParameter("fieldId");
+		String stageId = request.getParameter("stageId");*/
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return courseService.getRecommendCourse(userId, page, amountPerPage);
 	}
 }

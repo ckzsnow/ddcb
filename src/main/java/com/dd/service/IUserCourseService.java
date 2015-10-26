@@ -16,4 +16,12 @@ public interface IUserCourseService {
 	
 	public ResultModel deleteUserCourseByCourseIdAndUserType(String userId, String courseId, String userType);
 	
+	public ResultModel getOngoingSubscribeCourse(String userId, String page, String amountPerPage);
+	
+	public ResultModel getFinishedSubscribeCourse(String userId, String page, String amountPerPage);
+	
+	public ResultModel getOngoingPublishCourse(String userId, String page, String amountPerPage);
+	
+	public ResultModel getFinishedPublishCourse(String userId, String page, String amountPerPage);
+	
 }

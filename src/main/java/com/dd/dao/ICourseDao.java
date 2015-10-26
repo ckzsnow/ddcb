@@ -30,5 +30,13 @@ public interface ICourseDao {
 	public boolean deleteCourseByCourseId(Long courseId);
 	
 	public boolean praiseByCourseId(Long courseId);
+	
+	public boolean incListenerAmountForCourse(Long courseId);
+	
+	public List<CourseModel> getCarefullyChosenCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage);
+	
+	public List<CourseModel> getLatestCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage);
+	
+	public List<CourseModel> getRecommendCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage);
 
 }

@@ -1,6 +1,7 @@
 package com.dd.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.dd.models.UserProfileModel;
 import com.dd.service.ICategoryInfoService;
 import com.dd.service.ICourseService;
 import com.dd.service.IUserCourseService;
+import com.dd.service.IUserProfileService;
 
 @Service("courseService")
 public class CourseService implements ICourseService {
@@ -40,6 +42,9 @@ public class CourseService implements ICourseService {
 
 	@Autowired
 	private IUserProfileDao userProfileDao;
+	
+	@Autowired
+	private IUserProfileService userProfileService;
 
 	@Autowired
 	private IUserCourseService userCourseService;
@@ -499,7 +504,7 @@ public class CourseService implements ICourseService {
 				Constant.UserType.TEACH, 1, 10);
 		if (ucmList == null || ucmList.size() != 1)
 			return null;
-		UserProfileModel upm = userProfileDao.getUserProfileByUserId(ucmList.get(0).getUserId());
+		UserProfileModel upm = (UserProfileModel) userProfileService.getUserProfile(ucmList.get(0).getUserId()).getResult();
 		if (upm == null) return null;
 		return upm;
 	}
@@ -517,24 +522,182 @@ public class CourseService implements ICourseService {
 	private void addIFSName(CourseModel courseModel) {
 		ResultModel rm = categoryInfoService.getIndustryByIndustryId(String.valueOf(courseModel.getIndustryId()));
 		if (!("3000").equals(rm.getErrorCode())) {
-			courseModel.setIndustryName("未知");
+			courseModel.setIndustryName("");
 		} else {
 			courseModel.setIndustryName(((IndustryModel) rm.getResult()).getName());
 		}
 		rm = categoryInfoService.getFieldByFieldId(String.valueOf(courseModel.getFieldId()));
 		if (!("3000").equals(rm.getErrorCode())) {
-			courseModel.setFieldName("未知");
+			courseModel.setFieldName("");
 		} else {
 			courseModel.setFieldName(((FieldModel) rm.getResult()).getName());
 		}
 		rm = categoryInfoService.getStageByStageId(String.valueOf(courseModel.getStageId()));
 		if (!("3000").equals(rm.getErrorCode())) {
-			courseModel.setStageName("未知");
+			courseModel.setStageName("");
 		} else {
 			courseModel.setStageName(((StageModel) rm.getResult()).getName());
 		}
 		courseModel.setCourseAuditStatusName(CourseAuditStatus.values()[courseModel.getAuditStatus()].toString());
 		courseModel.setCourseTypeName(CourseType.values()[courseModel.getCourseType()].toString());
 		courseModel.setFormatSchoolTime(courseModel.getSchoolTime().toString());
+	}
+
+	@Override
+	public ResultModel getCarefullyChosenCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage) {
+		ResultModel ret = new ResultModel();
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseUserInfoModel> cuimList = new ArrayList<>();
+		List<CourseModel> courseModelList = courseDao.getCarefullyChosenCourse(industryId, fieldId, stageId, page_, amountPerPage_);
+		if (courseModelList == null || courseModelList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+			return ret;
+		}
+		for(CourseModel courseModel : courseModelList) {
+			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
+				courseModel.setIsEnter("true");
+			} else {
+				courseModel.setIsEnter("false");
+			}
+			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
+			if (upm == null ) {
+				logger.error("ERROR, get user profile in getCarefullyChosenCourse");
+			} else {
+				this.addExtraInfoForModel(courseModel);
+			}
+			CourseUserInfoModel cuim = new CourseUserInfoModel();
+			cuim.setCourseInfo(courseModel);
+			cuim.setUserInfo(upm);
+			cuimList.add(cuim);
+		}
+		if(cuimList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+		} else {
+			ret.setErrorCode("2000");
+			ret.setErrorMsg("操作成功");
+			ret.setResultList(Arrays.asList(cuimList.toArray()));
+		}
+		return ret;
+	}
+
+	@Override
+	public ResultModel getLatestCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage) {
+		ResultModel ret = new ResultModel();
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("2002");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseUserInfoModel> cuimList = new ArrayList<>();
+		List<CourseModel> courseModelList = courseDao.getLatestCourse(industryId, fieldId, stageId, page_, amountPerPage_);
+		if (courseModelList == null || courseModelList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+			return ret;
+		}
+		for(CourseModel courseModel : courseModelList) {
+			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
+				courseModel.setIsEnter("true");
+			} else {
+				courseModel.setIsEnter("false");
+			}
+			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
+			if (upm == null ) {
+				logger.error("ERROR, get user profile in getLatestCourse");
+			} else {
+				this.addExtraInfoForModel(courseModel);
+			}
+			CourseUserInfoModel cuim = new CourseUserInfoModel();
+			cuim.setCourseInfo(courseModel);
+			cuim.setUserInfo(upm);
+			cuimList.add(cuim);
+		}
+		if(cuimList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+		} else {
+			ret.setErrorCode("2000");
+			ret.setErrorMsg("操作成功");
+			ret.setResultList(Arrays.asList(cuimList.toArray()));
+		}
+		return ret;
+	}
+
+	@Override
+	public ResultModel getRecommendCourse(String userId, String page, String amountPerPage) {
+		ResultModel ret = new ResultModel();
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("2020");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		List<CourseUserInfoModel> cuimList = new ArrayList<>();
+		String industryId = String.valueOf(userProfileDao.getUserProfileByUserId(userId).getIndustryId());
+		List<CourseModel> courseModelList = courseDao.getRecommendCourse(industryId, null, null, page_, amountPerPage_);
+		if (courseModelList == null || courseModelList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+			return ret;
+		}
+		for(CourseModel courseModel : courseModelList) {
+			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
+				courseModel.setIsEnter("true");
+			} else {
+				courseModel.setIsEnter("false");
+			}
+			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
+			if (upm == null ) {
+				logger.error("ERROR, get user profile in getLatestCourse");
+			} else {
+				this.addExtraInfoForModel(courseModel);
+			}
+			CourseUserInfoModel cuim = new CourseUserInfoModel();
+			cuim.setCourseInfo(courseModel);
+			cuim.setUserInfo(upm);
+			cuimList.add(cuim);
+		}
+		if(cuimList.size() == 0) {
+			ret.setErrorCode("2001");
+			ret.setErrorMsg("未查询到数据");
+		} else {
+			ret.setErrorCode("2000");
+			ret.setErrorMsg("操作成功");
+			ret.setResultList(Arrays.asList(cuimList.toArray()));
+		}
+		return ret;
 	}
 }

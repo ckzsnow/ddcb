@@ -259,6 +259,71 @@ courseId-课程id(数字类型,必选参数)
 2011-操作数据库失败
 2000-操作成功
 
+9.获取精选课程接口路径：/course/getCarefullyChosenCourse
+请求方式:HTTP GET/POST
+
+请求参数:共计5个参数，如下
+industryId-行业Id(数字类型,可选,多个参数请以,隔开，例如，2,10,26)
+fieldId-领域Id(数字类型,可选,多个参数请以,隔开，例如，1,2)
+stageId-阶段Id(数字类型,可选,多个参数请以,隔开，例如，1,2)
+page-页码(参数为数字类型，且必须为正数, 必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数, 必选)
+
+返回字段:errorCode, errorMsg，resultList
+2001-未查询到数据
+2000-操作成功
+2020-传入参数格式不正确
+2002-页数或每页显示数量必须为正数
+
+resultList字段数据为json格式，样例如下：
+[{"courseInfo":{"id":2,"name":"创业讲座","brief":"你好","details":"你哦好","industryId":3,"fieldId":1,"stageId":3,"industryName":"法律","fieldName":"投资银行","stageName":"创业","schoolTime":1444301762000,"formatSchoolTime":"2015-10-08 18:56:02.0","docAttatch":null,"voiceAttatch":null,"courseType":1,"courseTypeName":"CHOICENESS","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1444301765000,"isEnter":"false","praiseAmount":11},"userInfo":{"userId":"111","userName":"测试1","nickName":null,"userPhoto":null,"userVisitCard":null,"userSex":0,"industryId":1,"industryName":"金融","companyName":"2","companyPosition":"3","workYearId":9,"careerPlanId":0,"workYear":"9年","careerPlan":"","provinceId":null,"provinceName":"","cityId":null,"cityName":"","areaId":null,"areaName":"","resume":null,"createTime":1445582742000}}]
+
+10.获取最新课程接口路径：/course/getLatestCourse
+请求方式:HTTP GET/POST
+
+请求参数:共计5个参数，如下
+industryId-行业Id(数字类型,可选,多个参数请以,隔开，例如，2,10,26)
+fieldId-领域Id(数字类型,可选,多个参数请以,隔开，例如，1,2)
+stageId-阶段Id(数字类型,可选,多个参数请以,隔开，例如，1,2)
+page-页码(参数为数字类型，且必须为正数, 必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数, 必选)
+
+返回字段:errorCode, errorMsg，resultList
+2001-未查询到数据
+2000-操作成功
+2020-传入参数格式不正确
+2002-页数或每页显示数量必须为正数
+
+resultList字段数据为json格式，样例如下：
+[{"courseInfo":{"id":1,"name":"咨询讲座","brief":"","details":"","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445582983000,"formatSchoolTime":"2015-10-23 14:49:43.0","docAttatch":null,"voiceAttatch":null,"courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445582992000,"isEnter":"false","praiseAmount":10},"userInfo":{"userId":"111","userName":"测试1","nickName":null,"userPhoto":null,"userVisitCard":null,"userSex":0,"industryId":1,"industryName":"金融","companyName":"2","companyPosition":"3","workYearId":9,"careerPlanId":0,"workYear":"9年","careerPlan":"","provinceId":null,"provinceName":"","cityId":null,"cityName":"","areaId":null,"areaName":"","resume":null,"createTime":1445582742000}}]
+
+11.获取推荐课程接口路径：/course/getRecommendCourse
+请求方式:HTTP GET/POST
+
+请求参数:共计2个参数，如下
+page-页码(参数为数字类型，且必须为正数, 必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数, 必选)
+
+返回字段:errorCode, errorMsg，resultList
+2001-未查询到数据
+2000-操作成功
+2020-传入参数格式不正确
+2002-页数或每页显示数量必须为正数
+
+resultList字段数据为json格式，样例如下：
+[{"courseInfo":{"id":1,"name":"咨询讲座","brief":"","details":"","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445582983000,"formatSchoolTime":"2015-10-23 14:49:43.0","docAttatch":null,"voiceAttatch":null,"courseType":0,"courseTypeName":"COMMON","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445582992000,"isEnter":"false","praiseAmount":10},"userInfo":{"userId":"111","userName":"测试1","nickName":null,"userPhoto":null,"userVisitCard":null,"userSex":0,"industryId":1,"industryName":"金融","companyName":"2","companyPosition":"3","workYearId":9,"careerPlanId":0,"workYear":"9年","careerPlan":"","provinceId":null,"provinceName":"","cityId":null,"cityName":"","areaId":null,"areaName":"","resume":null,"createTime":1445582742000}}]
+
+12.课程点赞接口路径：/course/praiseByCourseId
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+courseId-课程Id(数字类型,必选)
+
+返回字段:errorCode, errorMsg
+2020-传入参数格式不正确
+2001-未查询到数据
+2000-操作成功
+
 五：用户课程信息相关接口
 1.根据用户id和用户类型获取用户课程信息接口路径:/userCourse/getUserCourseByUserIdAndUserType
 
@@ -338,6 +403,87 @@ user_type-用户类型(字符串类型,必选,且必须为如下中的一个LISTEN-听课者, TEACH-授课
 6011-传入枚举类型格式不正确
 6000-操作成功
 6006-操作数据失败
+
+6.获取进行中的用户已报名的公开课接口路径:/userCourse/getOngoingSubscribeCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计2个参数，如下
+page-页码(参数为数字类型，且必须为正数,必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数,必选)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+
+result字段数据为json格式，样例如下：
+[{"courseInfo":{"id":5,"name":"测试课程","brief":"tset","details":"1tset2","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445669386000,"formatSchoolTime":"2015-10-24 14:49:46.0","docAttatch":null,"voiceAttatch":null,"courseType":1,"courseTypeName":"CHOICENESS","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445669395000,"isEnter":null,"praiseAmount":0,"enterAmount":1},"userInfo":{"userId":"18601615518","userName":"测试3","nickName":"0","userPhoto":"","userVisitCard":"","userSex":0,"industryId":3,"industryName":"法律","companyName":"3","companyPosition":"4","workYearId":0,"careerPlanId":0,"workYear":"","careerPlan":"","provinceId":"0","provinceName":"","cityId":"0","cityName":"","areaId":"0","areaName":"","resume":"","createTime":1445588613000}}]
+
+7.获取已经结束的用户已报名的公开课接口路径:/userCourse/getFinishedSubscribeCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计2个参数，如下
+page-页码(参数为数字类型，且必须为正数,必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数,必选)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+
+result字段数据为json格式，样例如下：
+[{"courseInfo":{"id":5,"name":"测试课程","brief":"tset","details":"1tset2","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445669386000,"formatSchoolTime":"2015-10-24 14:49:46.0","docAttatch":null,"voiceAttatch":null,"courseType":1,"courseTypeName":"CHOICENESS","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445669395000,"isEnter":null,"praiseAmount":0,"enterAmount":1},"userInfo":{"userId":"18601615518","userName":"测试3","nickName":"0","userPhoto":"","userVisitCard":"","userSex":0,"industryId":3,"industryName":"法律","companyName":"3","companyPosition":"4","workYearId":0,"careerPlanId":0,"workYear":"","careerPlan":"","provinceId":"0","provinceName":"","cityId":"0","cityName":"","areaId":"0","areaName":"","resume":"","createTime":1445588613000}}]
+
+8.获取进行中的用户开设的公开课接口路径:/userCourse/getOngoingPublishCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计2个参数，如下
+page-页码(参数为数字类型，且必须为正数,必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数,必选)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+
+result字段数据为json格式，样例如下：
+[{"courseInfo":{"id":5,"name":"测试课程","brief":"tset","details":"1tset2","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445669386000,"formatSchoolTime":"2015-10-24 14:49:46.0","docAttatch":null,"voiceAttatch":null,"courseType":1,"courseTypeName":"CHOICENESS","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445669395000,"isEnter":null,"praiseAmount":0,"enterAmount":1},"userInfo":{"userId":"18601615518","userName":"测试3","nickName":"0","userPhoto":"","userVisitCard":"","userSex":0,"industryId":3,"industryName":"法律","companyName":"3","companyPosition":"4","workYearId":0,"careerPlanId":0,"workYear":"","careerPlan":"","provinceId":"0","provinceName":"","cityId":"0","cityName":"","areaId":"0","areaName":"","resume":"","createTime":1445588613000}}]
+
+9.获取已经结束的用户开设的公开课接口路径:/userCourse/getFinishedPublishCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计2个参数，如下
+page-页码(参数为数字类型，且必须为正数,必选)
+amountPerPage-每页显示的数量(参数为数字类型，且必须为正数,必选)
+
+返回字段:errorCode, errorMsg, resultList
+6010-传入参数格式不正确
+6001-页数或每页显示数量必须为正数
+6002-查询结果为空
+6000-操作成功
+
+result字段数据为json格式，样例如下：
+[{"courseInfo":{"id":5,"name":"测试课程","brief":"tset","details":"1tset2","industryId":0,"fieldId":0,"stageId":0,"industryName":"","fieldName":"","stageName":"","schoolTime":1445669386000,"formatSchoolTime":"2015-10-24 14:49:46.0","docAttatch":null,"voiceAttatch":null,"courseType":1,"courseTypeName":"CHOICENESS","auditStatus":0,"courseAuditStatusName":"ONGOING","createTime":1445669395000,"isEnter":null,"praiseAmount":0,"enterAmount":1},"userInfo":{"userId":"18601615518","userName":"测试3","nickName":"0","userPhoto":"","userVisitCard":"","userSex":0,"industryId":3,"industryName":"法律","companyName":"3","companyPosition":"4","workYearId":0,"careerPlanId":0,"workYear":"","careerPlan":"","provinceId":"0","provinceName":"","cityId":"0","cityName":"","areaId":"0","areaName":"","resume":"","createTime":1445588613000}}]
+
+10.用户报名公开课:/userCourse/enterNameForCourse
+
+请求方式:HTTP GET/POST
+
+请求参数:共计1个参数，如下
+course_id-课程Id(参数为数字类型，必选)
+
+返回字段:errorCode, errorMsg
+6004-course_id未设置
+6006-操作数据库失败
+6060-当前课程为您自己开设的课程，不需要报名！
+6000-操作成功
 
 六:用户详细信息相关接口
 1.获取用户详细信息接口路径:/userProfile/getUserProfile

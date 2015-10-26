@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.dd.constant.Constant;
 import com.dd.constant.Constant.UserType;
 import com.dd.dao.IUserCourseDao;
+import com.dd.mappers.CourseModelMapper;
 import com.dd.mappers.UserCourseModelMapper;
+import com.dd.models.CourseModel;
 import com.dd.models.UserCourseModel;
 
 @Repository("userCourseDao")
@@ -120,6 +123,20 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 		}
 		return affectedRows != 0;
 	}
+	
+	@Override
+	public boolean getUserCourse(String userId, Long courseId, UserType userType) {
+		logger.debug("args courseId : {}", courseId);
+		String sql = "select count(*) from user_course where user_id=? and course_id=? and user_type=?";
+		int affectedRows = 0;
+		try {
+			affectedRows = jdbcTemplate.queryForObject(sql, new Object[] { userId, courseId, userType.value() },
+					Integer.class);
+		} catch (Exception e) {
+			logger.debug("getUserCourse, exception : {}", e.toString());
+		}
+		return affectedRows != 0;
+	}
 
 	@Override
 	public boolean deleteUserCourseByCourseId(Long courseId) {
@@ -146,6 +163,70 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 			logger.debug("updateUserId, exception : {}", e.toString());
 		}
 		return affectedRows != 0;
+	}
+
+	@Override
+	public List<CourseModel> getOngoingSubscribeCourse(String userId, int page, int amountPerPage) {
+		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? limit ? , ?";
+		List<CourseModel> courseModelList = null;
+		try {
+			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.LISTEN.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
+					new CourseModelMapper());
+		} catch (Exception e) {
+			logger.debug("getOngoingSubscribeCourse, exception : {}", e.toString());
+		}
+		return courseModelList;
+	}
+
+	@Override
+	public List<CourseModel> getFinishedSubscribeCourse(String userId, int page, int amountPerPage) {
+		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? limit ? , ?";
+		List<CourseModel> courseModelList = null;
+		try {
+			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.LISTEN.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
+					new CourseModelMapper());
+		} catch (Exception e) {
+			logger.debug("getFinishedSubscribeCourse, exception : {}", e.toString());
+		}
+		return courseModelList;
+	}
+
+	@Override
+	public List<CourseModel> getOngoingPublishCourse(String userId, int page, int amountPerPage) {
+		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? limit ? , ?";
+		List<CourseModel> courseModelList = null;
+		try {
+			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.TEACH.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
+					new CourseModelMapper());
+		} catch (Exception e) {
+			logger.debug("getOngoingPublishCourse, exception : {}", e.toString());
+		}
+		return courseModelList;
+	}
+
+	@Override
+	public List<CourseModel> getFinishedPublishCourse(String userId, int page, int amountPerPage) {
+		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitEnd = limitBegin + amountPerPage;
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? limit ? , ?";
+		List<CourseModel> courseModelList = null;
+		try {
+			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.TEACH.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
+					new CourseModelMapper());
+		} catch (Exception e) {
+			logger.debug("getFinishedPublishCourse, exception : {}", e.toString());
+		}
+		return courseModelList;
 	}
 
 }

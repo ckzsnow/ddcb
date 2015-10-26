@@ -92,6 +92,7 @@ public class UserProfileService implements IUserProfileService {
 		} else {
 			userProgile.setCareerPlan(((CareerPlanModel)rm.getResult()).getName());
 		}
+		if(userProgile.getResume() == null) userProgile.setResume("");
 		ret.setErrorCode("1000");
 		ret.setErrorMsg("操作成功");
 		ret.setResult(userProgile);
