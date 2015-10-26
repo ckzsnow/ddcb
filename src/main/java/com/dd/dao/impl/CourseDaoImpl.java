@@ -21,7 +21,9 @@ import com.dd.constant.Constant;
 import com.dd.constant.Constant.CourseAuditStatus;
 import com.dd.constant.Constant.CourseType;
 import com.dd.dao.ICourseDao;
+import com.dd.mappers.CityModelMapper;
 import com.dd.mappers.CourseModelMapper;
+import com.dd.models.CityModel;
 import com.dd.models.CourseModel;
 
 @Repository("courseDao")
@@ -471,5 +473,23 @@ public class CourseDaoImpl implements ICourseDao {
 			logger.debug("incListenerAmountForCourse, exception : {}", e.toString());
 		}
 		return affectedRows != 0;
+	}
+	
+	public List<CourseModel> getNotifyCourseList() {
+		List<CourseModel> courseList = null;
+		String sql = "select * from course where school_time<? and notify_status='0'";
+		String sqlUpdate = "update course set notify_status='1' where id=?";
+		Timestamp ts1 = new Timestamp(System.currentTimeMillis() + System.currentTimeMillis() + 1000 * 60 * 10);
+		try {
+			courseList = jdbcTemplate.query(sql.toString(), new Object[] { ts1 }, new CourseModelMapper());
+			if(courseList != null && courseList.size() != 0) {
+				for(CourseModel cm : courseList) {
+					jdbcTemplate.update(sqlUpdate, cm.getId());
+				}
+			}
+		} catch (Exception e) {
+			logger.error("getNotifyCourseList, exception : {}", e.toString());
+		}
+		return courseList;
 	}
 }

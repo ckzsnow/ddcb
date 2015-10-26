@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans
@@ -60,6 +61,10 @@
 		</property>
 	</bean>
 
+	<task:executor id="executor" pool-size="1" />  
+    <task:scheduler id="scheduler" pool-size="1" />  
+    <task:annotation-driven executor="executor" scheduler="scheduler" />
+
 	<!-- database config begin -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close">
@@ -82,6 +87,7 @@
 	<context:component-scan base-package="com.dd.service.impl" />
 	<context:component-scan base-package="com.dd.redis.service.impl" />
 	<context:component-scan base-package="com.dd.controller" />
+	<context:component-scan base-package="com.dd.schedule.service" />
 	<!-- user component-scan end -->
 
 	<bean id="websocket" class="com.dd.websocket.WebsocketEndPoint" />

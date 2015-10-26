@@ -39,4 +39,6 @@ public interface ICourseDao {
 	
 	public List<CourseModel> getRecommendCourse(String industryId, String fieldId, String stageId, int page, int amountPerPage);
 
+	public List<CourseModel> getNotifyCourseList();
+
 }
