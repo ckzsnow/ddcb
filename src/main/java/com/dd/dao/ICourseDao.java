@@ -30,5 +30,7 @@ public interface ICourseDao {
 	public boolean deleteCourseByCourseId(Long courseId);
 	
 	public boolean praiseByCourseId(Long courseId);
+	
+	public List<CourseModel> getNotifyCourseList();
 
 }
