@@ -214,9 +214,6 @@ public class CourseController {
 	public ResultModel getRecommendCourse(HttpServletRequest request) {
 		logger.debug("getRecommendCourse");
 		String userId = (String) request.getSession().getAttribute("userId");
-		/*String industryId = request.getParameter("industryId");
-		String fieldId = request.getParameter("fieldId");
-		String stageId = request.getParameter("stageId");*/
 		String page = request.getParameter("page");
 		String amountPerPage = request.getParameter("amountPerPage");
 		return courseService.getRecommendCourse(userId, page, amountPerPage);

@@ -58,6 +58,28 @@ public class CourseModel implements java.io.Serializable {
 		this.userId = userId;
 		this.notifyStatus = nofityStatus;
 	}
+	
+	public CourseModel(Long id, String name, String brief, String details, Integer industryId, Integer fieldId,
+			Integer stageId, Timestamp schoolTime, String docAttatch, String voiceAttatch, Integer courseType,
+			Integer auditStatus, Integer praiseAmount, Integer enterAmount, Timestamp createTime, Integer nofityStatus) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.brief = brief;
+		this.details = details;
+		this.industryId = industryId;
+		this.fieldId = fieldId;
+		this.stageId = stageId;
+		this.schoolTime = schoolTime;
+		this.docAttatch = docAttatch;
+		this.voiceAttatch = voiceAttatch;
+		this.courseType = courseType;
+		this.auditStatus = auditStatus;
+		this.praiseAmount = praiseAmount;
+		this.enterAmount = enterAmount;
+		this.createTime = createTime;
+		this.notifyStatus = nofityStatus;
+	}
 
 	public String getUserId() {
 		return userId;

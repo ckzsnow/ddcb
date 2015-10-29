@@ -2,19 +2,41 @@ package com.dd.models;
 
 import java.sql.Timestamp;
 
-public class CourseModelWrapper extends CourseModel implements java.io.Serializable {
+public class CourseUserIdModel implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private Long id;
+	private String name;
+	private String brief;
+	private String details;
+	private Integer industryId;
+	private Integer fieldId;
+	private Integer stageId;
+	private String industryName;
+	private String fieldName;
+	private String stageName;
+	private Timestamp schoolTime;
+	private String formatSchoolTime;
+	private String docAttatch;
+	private String voiceAttatch;
+	private Integer courseType;
+	private String courseTypeName;
+	private Integer auditStatus;
+	private String courseAuditStatusName;
+	private Timestamp createTime;
+	private String isEnter;
+	private Integer praiseAmount;
+	private Integer enterAmount;
 	private String userId;
 	private Integer notifyStatus;
 
 	// Constructors
 
 	/** default constructor */
-	public CourseModelWrapper() {
+	public CourseUserIdModel() {
 	}
 
-	public CourseModelWrapper(Long id, String name, String brief, String details, Integer industryId, Integer fieldId,
+	public CourseUserIdModel(Long id, String name, String brief, String details, Integer industryId, Integer fieldId,
 			Integer stageId, Timestamp schoolTime, String docAttatch, String voiceAttatch, Integer courseType,
 			Integer auditStatus, Integer praiseAmount, Integer enterAmount, Timestamp createTime, String userId, Integer nofityStatus) {
 		super();

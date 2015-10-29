@@ -1,7 +1,10 @@
 package com.dd.service.impl;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +30,7 @@ import com.dd.redis.service.IRedisService;
 import com.dd.service.ICategoryInfoService;
 import com.dd.service.IUserCourseService;
 import com.dd.service.IUserProfileService;
+import com.dd.utils.TimeFormat;
 
 @Service("userCourseService")
 public class UserCourseService implements IUserCourseService {
@@ -358,7 +362,7 @@ public class UserCourseService implements IUserCourseService {
 		}
 		courseModel.setCourseAuditStatusName(CourseAuditStatus.values()[courseModel.getAuditStatus()].toString());
 		courseModel.setCourseTypeName(CourseType.values()[courseModel.getCourseType()].toString());
-		courseModel.setFormatSchoolTime(courseModel.getSchoolTime().toString());
+		courseModel.setFormatSchoolTime(TimeFormat.getFormatTime(courseModel.getSchoolTime()));
 	}
 
 	@Override
@@ -456,4 +460,5 @@ public class UserCourseService implements IUserCourseService {
 		}
 		return ret;
 	}
+	
 }

@@ -30,6 +30,7 @@ import com.dd.service.ICategoryInfoService;
 import com.dd.service.ICourseService;
 import com.dd.service.IUserCourseService;
 import com.dd.service.IUserProfileService;
+import com.dd.utils.TimeFormat;
 
 @Service("courseService")
 public class CourseService implements ICourseService {
@@ -542,7 +543,7 @@ public class CourseService implements ICourseService {
 		}
 		courseModel.setCourseAuditStatusName(CourseAuditStatus.values()[courseModel.getAuditStatus()].toString());
 		courseModel.setCourseTypeName(CourseType.values()[courseModel.getCourseType()].toString());
-		courseModel.setFormatSchoolTime(courseModel.getSchoolTime().toString());
+		courseModel.setFormatSchoolTime(TimeFormat.getFormatTime(courseModel.getSchoolTime()));
 	}
 
 	@Override
