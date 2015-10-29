@@ -188,12 +188,6 @@ public class CourseController {
 	public ResultModel getCarefullyChosenCourse(HttpServletRequest request) {
 		logger.debug("getCarefullyChosenCourse");
 		String userId = (String) request.getSession().getAttribute("userId");
-		if(userId == null || userId.isEmpty()) {
-			ResultModel rm = new ResultModel();
-			rm.setErrorCode("9900");
-			rm.setErrorMsg("会话已过期，请重新登录");
-			return rm;
-		}
 		String industryId = request.getParameter("industryId");
 		String fieldId = request.getParameter("fieldId");
 		String stageId = request.getParameter("stageId");
@@ -207,12 +201,6 @@ public class CourseController {
 	public ResultModel getLatestCourse(HttpServletRequest request) {
 		logger.debug("getLatestCourse");
 		String userId = (String) request.getSession().getAttribute("userId");
-		if(userId == null || userId.isEmpty()) {
-			ResultModel rm = new ResultModel();
-			rm.setErrorCode("9900");
-			rm.setErrorMsg("会话已过期，请重新登录");
-			return rm;
-		}
 		String industryId = request.getParameter("industryId");
 		String fieldId = request.getParameter("fieldId");
 		String stageId = request.getParameter("stageId");
@@ -226,12 +214,6 @@ public class CourseController {
 	public ResultModel getRecommendCourse(HttpServletRequest request) {
 		logger.debug("getRecommendCourse");
 		String userId = (String) request.getSession().getAttribute("userId");
-		if(userId == null || userId.isEmpty()) {
-			ResultModel rm = new ResultModel();
-			rm.setErrorCode("9900");
-			rm.setErrorMsg("会话已过期，请重新登录");
-			return rm;
-		}
 		/*String industryId = request.getParameter("industryId");
 		String fieldId = request.getParameter("fieldId");
 		String stageId = request.getParameter("stageId");*/

@@ -42,7 +42,7 @@ public class CourseService implements ICourseService {
 
 	@Autowired
 	private IUserProfileDao userProfileDao;
-	
+
 	@Autowired
 	private IUserProfileService userProfileService;
 
@@ -73,15 +73,15 @@ public class CourseService implements ICourseService {
 			ret.setErrorMsg("未查询到数据");
 			return ret;
 		}
-		
+
 		if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseId_)) {
 			courseModel.setIsEnter("true");
 		} else {
 			courseModel.setIsEnter("false");
 		}
-		
+
 		UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
-		if (upm == null ) {
+		if (upm == null) {
 			ret.setErrorCode("2030");
 			ret.setErrorMsg("获取课程讲师信息失败！");
 		} else {
@@ -504,8 +504,10 @@ public class CourseService implements ICourseService {
 				Constant.UserType.TEACH, 1, 10);
 		if (ucmList == null || ucmList.size() != 1)
 			return null;
-		UserProfileModel upm = (UserProfileModel) userProfileService.getUserProfile(ucmList.get(0).getUserId()).getResult();
-		if (upm == null) return null;
+		UserProfileModel upm = (UserProfileModel) userProfileService.getUserProfile(ucmList.get(0).getUserId())
+				.getResult();
+		if (upm == null)
+			return null;
 		return upm;
 	}
 
@@ -544,7 +546,8 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel getCarefullyChosenCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage) {
+	public ResultModel getCarefullyChosenCourse(String userId, String industryId, String fieldId, String stageId,
+			String page, String amountPerPage) {
 		ResultModel ret = new ResultModel();
 		int page_ = 0;
 		int amountPerPage_ = 0;
@@ -563,20 +566,23 @@ public class CourseService implements ICourseService {
 			return ret;
 		}
 		List<CourseUserInfoModel> cuimList = new ArrayList<>();
-		List<CourseModel> courseModelList = courseDao.getCarefullyChosenCourse(industryId, fieldId, stageId, page_, amountPerPage_);
+		List<CourseModel> courseModelList = courseDao.getCarefullyChosenCourse(industryId, fieldId, stageId, page_,
+				amountPerPage_);
 		if (courseModelList == null || courseModelList.size() == 0) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 			return ret;
 		}
-		for(CourseModel courseModel : courseModelList) {
-			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
-				courseModel.setIsEnter("true");
-			} else {
-				courseModel.setIsEnter("false");
+		for (CourseModel courseModel : courseModelList) {
+			if (userId != null && !userId.isEmpty()) {
+				if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
+					courseModel.setIsEnter("true");
+				} else {
+					courseModel.setIsEnter("false");
+				}
 			}
 			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
-			if (upm == null ) {
+			if (upm == null) {
 				logger.error("ERROR, get user profile in getCarefullyChosenCourse");
 			} else {
 				this.addExtraInfoForModel(courseModel);
@@ -586,7 +592,7 @@ public class CourseService implements ICourseService {
 			cuim.setUserInfo(upm);
 			cuimList.add(cuim);
 		}
-		if(cuimList.size() == 0) {
+		if (cuimList.size() == 0) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 		} else {
@@ -598,7 +604,8 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public ResultModel getLatestCourse(String userId, String industryId, String fieldId, String stageId, String page, String amountPerPage) {
+	public ResultModel getLatestCourse(String userId, String industryId, String fieldId, String stageId, String page,
+			String amountPerPage) {
 		ResultModel ret = new ResultModel();
 		int page_ = 0;
 		int amountPerPage_ = 0;
@@ -617,20 +624,23 @@ public class CourseService implements ICourseService {
 			return ret;
 		}
 		List<CourseUserInfoModel> cuimList = new ArrayList<>();
-		List<CourseModel> courseModelList = courseDao.getLatestCourse(industryId, fieldId, stageId, page_, amountPerPage_);
+		List<CourseModel> courseModelList = courseDao.getLatestCourse(industryId, fieldId, stageId, page_,
+				amountPerPage_);
 		if (courseModelList == null || courseModelList.size() == 0) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 			return ret;
 		}
-		for(CourseModel courseModel : courseModelList) {
-			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
-				courseModel.setIsEnter("true");
-			} else {
-				courseModel.setIsEnter("false");
+		for (CourseModel courseModel : courseModelList) {
+			if (userId != null && !userId.isEmpty()) {
+				if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
+					courseModel.setIsEnter("true");
+				} else {
+					courseModel.setIsEnter("false");
+				}
 			}
 			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
-			if (upm == null ) {
+			if (upm == null) {
 				logger.error("ERROR, get user profile in getLatestCourse");
 			} else {
 				this.addExtraInfoForModel(courseModel);
@@ -640,7 +650,7 @@ public class CourseService implements ICourseService {
 			cuim.setUserInfo(upm);
 			cuimList.add(cuim);
 		}
-		if(cuimList.size() == 0) {
+		if (cuimList.size() == 0) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 		} else {
@@ -673,14 +683,14 @@ public class CourseService implements ICourseService {
 			ret.setErrorMsg("未查询到数据");
 			return ret;
 		}
-		for(CourseModel courseModel : courseModelList) {
+		for (CourseModel courseModel : courseModelList) {
 			if (userCourseDao.userIsEnterCourseByUserIdAndCourseIdAndUserType(userId, courseModel.getId())) {
 				courseModel.setIsEnter("true");
 			} else {
 				courseModel.setIsEnter("false");
 			}
 			UserProfileModel upm = getUserProfileInfoForCourse(courseModel.getId());
-			if (upm == null ) {
+			if (upm == null) {
 				logger.error("ERROR, get user profile in getLatestCourse");
 			} else {
 				this.addExtraInfoForModel(courseModel);
@@ -690,7 +700,7 @@ public class CourseService implements ICourseService {
 			cuim.setUserInfo(upm);
 			cuimList.add(cuim);
 		}
-		if(cuimList.size() == 0) {
+		if (cuimList.size() == 0) {
 			ret.setErrorCode("2001");
 			ret.setErrorMsg("未查询到数据");
 		} else {

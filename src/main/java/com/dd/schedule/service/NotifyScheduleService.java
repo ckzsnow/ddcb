@@ -26,7 +26,7 @@ public class NotifyScheduleService {
 	@Autowired
 	private IUserCourseDao userCourseDao;
 	
-	@Scheduled(fixedDelay=60000) //每60秒
+	//@Scheduled(fixedDelay=60000) //每60秒
 	public void sendNotify() {
 		List<CourseModel> courseList = courseDao.getNotifyCourseList();
 		logger.debug("courseList size : {}", courseList != null ? courseList.size() : null);

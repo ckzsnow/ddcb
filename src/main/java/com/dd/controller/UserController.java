@@ -47,6 +47,14 @@ public class UserController {
 		return userService.userLogin(userId, userPwd);
 	}
 	
+	@RequestMapping("/userLogout")
+	@ResponseBody
+	public ResultModel userLogout(HttpServletRequest request) {
+		logger.debug("userLogout");
+		request.getSession().setAttribute("userId", "");
+		return null;
+	}
+	
 	@RequestMapping("/userChangePwd")
 	@ResponseBody
 	public ResultModel userChangePwd(HttpServletRequest request) {
