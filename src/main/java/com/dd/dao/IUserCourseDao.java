@@ -33,4 +33,6 @@ public interface IUserCourseDao {
 	
 	public List<CourseModel> getFinishedPublishCourse(String userId, int page, int amountPerPage);
 	
+	public List<CourseModel> getPublishCourse(String userId, int page, int amountPerPage);
+	
 }

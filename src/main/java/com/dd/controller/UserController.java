@@ -52,7 +52,9 @@ public class UserController {
 	public ResultModel userLogout(HttpServletRequest request) {
 		logger.debug("userLogout");
 		request.getSession().setAttribute("userId", "");
-		return null;
+		ResultModel rm = new ResultModel();
+		rm.setErrorCode("0000");
+		return rm;
 	}
 	
 	@RequestMapping("/userChangePwd")
@@ -90,7 +92,7 @@ public class UserController {
 		logger.debug("userChangeUserId session id : {}", request.getSession().getId());
 		logger.debug("userChangeUserId session smscode : {}", sendedSMSCode);
 		String userVerifyCode = request.getParameter("userVerifyCode");
-		String newUserId = request.getParameter("newUserId");
+		String newUserId = request.getParameter("userId");
 		ResultModel rm = userService.userChangeUserId(userId, newUserId, sendedSMSCode, userVerifyCode);
 		if(("0000").equals(rm.getErrorCode())) {
 			request.getSession().setAttribute("userId", "");

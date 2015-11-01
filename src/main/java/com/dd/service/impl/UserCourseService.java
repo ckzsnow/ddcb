@@ -460,5 +460,53 @@ public class UserCourseService implements IUserCourseService {
 		}
 		return ret;
 	}
+
+	@Override
+	public ResultModel getPublishCourse(String userId, String page, String amountPerPage) {
+		ResultModel ret = new ResultModel();
+		int page_ = 0;
+		int amountPerPage_ = 0;
+		try {
+			page_ = Integer.valueOf(page);
+			amountPerPage_ = Integer.valueOf(amountPerPage);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			ret.setErrorCode("6010");
+			ret.setErrorMsg("传入参数格式不正确");
+			return ret;
+		}
+		if (page_ <= 0 || amountPerPage_ <= 0) {
+			ret.setErrorCode("6001");
+			ret.setErrorMsg("页数或每页显示数量必须为正数");
+			return ret;
+		}
+		List<CourseUserInfoModel> cuimList = new ArrayList<>();
+		List<CourseModel> cmList = userCourseDao.getPublishCourse(userId, page_, amountPerPage_);
+		if (cmList == null || cmList.size() == 0) {
+			ret.setErrorCode("6002");
+			ret.setErrorMsg("查询结果为空");
+			return ret;
+		}
+		for (CourseModel cm : cmList) {
+			this.addExtraInfoForModel(cm);
+			UserProfileModel upm = (UserProfileModel) userProfileService.getUserProfile(cm.getUserId()).getResult();
+			if (upm == null) {
+				logger.error("ERROR, get user profile in getFinishedPublishCourse");
+			}
+			CourseUserInfoModel cuim = new CourseUserInfoModel();
+			cuim.setCourseInfo(cm);
+			cuim.setUserInfo(upm);
+			cuimList.add(cuim);
+		}
+		if (cuimList.size() == 0) {
+			ret.setErrorCode("6002");
+			ret.setErrorMsg("查询结果为空");
+		} else {
+			ret.setErrorCode("6000");
+			ret.setErrorMsg("操作成功");
+			ret.setResultList(Arrays.asList(cuimList.toArray()));
+		}
+		return ret;
+	}
 	
 }

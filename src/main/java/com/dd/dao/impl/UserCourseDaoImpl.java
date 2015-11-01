@@ -29,7 +29,7 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 			int amountPerPage) {
 		logger.debug("args userId : {}, userType : {}, page : {}, amountPerPage : {}", userId, userType, page,
 				amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		String sql = "select * from user_course where user_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
@@ -97,7 +97,7 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 			int amountPerPage) {
 		logger.debug("args courseId : {}, userType : {}, page : {}, amountPerPage : {}", courseId, userType, page,
 				amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		String sql = "select * from user_course where course_id=? and user_type=? limit ? , ?";
 		List<UserCourseModel> userCourseList = null;
@@ -168,9 +168,9 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<CourseModel> getOngoingSubscribeCourse(String userId, int page, int amountPerPage) {
 		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
-		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? limit ? , ?";
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? ORDER BY school_time DESC limit ? , ?";
 		List<CourseModel> courseModelList = null;
 		try {
 			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.LISTEN.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
@@ -184,9 +184,9 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<CourseModel> getFinishedSubscribeCourse(String userId, int page, int amountPerPage) {
 		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
-		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? limit ? , ?";
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? ORDER BY school_time DESC limit ? , ?";
 		List<CourseModel> courseModelList = null;
 		try {
 			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.LISTEN.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
@@ -200,9 +200,9 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<CourseModel> getOngoingPublishCourse(String userId, int page, int amountPerPage) {
 		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
-		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? limit ? , ?";
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time>=? ORDER BY school_time DESC limit ? , ?";
 		List<CourseModel> courseModelList = null;
 		try {
 			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.TEACH.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
@@ -216,15 +216,31 @@ public class UserCourseDaoImpl implements IUserCourseDao {
 	@Override
 	public List<CourseModel> getFinishedPublishCourse(String userId, int page, int amountPerPage) {
 		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
-		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? limit ? , ?";
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? and a.school_time<? ORDER BY school_time DESC limit ? , ?";
 		List<CourseModel> courseModelList = null;
 		try {
 			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.TEACH.value(), new Timestamp(System.currentTimeMillis()).toString(), limitBegin, limitEnd },
 					new CourseModelMapper());
 		} catch (Exception e) {
 			logger.debug("getFinishedPublishCourse, exception : {}", e.toString());
+		}
+		return courseModelList;
+	}
+
+	@Override
+	public List<CourseModel> getPublishCourse(String userId, int page, int amountPerPage) {
+		logger.debug("args userId : {}, page : {}, amountPerPage : {}", userId, page, amountPerPage);
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
+		int limitEnd = limitBegin + amountPerPage;
+		String sql = "select * from course a inner join user_course b on a.id=b.course_id and b.user_id=? and b.user_type=? ORDER BY school_time DESC limit ? , ?";
+		List<CourseModel> courseModelList = null;
+		try {
+			courseModelList = jdbcTemplate.query(sql, new Object[] { userId, Constant.UserType.TEACH.value(), limitBegin, limitEnd },
+					new CourseModelMapper());
+		} catch (Exception e) {
+			logger.debug("getPublishCourse, exception : {}", e.toString());
 		}
 		return courseModelList;
 	}

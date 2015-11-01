@@ -57,7 +57,7 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		courseName = courseName == null || courseName.isEmpty() ? "%%" : "%" + courseName + "%";
 		courseBrief = courseBrief == null || courseBrief.isEmpty() ? "%%" : "%" + courseBrief + "%";
@@ -93,7 +93,7 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course where industry_id=? and field_id=? and stage_id=? ");
 		argsList.add(industryId);
@@ -128,7 +128,7 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course where create_time between ? and ? ");
 		argsList.add(startTime);
@@ -161,7 +161,7 @@ public class CourseDaoImpl implements ICourseDao {
 		List<CourseModel> courseList = null;
 		StringBuilder sql = new StringBuilder();
 		List<Object> argsList = new ArrayList<>();
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append("select * from course ");
 		boolean where_flag = false;
@@ -331,7 +331,7 @@ public class CourseDaoImpl implements ICourseDao {
 		argsList.add(Constant.CourseType.CHOICENESS.value());
 		processQueryParams(sql, argsList, industryId, fieldId, stageId);
 		sql.append(" ORDER BY school_time DESC ");
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -355,7 +355,7 @@ public class CourseDaoImpl implements ICourseDao {
 		argsList.add(Constant.CourseType.COMMON.value());
 		processQueryParams(sql, argsList, industryId, fieldId, stageId);
 		sql.append(" ORDER BY school_time DESC ");
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);
@@ -387,7 +387,7 @@ public class CourseDaoImpl implements ICourseDao {
 			argsList.add(industryId_);
 		}
 		sql.append(" ORDER BY school_time DESC ");
-		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page - 1) * amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		sql.append(" limit ?,? ");
 		argsList.add(limitBegin);

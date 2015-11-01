@@ -79,7 +79,7 @@ public class UserDaoImpl implements IUserDao {
 	@Override
 	public List<UserModel> getAllUser(int page, int amountPerPage) {
 		logger.debug("args page : {}, amountPerPage : {}", page, amountPerPage);
-		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage - 1;
+		int limitBegin = page == 1 ? 0 : (page-1)*amountPerPage;
 		int limitEnd = limitBegin + amountPerPage;
 		String sql = "select * from user limit ? , ?";
 		List<UserModel> userList = null;

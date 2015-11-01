@@ -24,4 +24,6 @@ public interface IUserCourseService {
 	
 	public ResultModel getFinishedPublishCourse(String userId, String page, String amountPerPage);
 	
+	public ResultModel getPublishCourse(String userId, String page, String amountPerPage);
+	
 }

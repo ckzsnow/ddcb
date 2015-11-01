@@ -170,6 +170,22 @@ public class UserCourseController {
 		return userCourseService.getFinishedPublishCourse(userId, page, amountPerPage);
 	}
 	
+	@RequestMapping("/getPublishCourse")
+	@ResponseBody
+	public ResultModel getPublishCourse(HttpServletRequest request) {
+		logger.debug("getPublishCourse");
+		String userId = (String) request.getSession().getAttribute("userId");
+		if(userId == null || userId.isEmpty()) {
+			ResultModel rm = new ResultModel();
+			rm.setErrorCode("9900");
+			rm.setErrorMsg("会话已过期，请重新登录");
+			return rm;
+		}
+		String page = request.getParameter("page");
+		String amountPerPage = request.getParameter("amountPerPage");
+		return userCourseService.getPublishCourse(userId, page, amountPerPage);
+	}
+	
 	@RequestMapping("/enterNameForCourse")
 	@ResponseBody
 	public ResultModel enterNameForCourse(HttpServletRequest request) {
