@@ -20,4 +20,6 @@ public interface IUserService {
 	
 	public ResultModel getAllRegisterUser(int page, int amountPerPage);
 	
+	public ResultModel resetPwd(String userId, String sendedSMSCode, String userVerifyCode, String userPwd);
+	
 }

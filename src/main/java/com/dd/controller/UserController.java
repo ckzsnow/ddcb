@@ -100,6 +100,20 @@ public class UserController {
 		return rm;
 	}
 	
+	@RequestMapping("/resetPwd")
+	@ResponseBody
+	public ResultModel resetPwd(HttpServletRequest request) {
+		logger.debug("resetPwd");
+		String userId = request.getParameter("userId");
+		String sendedSMSCode = (String) request.getSession().getAttribute("USER_PHONE_VERIFY_CODE");
+		logger.debug("userChangeUserId session id : {}", request.getSession().getId());
+		logger.debug("userChangeUserId session smscode : {}", sendedSMSCode);
+		String userVerifyCode = request.getParameter("userVerifyCode");
+		String userPwd = request.getParameter("userPwd");
+		ResultModel rm = userService.resetPwd(userId, sendedSMSCode, userVerifyCode, userPwd);
+		return rm;
+	}
+	
 	@RequestMapping("/sendVerifyCode")
 	@ResponseBody
 	public ResultModel sendVerifyCode(HttpServletRequest request) {

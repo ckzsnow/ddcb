@@ -45,7 +45,7 @@ public class WebsocketEndPoint extends TextWebSocketHandler {
 		String userId = (String) session.getAttributes().get("userId");
 		userSessionMap.put(userId, session);
 		if (userId != null) {
-			broadcastUserEnter(userId);
+			//broadcastUserEnter(userId);
 		}
 	}
 

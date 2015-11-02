@@ -264,4 +264,37 @@ public class UserService implements IUserService {
 		return ret;
 	}
 
+	@Override
+	public ResultModel resetPwd(String userId, String sendedSMSCode, String userVerifyCode, String userPwd) {
+		ResultModel ret = new ResultModel();
+		if(userId == null || userId.isEmpty()) {
+			ret.setErrorCode("0001");
+			ret.setErrorMsg("用户id为空");
+			return ret;
+		}
+		if(userVerifyCode == null || userVerifyCode.isEmpty()) {
+			ret.setErrorCode("0007");
+			ret.setErrorMsg("验证码为空");
+			return ret;
+		}
+		if(userPwd == null || userPwd.isEmpty()) {
+			ret.setErrorCode("0002");
+			ret.setErrorMsg("密码为空");
+			return ret;
+		}
+		if(!userVerifyCode.equals(sendedSMSCode)) {
+			ret.setErrorCode("0009");
+			ret.setErrorMsg("验证码不正确或已经过期");
+			return ret;
+		}
+		if(userDao.updateUserPwdByUserId(MD5Encrypt.EncryptPasswordByMd5(userPwd), userId)) {
+			ret.setErrorCode("0000");
+			ret.setErrorMsg("操作成功");
+		} else {
+			ret.setErrorCode("0004");
+			ret.setErrorMsg("数据库操作失败");
+		}
+		return ret;
+	}
+
 }
